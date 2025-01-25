@@ -1,0 +1,4 @@
+- pix version requirements `Pix.Project` / `Pix.Pipeline.Project`
+- --cache-from --cache-to (or more generally extra docker build opts)
+- review dedicated buildx builder
+- sidecar services (integration tests)
