@@ -8,7 +8,16 @@ defmodule Pix.Helper do
 
   @spec compile_file(Path.t()) :: module()
   def compile_file(path) do
-    case Code.with_diagnostics(fn -> Code.compile_file(path) end) do
+    Code.with_diagnostics([log: true], fn ->
+      try do
+        Code.compile_file(path)
+      rescue
+        _err ->
+          Pix.Log.error("Failed to compile #{path} due to errors\n\n")
+          System.halt(1)
+      end
+    end)
+    |> case do
       # accept exactly one module per file
       {[{module, _}], []} ->
         module
@@ -24,11 +33,5 @@ defmodule Pix.Helper do
       _ ->
         raise "Expected #{path} to define exactly one module per file"
     end
-  rescue
-    err ->
-      Pix.Log.error("Failed to compile #{path} due to errors:\n\n")
-      Pix.Log.error(Exception.format(:error, err, __STACKTRACE__))
-      Pix.Log.error("\n")
-      System.halt(1)
   end
 end

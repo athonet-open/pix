@@ -28,4 +28,4 @@ pix-*.tar
 # erlang release
 /_release/
 
-pix
+/pix
