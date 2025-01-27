@@ -1,7 +1,7 @@
 defmodule Pix.MixProject do
   use Mix.Project
 
-  def project() do
+  def project do
     [
       app: :pix,
       version: "0.0.0",
