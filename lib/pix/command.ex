@@ -1,6 +1,8 @@
 defmodule Pix.Command do
   @moduledoc false
 
+  @github_user_repo "visciang/pix"
+
   @spec help :: :ok
   def help do
     Pix.Log.info("""
@@ -26,9 +28,6 @@ defmodule Pix.Command do
                                 "dot" produces a DOT graph description of the pipeline graph in graph.dot
                                 in the current directory override any previously generated file.
                                 (dot -Tpng graph.dot -o xref_graph.png)
-
-    pix help
-        This help.
 
     pix run [--output] [--arg ARG]* [--progress PROGRESS] [--target TARGET [--tag TAG]] [--no-cache] [--no-cache-filter TARGET]* PIPELINE
         Run PIPELINE.
@@ -60,6 +59,13 @@ defmodule Pix.Command do
 
         OPTIONS:
             --target            The shell target
+
+    pix upgrade
+        Upgrade pix to the latest version.
+
+    pix help
+        This help.
+
 
     ENVIRONMENT VARIABLES:
 
@@ -306,5 +312,52 @@ defmodule Pix.Command do
     end
 
     :ok
+  end
+
+  @spec upgrade() :: :ok
+  def upgrade do
+    latest_version = get_latest_version_from_github()
+
+    if Version.compare(latest_version, Pix.version()) == :gt do
+      Pix.Log.info("A new version of Pix is available: #{latest_version}\n")
+
+      Pix.Log.info("Updating ...\n")
+
+      {_, 0} =
+        System.cmd("mix", ["escript.install", "--force", "github", @github_user_repo, "ref", "v#{latest_version}"],
+          into: IO.stream()
+        )
+
+      Pix.Log.info("Update complete\m")
+    else
+      Pix.Log.info("Pix is up to date\n")
+    end
+
+    :ok
+  end
+
+  @spec get_latest_version_from_github() :: String.t()
+  defp get_latest_version_from_github do
+    endpoint_uri = "https://api.github.com/repos/#{@github_user_repo}/tags?per_page=1"
+    headers = [{~c"User-Agent", ~c"pix"}, {~c"Accept", ~c"application/vnd.github+json"}]
+
+    case :httpc.request(:get, {endpoint_uri, headers}, [], []) do
+      {:ok, {{_, 200, _}, _headers, body}} ->
+        body = body |> IO.iodata_to_binary() |> JSON.decode!()
+
+        case body do
+          [%{"name" => "v" <> latest_tag}] ->
+            latest_tag
+
+          _ ->
+            Pix.Log.error("Failed to parse latest version from GitHub\n")
+            Pix.Log.error("Body: #{inspect(body)}\n")
+            System.halt(1)
+        end
+
+      {:error, reason} ->
+        Pix.Log.error("Failed to fetch latest version from GitHub: #{inspect(reason)}\n")
+        System.halt(1)
+    end
   end
 end

@@ -1,12 +1,14 @@
 defmodule Pix do
   @moduledoc false
 
+  @version Mix.Project.config()[:version]
+
   @spec version :: String.t()
-  def version, do: System.get_env("PIX_VERSION", "0.0.0")
+  def version, do: @version
 
   @spec main(OptionParser.argv()) :: :ok
   def main(argv) do
-    Pix.Log.info("pix v#{version()}\n\n")
+    Pix.Log.info("pix v#{version()}\n")
     Pix.System.setup()
     Pix.Log.info("\n")
 
@@ -24,6 +26,9 @@ defmodule Pix do
       ["shell" | sub_argv] ->
         Pix.Docker.setup_buildx()
         Pix.Command.shell(Pix.Config.get(), sub_argv)
+
+      ["upgrade"] ->
+        Pix.Command.upgrade()
 
       ["help"] ->
         Pix.Command.help()

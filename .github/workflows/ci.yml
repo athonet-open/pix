@@ -27,10 +27,14 @@ jobs:
         id: pix_version
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
+            PUSH=true
             PIX_VERSION="${GITHUB_REF#refs/tags/v}"
           else
-            PIX_VERSION="latest"
+            PUSH=false
+            PIX_VERSION="0.0.0-dev"
           fi
+          
+          echo "push=$PUSH" >> $GITHUB_OUTPUT
           echo "version=$PIX_VERSION" >> $GITHUB_OUTPUT
 
       - name: Build
@@ -43,5 +47,5 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             PIX_VERSION=${{ steps.pix_version.outputs.version }}
-          push: true
+          push: ${{ steps.pix_version.outputs.push }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/pix:${{ steps.pix_version.outputs.version }}

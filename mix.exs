@@ -1,10 +1,22 @@
 defmodule Pix.MixProject do
   use Mix.Project
 
+  case System.cmd("git", ["describe", "--tags"], stderr_to_stdout: true) do
+    {"v" <> version, 0} ->
+      @version String.trim(version)
+
+    _ ->
+      case System.get_env("PIX_VERSION") do
+        nil -> @version "0.0.0"
+        "" -> @version "0.0.0"
+        version -> @version String.trim(version)
+      end
+  end
+
   def project do
     [
       app: :pix,
-      version: "0.0.0",
+      version: @version,
       elixir: "~> 1.18",
       deps: deps(),
       escript: [
@@ -16,7 +28,7 @@ defmodule Pix.MixProject do
 
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :inets, :ssl]
     ]
   end
 
