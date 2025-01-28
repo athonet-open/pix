@@ -19,6 +19,7 @@ defmodule Pix.Pipeline do
   @spec run(Pix.Config.pipeline(), run_cli_opts()) :: :ok
   def run(pipeline_config, cli_opts) do
     %{
+      from: from,
       default_targets: default_targets,
       default_args: default_args,
       ctx_dir: ctx_dir,
@@ -38,7 +39,7 @@ defmodule Pix.Pipeline do
     dockerfile_path = write_pipeline_files(pipeline_dockerfile, pipeline.dockerignore)
 
     # Run the build
-    build_opts = run_build_options(cli_opts, pipeline, pipeline_target, ctx_dir, default_args)
+    build_opts = run_build_options(cli_opts, pipeline, pipeline_target, from, ctx_dir, default_args)
     execute_run_build(build_opts, dockerfile_path, cli_opts)
 
     :ok
@@ -46,7 +47,12 @@ defmodule Pix.Pipeline do
 
   @spec shell(Pix.Config.pipeline(), shell_cli_opts(), [String.t()]) :: :ok
   def shell(pipeline_config, cli_opts, cmd_args) do
-    %{default_args: default_args, ctx_dir: ctx_dir, pipeline_mod: pipeline_mod} = pipeline_config
+    %{
+      from: from,
+      default_args: default_args,
+      ctx_dir: ctx_dir,
+      pipeline_mod: pipeline_mod
+    } = pipeline_config
 
     pipeline = pipeline_mod.pipeline()
     validate_shell_capability!(pipeline_mod, pipeline.name)
@@ -60,12 +66,12 @@ defmodule Pix.Pipeline do
     # Build shell image
     pipeline = pipeline_mod.shell(pipeline, shell_target, shell_from_target)
     dockerfile_path = write_pipeline_files(Pix.Pipeline.SDK.dump(pipeline), pipeline.dockerignore)
-    build_opts = shell_build_options(shell_target, shell_docker_image, ctx_dir, default_args, dockerfile_path)
+    build_opts = shell_build_options(shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path)
 
     execute_shell_build(build_opts, shell_target)
 
     # Enter the shell
-    enter_shell(shell_docker_image, shell_target, cli_opts, cmd_args)
+    enter_shell(shell_docker_image, shell_target, from, cli_opts, cmd_args)
 
     :ok
   end
@@ -124,8 +130,9 @@ defmodule Pix.Pipeline do
     dockerfile_path
   end
 
-  @spec run_build_options(run_cli_opts(), Pix.Pipeline.SDK.t(), String.t(), Path.t(), map()) :: Pix.Docker.opts()
-  defp run_build_options(cli_opts, pipeline, pipeline_target, ctx_dir, default_args) do
+  @spec run_build_options(run_cli_opts(), Pix.Pipeline.SDK.t(), String.t(), Pix.Config.from(), Path.t(), map()) ::
+          Pix.Docker.opts()
+  defp run_build_options(cli_opts, pipeline, pipeline_target, from, ctx_dir, default_args) do
     no_cache_filter_opts =
       for(%{cache: false, stage: stage} <- pipeline.stages, do: {:"no-cache-filter", stage}) ++
         for {:no_cache_filter, filter} <- cli_opts, do: {:"no-cache-filter", filter}
@@ -143,7 +150,7 @@ defmodule Pix.Pipeline do
     |> add_run_output_option(cli_opts)
     |> add_run_tag_option(cli_opts)
     |> add_run_cache_options(cli_opts, no_cache_filter_opts)
-    |> Kernel.++(pipeline_build_args(default_args, cli_args))
+    |> Kernel.++(pipeline_build_args(pipeline_target, from, default_args, cli_args))
   end
 
   @spec add_run_output_option(Pix.Docker.opts(), run_cli_opts()) :: Pix.Docker.opts()
@@ -204,19 +211,19 @@ defmodule Pix.Pipeline do
     :ok
   end
 
-  @spec shell_build_options(String.t(), String.t(), Path.t(), map(), Path.t()) :: Pix.Docker.opts()
-  defp shell_build_options(shell_target, shell_docker_image, ctx_dir, default_args, dockerfile_path) do
+  @spec shell_build_options(String.t(), String.t(), Pix.Config.from(), Path.t(), map(), Path.t()) :: Pix.Docker.opts()
+  defp shell_build_options(shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path) do
     [
       :load,
       target: shell_target,
       file: dockerfile_path,
       build_context: "#{Pix.Pipeline.SDK.pipeline_ctx()}=#{ctx_dir}",
       tag: shell_docker_image
-    ] ++ pipeline_build_args(default_args, [])
+    ] ++ pipeline_build_args(shell_target, from, default_args, [])
   end
 
-  @spec shell_run_options(String.t(), shell_cli_opts()) :: Pix.Docker.opts()
-  defp shell_run_options(shell_target, cli_opts) do
+  @spec shell_run_options(String.t(), Pix.Config.from(), shell_cli_opts()) :: Pix.Docker.opts()
+  defp shell_run_options(shell_target, from, cli_opts) do
     base_opts = [:privileged, :rm, :interactive, network: "host"]
     tty_opts = if Pix.Env.ci?(), do: [], else: [:tty]
 
@@ -227,7 +234,7 @@ defmodule Pix.Pipeline do
         []
       end
 
-    base_opts ++ tty_opts ++ host_opts ++ pipeline_envs(shell_target)
+    base_opts ++ tty_opts ++ host_opts ++ pipeline_envs(shell_target, from)
   end
 
   @spec execute_shell_build(Pix.Docker.opts(), String.t()) :: :ok
@@ -240,12 +247,12 @@ defmodule Pix.Pipeline do
     :ok
   end
 
-  @spec enter_shell(String.t(), String.t(), shell_cli_opts(), [String.t()]) :: :ok
-  defp enter_shell(shell_docker_image, shell_target, cli_opts, cmd_args) do
+  @spec enter_shell(String.t(), String.t(), Pix.Config.from(), shell_cli_opts(), [String.t()]) :: :ok
+  defp enter_shell(shell_docker_image, shell_target, from, cli_opts, cmd_args) do
     Pix.Log.info("\nEntering shell\n")
 
     shell_docker_image
-    |> Pix.Docker.run(shell_run_options(shell_target, cli_opts), cmd_args)
+    |> Pix.Docker.run(shell_run_options(shell_target, from, cli_opts), cmd_args)
     |> halt_on_error()
 
     :ok
@@ -262,32 +269,51 @@ defmodule Pix.Pipeline do
     get_in(pipeline, [Access.key!(:stages), filter_stage, :stage])
   end
 
-  @spec pipeline_builtins_var(pipeline_target :: String.t()) :: Pix.Config.args()
-  defp pipeline_builtins_var(pipeline_target) do
-    %{
-      "PIX_PROJECT_NAME" => Pix.Env.git_project_name(),
-      "PIX_COMMIT_SHA" => Pix.Env.git_commit_sha(),
-      "PIX_PIPELINE_TARGET" => pipeline_target
-    }
-  end
-
-  @spec pipeline_envs(pipeline_target :: String.t()) :: Pix.Docker.opts()
-  defp pipeline_envs(pipeline_target) do
-    builtin_envs = pipeline_builtins_var(pipeline_target)
+  @spec pipeline_envs(target :: String.t(), Pix.Config.from()) :: Pix.Docker.opts()
+  defp pipeline_envs(target, from) do
+    builtin_envs = pipeline_builtins_var(target, from)
 
     for {env_k, env_v} <- builtin_envs do
       {:env, "#{env_k}=#{env_v}"}
     end
   end
 
-  @spec pipeline_build_args(Pix.Config.args(), cli_args :: [String.t()]) :: Pix.Docker.opts()
-  defp pipeline_build_args(default_args, cli_args) do
-    default_args = Map.merge(default_args, pipeline_builtins_var(""))
+  @spec pipeline_build_args(target :: String.t(), Pix.Config.from(), Pix.Config.args(), cli_args :: [String.t()]) ::
+          Pix.Docker.opts()
+  defp pipeline_build_args(target, from, default_args, cli_args) do
+    default_args = Map.merge(default_args, pipeline_builtins_var(target, from))
 
     build_args = for {arg_k, arg_v} <- default_args, do: {:build_arg, "#{arg_k}=#{arg_v}"}
     cli_build_args = for arg <- cli_args, do: {:build_arg, arg}
 
     build_args ++ cli_build_args
+  end
+
+  @spec pipeline_builtins_var(target :: String.t(), Pix.Config.from()) :: Pix.Config.args()
+  defp pipeline_builtins_var(target, from) do
+    base = %{
+      "PIX_PROJECT_NAME" => Pix.Env.git_project_name(),
+      "PIX_COMMIT_SHA" => Pix.Env.git_commit_sha(),
+      "PIX_PIPELINE_TARGET" => target
+    }
+
+    from_vars =
+      case from do
+        %{path: path} ->
+          %{
+            "PIX_PIPELINE_FROM_PATH" => path,
+            "PIX_PIPELINE_FROM_SUB_DIR" => Map.get(from, :sub_dir, "")
+          }
+
+        %{git: repo} ->
+          %{
+            "PIX_PIPELINE_FROM_GIT_REPO" => repo,
+            "PIX_PIPELINE_FROM_GIT_REF" => Map.get(from, :ref, ""),
+            "PIX_PIPELINE_FROM_GIT_SUB_DIR" => Map.get(from, :sub_dir, "")
+          }
+      end
+
+    Map.merge(base, from_vars)
   end
 
   @spec halt_on_error(non_neg_integer()) :: :ok

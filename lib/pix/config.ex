@@ -9,6 +9,7 @@ defmodule Pix.Config do
           }
         }
   @type pipeline() :: %{
+          from: from(),
           default_args: args(),
           default_targets: [String.t()],
           ctx_dir: Path.t(),
@@ -81,6 +82,7 @@ defmodule Pix.Config do
 
         {alias_,
          %{
+           from: config.from,
            default_args: config.default_args,
            default_targets: config.default_targets,
            ctx_dir: ctx_dir,

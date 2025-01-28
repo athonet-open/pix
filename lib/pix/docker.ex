@@ -40,10 +40,6 @@ defmodule Pix.Docker do
     opts = opts ++ run_opts_ssh_forward() ++ run_opts_docker_outside_of_docker()
     args = ["run"] ++ opts_encode(opts) ++ [image] ++ cmd_args
 
-    if System.get_env("PIX_DEBUG") == "true" do
-      Pix.Log.internal("docker #{inspect(args)}")
-    end
-
     debug_docker(opts, args)
 
     port_opts = [:nouse_stdio, :exit_status, args: args]
