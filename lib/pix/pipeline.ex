@@ -40,7 +40,7 @@ defmodule Pix.Pipeline do
 
     # Run the build
     build_opts = run_build_options(cli_opts, pipeline, pipeline_target, from, ctx_dir, default_args)
-    execute_run_build(build_opts, dockerfile_path, cli_opts)
+    execute_run_build(build_opts, dockerfile_path, cli_opts, targets)
 
     :ok
   end
@@ -173,9 +173,9 @@ defmodule Pix.Pipeline do
     if cli_opts[:no_cache], do: opts ++ [:"no-cache"], else: opts ++ no_cache_filter_opts
   end
 
-  @spec execute_run_build(Pix.Docker.opts(), Path.t(), run_cli_opts()) :: :ok
-  defp execute_run_build(build_opts, dockerfile_path, cli_opts) do
-    Pix.Log.info("\nRunning pipeline\n\n")
+  @spec execute_run_build(Pix.Docker.opts(), Path.t(), run_cli_opts(), [String.t()]) :: :ok
+  defp execute_run_build(build_opts, dockerfile_path, cli_opts, targets) do
+    Pix.Log.info("\nRunning pipeline (targets: #{inspect(targets)})\n\n")
 
     build_opts = Keyword.put(build_opts, :file, dockerfile_path)
     Pix.Docker.build(build_opts, ".") |> halt_on_error()

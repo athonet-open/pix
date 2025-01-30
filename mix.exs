@@ -6,7 +6,7 @@ defmodule Pix.MixProject do
       @version String.trim(version)
 
     _ ->
-      case System.get_env("PIX_VERSION") do
+      case System.get_env("VERSION") do
         nil -> @version "0.0.0"
         "" -> @version "0.0.0"
         version -> @version String.trim(version)
