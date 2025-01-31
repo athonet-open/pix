@@ -68,7 +68,7 @@ defmodule Pix.Command do
 
 
     ENVIRONMENT VARIABLES:
-    
+
       Thesse environment variables can be used to force/override some "internal" behaviour of pix.
 
       PIX_DEBUG:                Set to "true" to enable debug logs
@@ -328,7 +328,7 @@ defmodule Pix.Command do
           into: IO.stream()
         )
 
-      Pix.Log.info("Update complete\m")
+      Pix.Log.info("Update complete\n")
     else
       Pix.Log.info("Pix is up to date\n")
     end
