@@ -10,7 +10,9 @@ defmodule Pix.Pipeline.SDK do
   @type instruction :: {command(), options(), iargs()}
 
   defmodule Stage do
-    @moduledoc false
+    @moduledoc """
+    Pipeline stage.
+    """
 
     @enforce_keys [
       :stage,
@@ -103,6 +105,8 @@ defmodule Pix.Pipeline.SDK do
 
   @doc """
   Adds a [`RUN`](https://docs.docker.com/reference/dockerfile/#run) instruction.
+
+  For [Here-documents](https://docs.docker.com/reference/dockerfile/#here-documents) string see `sigil_h/2`.
   """
   @spec run(t(), command :: String.t() | [String.t(), ...], options()) :: t()
   def run(%__MODULE__{} = dockerfile, command, options \\ []) do
@@ -263,6 +267,34 @@ defmodule Pix.Pipeline.SDK do
       command = shell_or_exec_form(command)
       append_instruction(dockerfile, "HEALTHCHECK", options, ["CMD" | command])
     end
+  end
+
+  @doc """
+  A basic [Here-documents](https://docs.docker.com/reference/dockerfile/#here-documents) string sigil.
+
+  It expands to:
+
+  ```
+  <<EOT
+  ... your string here ...
+  EOT
+  ```
+
+  Example:
+
+  ```
+  run(pipeline, ~h\"\"\"
+    if [ "$X" == "x" ]; then
+      echo "x!"
+    fi
+  \"\"\")
+  ```
+
+  For more heredoc advance feature simply encode the heredoc yourself.
+  """
+  @spec sigil_h(str :: String.t(), opts :: Keyword.t()) :: String.t()
+  def sigil_h(str, _opts) do
+    "<<EOT\n#{str}\nEOT"
   end
 
   @doc false
