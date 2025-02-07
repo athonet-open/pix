@@ -242,7 +242,13 @@ defmodule Pix.Command do
     end
   end
 
-  defp display_stage(%{stage: name, args_: args, outputs: outputs, private: private, cache: cache}) do
+  defp display_stage(%Pix.Pipeline.SDK.Stage{
+         stage: name,
+         args_: args,
+         outputs: outputs,
+         private: private,
+         cache: cache
+       }) do
     # Stage name with formatting based on privacy
     stage_format = if private, do: [:faint, :green], else: [:green]
     IO.puts("      #{IO.ANSI.format(stage_format ++ [name])}:")

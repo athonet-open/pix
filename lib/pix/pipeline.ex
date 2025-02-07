@@ -268,7 +268,7 @@ defmodule Pix.Pipeline do
         :public -> Access.filter(&(not &1.private))
       end
 
-    get_in(pipeline, [Access.key!(:stages), filter_stage, :stage])
+    get_in(pipeline, [Access.key!(:stages), filter_stage, Access.key!(:stage)])
   end
 
   @spec pipeline_envs(target :: String.t(), Pix.Config.from()) :: Pix.Docker.opts()

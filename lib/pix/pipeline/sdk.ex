@@ -6,28 +6,43 @@ defmodule Pix.Pipeline.SDK do
   @type command :: String.t()
   @type options :: Keyword.t()
   @type iargs :: [String.t(), ...]
-  @type instruction :: {command(), options(), iargs()}
   @type args() :: %{(name :: String.t()) => default_value :: nil | String.t()}
-  @type stage :: %{
-          stage: String.t(),
-          instructions: [instruction()],
-          args_: args(),
-          outputs: [Path.t()],
-          private: boolean(),
-          cache: boolean()
-        }
+  @type instruction :: {command(), options(), iargs()}
+
+  defmodule Stage do
+    @moduledoc false
+
+    @enforce_keys [
+      :stage,
+      :instructions,
+      :args_,
+      :outputs,
+      :private,
+      :cache
+    ]
+    defstruct @enforce_keys
+
+    @type t :: %__MODULE__{
+            stage: String.t(),
+            instructions: [Pix.Pipeline.SDK.instruction()],
+            args_: Pix.Pipeline.SDK.args(),
+            outputs: [Path.t()],
+            private: boolean(),
+            cache: boolean()
+          }
+  end
+
+  @enforce_keys [:name]
+  defstruct @enforce_keys ++ [description: "", args: [], stages: [], args_: %{}, dockerignore: []]
 
   @type t :: %__MODULE__{
           name: String.t(),
           description: String.t(),
           args: [instruction()],
-          stages: [stage()],
+          stages: [Stage.t()],
           args_: args(),
           dockerignore: [String.t()]
         }
-
-  @enforce_keys [:name]
-  defstruct @enforce_keys ++ [description: "", args: [], stages: [], args_: %{}, dockerignore: []]
 
   @doc """
   Build context name of the pipeline ctx directory.
@@ -58,7 +73,7 @@ defmodule Pix.Pipeline.SDK do
   def stage(%__MODULE__{stages: stages} = dockerfile, stage_name, options \\ []) do
     options = Keyword.validate!(options, from: "scratch", private: false, cache: true)
 
-    new_stage = %{
+    new_stage = %Stage{
       stage: stage_name,
       private: options[:private],
       cache: options[:cache],
@@ -77,7 +92,11 @@ defmodule Pix.Pipeline.SDK do
   @spec output(t(), Path.t() | [Path.t(), ...]) :: t()
   def output(%__MODULE__{} = dockerfile, path) do
     {_, dockerfile} =
-      get_and_update_in(dockerfile, [Access.key!(:stages), Access.at!(0), :outputs], &{&1, &1 ++ List.wrap(path)})
+      get_and_update_in(
+        dockerfile,
+        [Access.key!(:stages), Access.at!(0), Access.key!(:outputs)],
+        &{&1, &1 ++ List.wrap(path)}
+      )
 
     dockerfile
   end
@@ -209,7 +228,7 @@ defmodule Pix.Pipeline.SDK do
     {_, dockerfile} =
       get_and_update_in(
         dockerfile,
-        [Access.key!(:stages), Access.at!(0), :args_],
+        [Access.key!(:stages), Access.at!(0), Access.key!(:args_)],
         &{&1, Map.put(&1, name, default_value)}
       )
 
@@ -293,8 +312,8 @@ defmodule Pix.Pipeline.SDK do
     end
   end
 
-  @spec serialize_stage(stage()) :: String.t()
-  defp serialize_stage(%{instructions: instructions}) do
+  @spec serialize_stage(Stage.t()) :: String.t()
+  defp serialize_stage(%Stage{instructions: instructions}) do
     instructions
     |> Enum.reverse()
     |> Enum.map_join("\n", &serialize_instruction/1)
