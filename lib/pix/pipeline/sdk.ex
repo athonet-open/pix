@@ -103,6 +103,17 @@ defmodule Pix.Pipeline.SDK do
 
   @doc """
   Adds a [`RUN`](https://docs.docker.com/reference/dockerfile/#run) instruction.
+
+  [Here-documents](https://docs.docker.com/reference/dockerfile/#here-documents) can be defined with:
+
+  ```
+  run(pipeline, \"\"\"
+  <<EOT
+    echo A
+    echo B
+  EOT
+  \"\"\")
+  ```
   """
   @spec run(t(), command :: String.t() | [String.t(), ...], options()) :: t()
   def run(%__MODULE__{} = dockerfile, command, options \\ []) do
