@@ -29,16 +29,15 @@ defmodule Pix.MixProject do
   end
 
   defp version do
-    case System.cmd("git", ["describe", "--tags"], stderr_to_stdout: true) do
-      {"v" <> version, 0} ->
-        String.trim(version)
+    version =
+      case System.get_env("VERSION") do
+        nil -> "0.0.0"
+        "" -> "0.0.0"
+        version -> String.trim(version)
+      end
 
-      _ ->
-        case System.get_env("VERSION") do
-          nil -> "0.0.0"
-          "" -> "0.0.0"
-          version -> String.trim(version)
-        end
-    end
+    File.write!("VERSION", version)
+
+    version
   end
 end

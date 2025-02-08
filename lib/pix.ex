@@ -1,7 +1,11 @@
 defmodule Pix do
   @moduledoc false
 
-  @version Mix.Project.config()[:version]
+  # We should recompile if the version changes.
+  # Reading the version from `Mix.Project.config()[:version]` is not correct
+  # since the mix.exs file does not change if the env var VERSION change.
+  @external_resource "VERSION"
+  @version File.read!("VERSION")
 
   @spec version :: String.t()
   def version, do: @version
