@@ -34,13 +34,20 @@ $ docker run --rm -it \
   --volume $PWD:/code --workdir /code \
   # docker outside of docker mode \
   --volume /var/run/docker.sock:/var/run/docker.sock \
-  # SSG forwarding \
+  # SSH forwarding \
   --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
   --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
   ghcr.io/visciang/pix:X.Y.Z
 ```
 
-in this case is important to expose the docker daemon socket to the container with the `--volume` option and forward the SSH agent socket too (if you build need SSH access).
+in this case is important to expose the docker daemon socket to the container with the `--volume` option and forward the SSH agent socket too (if your build need SSH access).
+
+Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is accessible via:
+
+```bash
+--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
+--env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
+```
 
 ## Quick start
 

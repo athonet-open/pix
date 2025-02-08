@@ -23,7 +23,7 @@ defmodule Pix.Docker do
         opts = ["--driver", "docker-container", "--driver-opt", "image=moby/buildkit:#{@buildkit_version}"]
         {_, 0} = System.cmd("docker", ["buildx", "create", "--bootstrap", "--name", buildx_builder() | opts])
 
-        Pix.Log.internal("Created builder:`\n")
+        Pix.Log.internal("\n\nCreated builder:`\n")
 
         {inspect, 0} =
           System.cmd("docker", ["buildx", "inspect", "--builder", buildx_builder()], stderr_to_stdout: true)

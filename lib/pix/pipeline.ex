@@ -42,6 +42,10 @@ defmodule Pix.Pipeline do
     build_opts = run_build_options(cli_opts, pipeline, pipeline_target, from, ctx_dir, default_args)
     execute_run_build(build_opts, dockerfile_path, cli_opts, targets)
 
+    if Keyword.has_key?(cli_opts, :target) and Keyword.has_key?(cli_opts, :tag) do
+      execute_tag(build_opts, dockerfile_path, cli_opts)
+    end
+
     :ok
   end
 
@@ -148,7 +152,6 @@ defmodule Pix.Pipeline do
 
     base_opts
     |> add_run_output_option(cli_opts)
-    |> add_run_tag_option(cli_opts)
     |> add_run_cache_options(cli_opts, no_cache_filter_opts)
     |> Kernel.++(pipeline_build_args(pipeline_target, from, default_args, cli_args))
   end
@@ -184,6 +187,21 @@ defmodule Pix.Pipeline do
       Pix.Log.info("\nExported pipeline outputs to .pipeline/output:\n")
       for f <- File.ls!(".pipeline/output"), do: Pix.Log.info("- #{f}\n")
     end
+
+    :ok
+  end
+
+  @spec execute_tag(Pix.Docker.opts(), Path.t(), run_cli_opts()) :: :ok
+  defp execute_tag(build_opts, dockerfile_path, cli_opts) do
+    Pix.Log.info("\nTagging pipeline target #{inspect(cli_opts[:target])} as #{inspect(cli_opts[:tag])}\n\n")
+
+    build_opts =
+      build_opts
+      |> Keyword.put(:target, cli_opts[:target])
+      |> Keyword.put(:file, dockerfile_path)
+      |> add_run_tag_option(cli_opts)
+
+    Pix.Docker.build(build_opts, ".") |> halt_on_error()
 
     :ok
   end
