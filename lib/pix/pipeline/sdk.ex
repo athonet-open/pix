@@ -1,6 +1,41 @@
 defmodule Pix.Pipeline.SDK do
   @moduledoc """
   Provides APIs for building Dockerfiles pipelines programmatically.
+
+  The names of the functions maps to the [Dockerfile](https://docs.docker.com/engine/reference/builder/) commands.
+  Some of the functions have addition options to extend the functionality of the commands (eg. `private` and `cache` in `stage/2`)
+  and some functions are extension to the commands (eg. `output/2`).
+
+  For example:
+
+  ```elixir
+  import Pix.Pipeline.SDK
+
+  pipeline =
+    pipeline("gohello", description: "My pipeline description")
+    |> stage("build", from: "golang:1.23", private: true)
+    |> copy("hello.go", ".")
+    |> run("go build -o hello hello.go")
+    |> stage("app", from: "scratch")
+    |> copy("hello", ".", from: "build")
+    |> cmd(["/hello"])
+
+  pipeline
+  |> dump()
+  |> IO.puts()
+  ```
+
+  ## Output
+
+  ```Dockerfile
+  FROM golang:1.23 AS build
+  COPY hello.go .
+  RUN go build -o hello hello.go
+
+  FROM scratch AS app
+  COPY --from="build" hello .
+  CMD ["/hello"]
+  ```
   """
 
   @type command :: String.t()
@@ -70,9 +105,18 @@ defmodule Pix.Pipeline.SDK do
 
   @doc """
   Starts a new stage [`FROM`](https://docs.docker.com/reference/dockerfile/#from) the given base image.
+
+  ```elixir
+  stage("build", from: "golang:1.23")
+  ```
+
+  the optional `private` and `cache` options can be used to control the behavior of the stage:
+
+  - `private: true` - the stage will not be accessible as a build target, only from other stages.
+  - `cache: false` - the stage will not be cached, the stage will be built from scratch every time.
   """
   @spec stage(t(), stage_name :: String.t(), [{:from, String.t()} | {:private, boolean()} | {:cache, boolean()}]) :: t()
-  def stage(%__MODULE__{stages: stages} = dockerfile, stage_name, options \\ []) do
+  def stage(%__MODULE__{stages: stages} = pipeline, stage_name, options \\ []) do
     options = Keyword.validate!(options, from: "scratch", private: false, cache: true)
 
     new_stage = %Stage{
@@ -84,23 +128,26 @@ defmodule Pix.Pipeline.SDK do
       instructions: []
     }
 
-    %__MODULE__{dockerfile | stages: [new_stage | stages]}
+    %__MODULE__{pipeline | stages: [new_stage | stages]}
     |> append_instruction("FROM", ["#{options[:from]} AS #{stage_name}"])
   end
 
   @doc """
-  Declare a stage output artifact
+  Declare a stage output artifact.
+
+  This function doesn't add any instruction to the Dockerfile.
+  It's used to declare the output of the stage.
   """
   @spec output(t(), Path.t() | [Path.t(), ...]) :: t()
-  def output(%__MODULE__{} = dockerfile, path) do
-    {_, dockerfile} =
+  def output(%__MODULE__{} = pipeline, path) do
+    {_, pipeline} =
       get_and_update_in(
-        dockerfile,
+        pipeline,
         [Access.key!(:stages), Access.at!(0), Access.key!(:outputs)],
         &{&1, &1 ++ List.wrap(path)}
       )
 
-    dockerfile
+    pipeline
   end
 
   @doc """
@@ -109,42 +156,42 @@ defmodule Pix.Pipeline.SDK do
   For [Here-documents](https://docs.docker.com/reference/dockerfile/#here-documents) string see `sigil_h/2`.
   """
   @spec run(t(), command :: String.t() | [String.t(), ...], options()) :: t()
-  def run(%__MODULE__{} = dockerfile, command, options \\ []) do
-    append_instruction(dockerfile, "RUN", options, shell_or_exec_form(command))
+  def run(%__MODULE__{} = pipeline, command, options \\ []) do
+    append_instruction(pipeline, "RUN", options, shell_or_exec_form(command))
   end
 
   @doc """
   Adds a [`CMD`](https://docs.docker.com/reference/dockerfile/#cmd) instruction.
   """
   @spec cmd(t(), command :: String.t() | [String.t()]) :: t()
-  def cmd(%__MODULE__{} = dockerfile, command) do
-    append_instruction(dockerfile, "CMD", [], shell_or_exec_form(command))
+  def cmd(%__MODULE__{} = pipeline, command) do
+    append_instruction(pipeline, "CMD", [], shell_or_exec_form(command))
   end
 
   @doc """
   Adds a [`LABEL`](https://docs.docker.com/reference/dockerfile/#label) instruction.
   """
   @spec label(t(), labels :: Enumerable.t({String.t(), String.t()})) :: t()
-  def label(%__MODULE__{} = dockerfile, labels) do
+  def label(%__MODULE__{} = pipeline, labels) do
     labels = Enum.map(labels, fn {k, v} -> "#{inspect(k)}=#{inspect(v)}" end)
-    append_instruction(dockerfile, "LABEL", [], labels)
+    append_instruction(pipeline, "LABEL", [], labels)
   end
 
   @doc """
   Adds a [`EXPOSE`](https://docs.docker.com/reference/dockerfile/#expose) instruction.
   """
   @spec expose(t(), port :: String.t()) :: t()
-  def expose(%__MODULE__{} = dockerfile, port) do
-    append_instruction(dockerfile, "EXPOSE", [], [port])
+  def expose(%__MODULE__{} = pipeline, port) do
+    append_instruction(pipeline, "EXPOSE", [], [port])
   end
 
   @doc """
   Adds a [`ENV`](https://docs.docker.com/reference/dockerfile/#env) instruction.
   """
   @spec env(t(), envs :: Enumerable.t({String.t() | atom(), String.t()})) :: t()
-  def env(%__MODULE__{} = dockerfile, envs) do
+  def env(%__MODULE__{} = pipeline, envs) do
     envs = Enum.map(envs, fn {k, v} -> "#{k}=#{inspect(v)}" end)
-    append_instruction(dockerfile, "ENV", [], envs)
+    append_instruction(pipeline, "ENV", [], envs)
   end
 
   @doc """
@@ -152,8 +199,8 @@ defmodule Pix.Pipeline.SDK do
   """
   @spec add(t(), source :: String.t() | [String.t(), ...], destination :: String.t(), options()) ::
           t()
-  def add(%__MODULE__{} = dockerfile, source, destination, options \\ []) do
-    append_instruction(dockerfile, "ADD", options, List.wrap(source) ++ [destination])
+  def add(%__MODULE__{} = pipeline, source, destination, options \\ []) do
+    append_instruction(pipeline, "ADD", options, List.wrap(source) ++ [destination])
   end
 
   @doc """
@@ -161,47 +208,47 @@ defmodule Pix.Pipeline.SDK do
   """
   @spec copy(t(), source :: String.t() | [String.t(), ...], destination :: String.t(), options()) ::
           t()
-  def copy(%__MODULE__{} = dockerfile, source, destination, options \\ []) do
-    append_instruction(dockerfile, "COPY", options, List.wrap(source) ++ [destination])
+  def copy(%__MODULE__{} = pipeline, source, destination, options \\ []) do
+    append_instruction(pipeline, "COPY", options, List.wrap(source) ++ [destination])
   end
 
   @doc """
   Adds a [`ENTRYPOINT`](https://docs.docker.com/reference/dockerfile/#entrypoint) instruction.
   """
   @spec entrypoint(t(), command :: String.t() | [String.t()]) :: t()
-  def entrypoint(%__MODULE__{} = dockerfile, command) do
-    append_instruction(dockerfile, "ENTRYPOINT", [], shell_or_exec_form(command))
+  def entrypoint(%__MODULE__{} = pipeline, command) do
+    append_instruction(pipeline, "ENTRYPOINT", [], shell_or_exec_form(command))
   end
 
   @doc """
   Adds a [`VOLUME`](https://docs.docker.com/reference/dockerfile/#volume) instruction.
   """
   @spec volume(t(), volume :: String.t() | [String.t(), ...]) :: t()
-  def volume(%__MODULE__{} = dockerfile, volume) do
-    append_instruction(dockerfile, "VOLUME", [], shell_or_exec_form(volume))
+  def volume(%__MODULE__{} = pipeline, volume) do
+    append_instruction(pipeline, "VOLUME", [], shell_or_exec_form(volume))
   end
 
   @doc """
   Adds a [`USER`](https://docs.docker.com/reference/dockerfile/#user) instruction.
   """
   @spec user(t(), user :: String.t()) :: t()
-  def user(%__MODULE__{} = dockerfile, user) do
-    append_instruction(dockerfile, "USER", [], [user])
+  def user(%__MODULE__{} = pipeline, user) do
+    append_instruction(pipeline, "USER", [], [user])
   end
 
   @doc """
   Adds a [`WORKDIR`](https://docs.docker.com/reference/dockerfile/#workdir) instruction.
   """
   @spec workdir(t(), workdir :: String.t()) :: t()
-  def workdir(%__MODULE__{} = dockerfile, workdir) do
-    append_instruction(dockerfile, "WORKDIR", [], [workdir])
+  def workdir(%__MODULE__{} = pipeline, workdir) do
+    append_instruction(pipeline, "WORKDIR", [], [workdir])
   end
 
   @doc """
   Adds a [`ARG`](https://docs.docker.com/reference/dockerfile/#arg) instruction in the global scope.
   """
   @spec global_arg(t(), name :: String.t() | atom(), default_value :: nil | String.t()) :: t()
-  def global_arg(%__MODULE__{} = dockerfile, name, default_value \\ nil) do
+  def global_arg(%__MODULE__{} = pipeline, name, default_value \\ nil) do
     iargs =
       if default_value == nil do
         [to_string(name)]
@@ -209,17 +256,17 @@ defmodule Pix.Pipeline.SDK do
         ["#{name}=#{inspect(default_value)}"]
       end
 
-    args = [{"ARG", [], iargs} | dockerfile.args]
-    args_ = Map.put(dockerfile.args_, name, default_value)
+    args = [{"ARG", [], iargs} | pipeline.args]
+    args_ = Map.put(pipeline.args_, name, default_value)
 
-    %__MODULE__{dockerfile | args: args, args_: args_}
+    %__MODULE__{pipeline | args: args, args_: args_}
   end
 
   @doc """
   Adds a [`ARG`](https://docs.docker.com/reference/dockerfile/#arg) instruction in a stage scope.
   """
   @spec arg(t(), name :: String.t() | atom(), default_value :: nil | String.t()) :: t()
-  def arg(%__MODULE__{} = dockerfile, name, default_value \\ nil) do
+  def arg(%__MODULE__{} = pipeline, name, default_value \\ nil) do
     iargs =
       if default_value == nil do
         [to_string(name)]
@@ -227,32 +274,32 @@ defmodule Pix.Pipeline.SDK do
         ["#{name}=#{inspect(default_value)}"]
       end
 
-    dockerfile = append_instruction(dockerfile, "ARG", [], iargs)
+    pipeline = append_instruction(pipeline, "ARG", [], iargs)
 
-    {_, dockerfile} =
+    {_, pipeline} =
       get_and_update_in(
-        dockerfile,
+        pipeline,
         [Access.key!(:stages), Access.at!(0), Access.key!(:args_)],
         &{&1, Map.put(&1, name, default_value)}
       )
 
-    dockerfile
+    pipeline
   end
 
   @doc """
   Adds a [`STOPSIGNAL`](https://docs.docker.com/reference/dockerfile/#stopsignal) instruction.
   """
   @spec stopsignal(t(), name :: String.t()) :: t()
-  def stopsignal(%__MODULE__{} = dockerfile, signal) do
-    append_instruction(dockerfile, "STOPSIGNAL", [], [signal])
+  def stopsignal(%__MODULE__{} = pipeline, signal) do
+    append_instruction(pipeline, "STOPSIGNAL", [], [signal])
   end
 
   @doc """
   Adds a [`SHELL`](https://docs.docker.com/reference/dockerfile/#shell) instruction.
   """
   @spec shell(t(), command :: [String.t(), ...]) :: t()
-  def shell(%__MODULE__{} = dockerfile, command) do
-    append_instruction(dockerfile, "SHELL", [], command)
+  def shell(%__MODULE__{} = pipeline, command) do
+    append_instruction(pipeline, "SHELL", [], command)
   end
 
   @doc """
@@ -260,12 +307,12 @@ defmodule Pix.Pipeline.SDK do
   """
   @spec healthcheck(t(), command :: nil | String.t() | [String.t(), ...], options :: options()) ::
           t()
-  def healthcheck(%__MODULE__{} = dockerfile, command, options \\ []) do
+  def healthcheck(%__MODULE__{} = pipeline, command, options \\ []) do
     if command == nil do
-      append_instruction(dockerfile, "HEALTHCHECK", [], ["NONE"])
+      append_instruction(pipeline, "HEALTHCHECK", [], ["NONE"])
     else
       command = shell_or_exec_form(command)
-      append_instruction(dockerfile, "HEALTHCHECK", options, ["CMD" | command])
+      append_instruction(pipeline, "HEALTHCHECK", options, ["CMD" | command])
     end
   end
 
@@ -299,20 +346,20 @@ defmodule Pix.Pipeline.SDK do
 
   @doc false
   @spec append_instruction(t(), command(), options(), iargs()) :: t()
-  def append_instruction(dockerfile, command, options \\ [], iargs)
+  def append_instruction(pipeline, command, options \\ [], iargs)
 
   def append_instruction(%__MODULE__{stages: []}, _, _, _) do
     raise("No stage defined. Use `stage/3` to start a stage first.")
   end
 
   def append_instruction(
-        %__MODULE__{stages: [stage | rest_stages]} = dockerfile,
+        %__MODULE__{stages: [stage | rest_stages]} = pipeline,
         command,
         options,
         iargs
       ) do
     stage = %{stage | instructions: [{command, options, iargs} | stage.instructions]}
-    %__MODULE__{dockerfile | stages: [stage | rest_stages]}
+    %__MODULE__{pipeline | stages: [stage | rest_stages]}
   end
 
   @doc """

@@ -21,7 +21,7 @@ The execution semantics (parallelism, cache, etc) are the same as a standard doc
 
 ## Installation
 
-Pix can be installed nativelly as an elixir escript.
+Pix can be installed nativelly as an Elixir escript.
 
 ```bash
 $ mix escript.install github visciang/pix ref vX.Y.Z
@@ -40,8 +40,10 @@ $ docker run --rm -it \
   ghcr.io/visciang/pix:X.Y.Z
 ```
 
-in this case is important to expose the docker daemon socket to the container with the `--volume` option and forward the SSH agent socket too (if your build need SSH access).
+in this case is important to give the pix container access the docker engine
+You can use the Docker Socket Mounting (DooD - Docker outside of docker) or the Docker-in-Docker (dind) mode.
 
+If you need SSH access, you need to forward the SSH agent socket to the pix container.
 Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is accessible via:
 
 ```bash
@@ -70,9 +72,10 @@ $ pix run pix
 
 This will build the project, the docs, run the tests, etc..
 
-The `pix ls` command can be used to list all the pipelines defined in the project.
-Then the `pix graph` command can be used to generate a graph of a specific pipeline.
+The `pix ls pix` command can be used to list all the pipelines defined in the project along with their configuration.
 
-The Pix elixir documentation is built by the pipeline, run `pix run --output pix` to run the pipeline and output the produced artifacts to the current directory. The docs will be availbale under `.pipeline/output/doc/index.html`.
+Then the `pix graph pix` command can be used to generate a graph of a specific pipeline.
+
+The Pix Elixir documentation is built by the pipeline, run `pix run --output pix` to run the pipeline and output the produced artifacts to the current directory. The docs will be available under `.pipeline/output/doc/index.html`.
 
 For more information about the available commands and their options, run `pix help`.

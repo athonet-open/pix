@@ -10,7 +10,8 @@ defmodule Pix.MixProject do
       escript: [
         main_module: Pix,
         emu_args: "-noinput +B"
-      ]
+      ],
+      docs: docs()
     ]
   end
 
@@ -25,6 +26,14 @@ defmodule Pix.MixProject do
       {:ex_doc, "~> 0.16", only: [:dev], runtime: false},
       {:credo, "~> 1.0", only: [:dev], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"],
+      formatters: ["html"]
     ]
   end
 

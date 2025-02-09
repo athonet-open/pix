@@ -97,6 +97,7 @@ defmodule Pix2Pix.Pipeline do
   defp stage_docs(pipeline) do
     pipeline
     |> stage("pix.docs", from: "pix.compile_dev")
+    |> copy("README.md", ".")
     |> run("mix docs")
     |> output("#{@workdir}/doc")
   end
