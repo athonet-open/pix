@@ -236,13 +236,14 @@ defmodule Pix.Pipeline do
       target: shell_target,
       file: dockerfile_path,
       build_context: "#{Pix.Pipeline.SDK.pipeline_ctx()}=#{ctx_dir}",
+      platform: "linux/#{Pix.Env.arch()}",
       tag: shell_docker_image
     ] ++ pipeline_build_args(shell_target, from, default_args, [])
   end
 
   @spec shell_run_options(String.t(), Pix.Config.from(), shell_cli_opts()) :: Pix.Docker.opts()
   defp shell_run_options(shell_target, from, cli_opts) do
-    base_opts = [:privileged, :rm, :interactive, network: "host"]
+    base_opts = [:rm, :interactive, network: "host"]
     tty_opts = if Pix.Env.ci?(), do: [], else: [:tty]
 
     host_opts =
