@@ -284,6 +284,8 @@ defmodule Pix.Command do
     {cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args_run)
     config_pipelines = config.pipelines
 
+    validate_run_cli_opts!(cli_opts)
+
     case args do
       [pipeline_alias] when is_map_key(config_pipelines, pipeline_alias) ->
         Pix.Pipeline.run(config_pipelines[pipeline_alias], cli_opts)
@@ -365,5 +367,15 @@ defmodule Pix.Command do
         Pix.Log.error("Failed to fetch latest version from GitHub: #{inspect(reason)}\n")
         System.halt(1)
     end
+  end
+
+  @spec validate_run_cli_opts!(OptionParser.parsed()) :: :ok
+  defp validate_run_cli_opts!(cli_opts) do
+    if Keyword.has_key?(cli_opts, :tag) and not Keyword.has_key?(cli_opts, :target) do
+      Pix.Log.error("--tag option requires a --target\n")
+      System.halt(1)
+    end
+
+    :ok
   end
 end
