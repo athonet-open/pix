@@ -2,7 +2,9 @@ defmodule Pix2Pix.Pipeline do
   use Pix.Pipeline.Project
   import Pix.Pipeline.SDK
 
-  @elixir_image_tag "1.18.2-erlang-27.2.1-alpine-3.21.2"
+  @external_resource "Dockerfile"
+
+  @elixir_image_tag Regex.named_captures(~r"ARG ELIXIR_VERSION=(?<version>.*)", File.read!("Dockerfile"))["version"]
   @workdir "/build"
 
   @impl true
