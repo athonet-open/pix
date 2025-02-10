@@ -45,7 +45,7 @@ jobs:
           echo "push=$PUSH" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build and push to Docker image
+      - name: Build and push Pix Docker image to GHCR
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
@@ -57,3 +57,22 @@ jobs:
             VERSION=${{ steps.version.outputs.version }}
           push: ${{ steps.version.outputs.push }}
           tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
+
+      - name: Build docker image for Pix
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=${{ steps.version.outputs.version }}
+          tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
+          load: true
+
+      - name: Pix run Pix
+        run: |
+          docker run --rm \
+            --volume="$PWD:$PWD" --workdir="$PWD" \
+             --volume /var/run/docker.sock:/var/run/docker.sock \
+             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run pix
