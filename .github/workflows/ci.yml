@@ -58,6 +58,8 @@ jobs:
           push: ${{ steps.version.outputs.push }}
           tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
 
+      # ---- Pix in Pix ----
+
       - name: Build docker image for Pix
         uses: docker/build-push-action@v6
         with:
@@ -70,9 +72,17 @@ jobs:
           tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
           load: true
 
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v3
+
       - name: Pix run Pix
         run: |
+          PIX_DOCKER_BUILD_OPTS="--cache-from=type=gha --cache-to=type=gha,mode=max" \
           docker run --rm \
+            --env ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL \
+            --env ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN \
+            --env ACTIONS_CACHE_URL=$ACTIONS_CACHE_URL \
+            --env ACTIONS_RESULTS_URL=$ACTIONS_RESULTS_URL \
             --volume="$PWD:$PWD" --workdir="$PWD" \
-             --volume /var/run/docker.sock:/var/run/docker.sock \
-             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run pix
+            --volume /var/run/docker.sock:/var/run/docker.sock \
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run pix
