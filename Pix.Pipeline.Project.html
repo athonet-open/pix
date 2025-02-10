@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.36.1">
+    <meta name="project" content="pix v0.0.0">
+
+
+    <title>Pix.Pipeline.Project — pix v0.0.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-DBD78430.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
+
+  </head>
+  <body class="sidebar-closed">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+pix
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
+
+
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of pix</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+    <span translate="no">Pix.Pipeline.Project</span> <small>behaviour</small>
+    <small class="app-vsn" translate="no">(pix v0.0.0)</small>
+
+  </h1>
+
+
+    <section id="moduledoc">
+<p>Defines Pix pipeline projects.</p><p>A Pix pipeline project is defined by calling <code class="inline">use Pix.Pipeline.Project</code> in a module placed in <code class="inline">pipeline.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Pipeline</span><span class="w"> </span><span class="k" data-group-id="7538450915-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Pix.Pipeline.Project</span><span class="w">
+  </span><span class="kn">import</span><span class="w"> </span><span class="nc">Pix.Pipeline.SDK</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">pipeline</span><span class="p" data-group-id="7538450915-2">(</span><span class="p" data-group-id="7538450915-2">)</span><span class="w"> </span><span class="k" data-group-id="7538450915-3">do</span><span class="w">
+    </span><span class="n">pipeline</span><span class="p" data-group-id="7538450915-4">(</span><span class="s">&quot;myapp&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MyApp pipeline&quot;</span><span class="p">,</span><span class="w">
+      </span><span class="ss">dockerignore</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7538450915-5">[</span><span class="s">&quot;.git&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;_build&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;deps&quot;</span><span class="p" data-group-id="7538450915-5">]</span><span class="w">
+    </span><span class="p" data-group-id="7538450915-4">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="7538450915-6">(</span><span class="s">&quot;base&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;alpine:3.18&quot;</span><span class="p" data-group-id="7538450915-6">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="7538450915-7">(</span><span class="s">&quot;apk add --no-cache git&quot;</span><span class="p" data-group-id="7538450915-7">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="7538450915-8">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elixir:1.15&quot;</span><span class="p" data-group-id="7538450915-8">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">arg</span><span class="p" data-group-id="7538450915-9">(</span><span class="s">&quot;MIX_ENV&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;prod&quot;</span><span class="p" data-group-id="7538450915-9">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="7538450915-10">(</span><span class="s">&quot;mix.exs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="7538450915-10">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="7538450915-11">(</span><span class="s">&quot;mix deps.get&quot;</span><span class="p" data-group-id="7538450915-11">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="7538450915-12">(</span><span class="s">&quot;lib&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;lib&quot;</span><span class="p" data-group-id="7538450915-12">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="7538450915-13">(</span><span class="s">&quot;mix compile&quot;</span><span class="p" data-group-id="7538450915-13">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">output</span><span class="p" data-group-id="7538450915-14">(</span><span class="s">&quot;/app/_build&quot;</span><span class="p" data-group-id="7538450915-14">)</span><span class="w">
+  </span><span class="k" data-group-id="7538450915-3">end</span><span class="w">
+
+  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">shell</span><span class="p" data-group-id="7538450915-15">(</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="n">shell_stage</span><span class="p">,</span><span class="w"> </span><span class="n">from_target</span><span class="p" data-group-id="7538450915-15">)</span><span class="w"> </span><span class="k" data-group-id="7538450915-16">do</span><span class="w">
+    </span><span class="n">pipeline</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="7538450915-17">(</span><span class="n">shell_stage</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="n">from_target</span><span class="p" data-group-id="7538450915-17">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="7538450915-18">(</span><span class="s">&quot;apk add --no-cache bash&quot;</span><span class="p" data-group-id="7538450915-18">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">cmd</span><span class="p" data-group-id="7538450915-19">(</span><span class="s">&quot;bash&quot;</span><span class="p" data-group-id="7538450915-19">)</span><span class="w">
+  </span><span class="k" data-group-id="7538450915-16">end</span><span class="w">
+</span><span class="k" data-group-id="7538450915-1">end</span></code></pre><h2 id="module-pipeline-definition" class="section-heading">
+  <a href="#module-pipeline-definition" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pipeline Definition</span>
+</h2>
+<p>A pipeline project must implement the <a href="#c:pipeline/0"><code class="inline">pipeline/0</code></a> callback to define the pipeline stages and instructions.
+The pipeline is built using the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a> module which provides a fluent API for:</p><ul><li>Creating pipeline stages</li><li>Adding Docker instructions (RUN, COPY, ARG etc)</li><li>Defining outputs</li><li>Setting build arguments</li><li>Configuring .dockerignore</li></ul><h2 id="module-shell-support" class="section-heading">
+  <a href="#module-shell-support" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Shell Support</span>
+</h2>
+<p>Optionally, a pipeline can implement the <a href="#c:shell/3"><code class="inline">shell/3</code></a> callback to provide an interactive shell environment.
+The shell callback receives:</p><ul><li>The pipeline definition</li><li>The shell stage name</li><li>The target stage to base the shell from (or :default)</li></ul><p>This enables debugging and interactive development within pipeline stages.</p><h2 id="module-pipeline-stages" class="section-heading">
+  <a href="#module-pipeline-stages" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pipeline Stages</span>
+</h2>
+<p>Each stage in a pipeline:</p><ul><li>Has a unique name</li><li>Can be marked as private</li><li>Can enable/disable caching</li><li>Can define outputs</li><li>Can have stage-specific build arguments</li></ul><h2 id="module-pipeline-sdk" class="section-heading">
+  <a href="#module-pipeline-sdk" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pipeline SDK</span>
+</h2>
+<p>The <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a> module provides a complete API for building Dockerfiles programmatically:</p><ul><li>Stage management (FROM)</li><li>File operations (COPY, ADD)</li><li>Command execution (RUN, CMD)</li><li>Environment setup (ENV, ARG)</li><li>Output artifacts</li><li>And more every other Docker instruction</li></ul><h2 id="module-pipeline-copy-context" class="section-heading">
+  <a href="#module-pipeline-copy-context" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pipeline COPY context</span>
+</h2>
+<p>When using the <a href="Pix.Pipeline.SDK.html#copy/3"><code class="inline">Pix.Pipeline.SDK.copy/3</code></a> function, it's possible to specify a context directory to copy from.
+To copy files from the directory where the pipeline is defined (the directory where the <code class="inline">pipeline.exs</code> file is located),
+use <code class="inline">copy(src, dest, from: pipeline_ctx()</code>.</p><p>See <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a> for the complete API reference.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:pipeline/0" data-no-tooltip translate="no">pipeline()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:shell/3" data-no-tooltip translate="no">shell(t, shell_stage, from_target)</a>
+
+      </div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">t()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:pipeline/0">
+
+  <div class="detail-header">
+    <a href="#c:pipeline/0" class="detail-link" data-no-tooltip aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">pipeline()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> pipeline() :: <a href="Pix.Pipeline.SDK.html#t:t/0">Pix.Pipeline.SDK.t</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:shell/3">
+
+  <div class="detail-header">
+    <a href="#c:shell/3" class="detail-link" data-no-tooltip aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">shell(t, shell_stage, from_target)</h1>
+
+
+      <span class="note">(optional)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> shell(
+  <a href="Pix.Pipeline.SDK.html#t:t/0">Pix.Pipeline.SDK.t</a>(),
+  shell_stage :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  from_target :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | :default
+) ::
+  <a href="Pix.Pipeline.SDK.html#t:t/0">Pix.Pipeline.SDK.t</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

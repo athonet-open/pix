@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.36.1">
+    <meta name="project" content="pix v0.0.0">
+
+
+    <title>Pix.Pipeline.SDK — pix v0.0.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-DBD78430.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
+
+  </head>
+  <body class="sidebar-closed">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+pix
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
+
+
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of pix</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+    <span translate="no">Pix.Pipeline.SDK</span> 
+    <small class="app-vsn" translate="no">(pix v0.0.0)</small>
+
+  </h1>
+
+
+    <section id="moduledoc">
+<p>Provides APIs for building Dockerfiles pipelines programmatically.</p><p>The names of the functions maps to the <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile</a> commands.
+Some of the functions have addition options to extend the functionality of the commands (eg. <code class="inline">private</code> and <code class="inline">cache</code> in <a href="#stage/2"><code class="inline">stage/2</code></a>)
+and some functions are extension to the commands (eg. <a href="#output/2"><code class="inline">output/2</code></a>).</p><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Pix.Pipeline.SDK</span><span class="w">
+
+</span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span><span class="w">
+  </span><span class="n">pipeline</span><span class="p" data-group-id="9507616089-1">(</span><span class="s">&quot;gohello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My pipeline description&quot;</span><span class="p" data-group-id="9507616089-1">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="9507616089-2">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">private</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="9507616089-2">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="9507616089-3">(</span><span class="s">&quot;hello.go&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="9507616089-3">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="9507616089-4">(</span><span class="s">&quot;go build -o hello hello.go&quot;</span><span class="p" data-group-id="9507616089-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="9507616089-5">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scratch&quot;</span><span class="p" data-group-id="9507616089-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="9507616089-6">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;build&quot;</span><span class="p" data-group-id="9507616089-6">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">cmd</span><span class="p" data-group-id="9507616089-7">(</span><span class="p" data-group-id="9507616089-8">[</span><span class="s">&quot;/hello&quot;</span><span class="p" data-group-id="9507616089-8">]</span><span class="p" data-group-id="9507616089-7">)</span><span class="w">
+
+</span><span class="n">pipeline</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">dump</span><span class="p" data-group-id="9507616089-9">(</span><span class="p" data-group-id="9507616089-9">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="9507616089-10">(</span><span class="p" data-group-id="9507616089-10">)</span></code></pre><h2 id="module-output" class="section-heading">
+  <a href="#module-output" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Output</span>
+</h2>
+<pre><code class="Dockerfile">FROM golang:1.23 AS build
+COPY hello.go .
+RUN go build -o hello hello.go
+
+FROM scratch AS app
+COPY --from=&quot;build&quot; hello .
+CMD [&quot;/hello&quot;]</code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:args/0" data-no-tooltip translate="no">args()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:command/0" data-no-tooltip translate="no">command()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:iargs/0" data-no-tooltip translate="no">iargs()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:instruction/0" data-no-tooltip translate="no">instruction()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:options/0" data-no-tooltip translate="no">options()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add/4" data-no-tooltip translate="no">add(pipeline, source, destination, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#add"><code class="inline">ADD</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#arg/3" data-no-tooltip translate="no">arg(pipeline, name, default_value \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#arg"><code class="inline">ARG</code></a> instruction in a stage scope.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cmd/2" data-no-tooltip translate="no">cmd(pipeline, command)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#cmd"><code class="inline">CMD</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#copy/4" data-no-tooltip translate="no">copy(pipeline, source, destination, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#copy"><code class="inline">COPY</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#dump/1" data-no-tooltip translate="no">dump(sdk)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts the Dockerfile into a string representation.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#entrypoint/2" data-no-tooltip translate="no">entrypoint(pipeline, command)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#entrypoint"><code class="inline">ENTRYPOINT</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#env/2" data-no-tooltip translate="no">env(pipeline, envs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#env"><code class="inline">ENV</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#expose/2" data-no-tooltip translate="no">expose(pipeline, port)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#expose"><code class="inline">EXPOSE</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#global_arg/3" data-no-tooltip translate="no">global_arg(pipeline, name, default_value \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#arg"><code class="inline">ARG</code></a> instruction in the global scope.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#healthcheck/3" data-no-tooltip translate="no">healthcheck(pipeline, command, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#healthcheck"><code class="inline">HEALTHCHECK</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#label/2" data-no-tooltip translate="no">label(pipeline, labels)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#label"><code class="inline">LABEL</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#output/2" data-no-tooltip translate="no">output(pipeline, path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Declare a stage output artifact.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pipeline/2" data-no-tooltip translate="no">pipeline(name, options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a new pipeline.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pipeline_ctx/0" data-no-tooltip translate="no">pipeline_ctx()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Build context name of the pipeline ctx directory.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#run/3" data-no-tooltip translate="no">run(pipeline, command, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#run"><code class="inline">RUN</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#shell/2" data-no-tooltip translate="no">shell(pipeline, command)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#shell"><code class="inline">SHELL</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#sigil_h/2" data-no-tooltip translate="no">sigil_h(str, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stage/3" data-no-tooltip translate="no">stage(pipeline, stage_name, options \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stopsignal/2" data-no-tooltip translate="no">stopsignal(pipeline, signal)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#stopsignal"><code class="inline">STOPSIGNAL</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#user/2" data-no-tooltip translate="no">user(pipeline, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#user"><code class="inline">USER</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#volume/2" data-no-tooltip translate="no">volume(pipeline, volume)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#volume"><code class="inline">VOLUME</code></a> instruction.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#workdir/2" data-no-tooltip translate="no">workdir(pipeline, workdir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#workdir"><code class="inline">WORKDIR</code></a> instruction.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:args/0">
+
+  <div class="detail-header">
+    <a href="#t:args/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">args()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> args() :: %{required(name :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) =&gt; default_value :: nil | <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:command/0">
+
+  <div class="detail-header">
+    <a href="#t:command/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">command()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> command() :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:iargs/0">
+
+  <div class="detail-header">
+    <a href="#t:iargs/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">iargs()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> iargs() :: [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ...]</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:instruction/0">
+
+  <div class="detail-header">
+    <a href="#t:instruction/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">instruction()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> instruction() :: {<a href="#t:command/0">command</a>(), <a href="#t:options/0">options</a>(), <a href="#t:iargs/0">iargs</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:options/0">
+
+  <div class="detail-header">
+    <a href="#t:options/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">options()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> options() :: <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">t()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Pix.Pipeline.SDK{
+  args: [<a href="#t:instruction/0">instruction</a>()],
+  args_: <a href="#t:args/0">args</a>(),
+  description: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  dockerignore: [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()],
+  name: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  stages: [<a href="Pix.Pipeline.SDK.Stage.html#t:t/0">Pix.Pipeline.SDK.Stage.t</a>()]
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="add/4">
+
+    <span id="add/3"></span>
+
+  <div class="detail-header">
+    <a href="#add/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">add(pipeline, source, destination, options \\ [])</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> add(
+  <a href="#t:t/0">t</a>(),
+  source :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ...],
+  destination :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  <a href="#t:options/0">options</a>()
+) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#add"><code class="inline">ADD</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="arg/3">
+
+    <span id="arg/2"></span>
+
+  <div class="detail-header">
+    <a href="#arg/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">arg(pipeline, name, default_value \\ nil)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> arg(<a href="#t:t/0">t</a>(), name :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), default_value :: nil | <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#arg"><code class="inline">ARG</code></a> instruction in a stage scope.</p>
+  </section>
+</section>
+<section class="detail" id="cmd/2">
+
+  <div class="detail-header">
+    <a href="#cmd/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">cmd(pipeline, command)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cmd(<a href="#t:t/0">t</a>(), command :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()]) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#cmd"><code class="inline">CMD</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="copy/4">
+
+    <span id="copy/3"></span>
+
+  <div class="detail-header">
+    <a href="#copy/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">copy(pipeline, source, destination, options \\ [])</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> copy(
+  <a href="#t:t/0">t</a>(),
+  source :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ...],
+  destination :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  <a href="#t:options/0">options</a>()
+) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#copy"><code class="inline">COPY</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="dump/1">
+
+  <div class="detail-header">
+    <a href="#dump/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">dump(sdk)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> dump(<a href="#t:t/0">t</a>()) :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Converts the Dockerfile into a string representation.</p>
+  </section>
+</section>
+<section class="detail" id="entrypoint/2">
+
+  <div class="detail-header">
+    <a href="#entrypoint/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">entrypoint(pipeline, command)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> entrypoint(<a href="#t:t/0">t</a>(), command :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()]) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#entrypoint"><code class="inline">ENTRYPOINT</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="env/2">
+
+  <div class="detail-header">
+    <a href="#env/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">env(pipeline, envs)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> env(<a href="#t:t/0">t</a>(), envs :: <a href="https://hexdocs.pm/elixir/Enumerable.html#t:t/1">Enumerable.t</a>({<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()})) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#env"><code class="inline">ENV</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="expose/2">
+
+  <div class="detail-header">
+    <a href="#expose/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">expose(pipeline, port)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> expose(<a href="#t:t/0">t</a>(), port :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#expose"><code class="inline">EXPOSE</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="global_arg/3">
+
+    <span id="global_arg/2"></span>
+
+  <div class="detail-header">
+    <a href="#global_arg/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">global_arg(pipeline, name, default_value \\ nil)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> global_arg(<a href="#t:t/0">t</a>(), name :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), default_value :: nil | <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#arg"><code class="inline">ARG</code></a> instruction in the global scope.</p>
+  </section>
+</section>
+<section class="detail" id="healthcheck/3">
+
+    <span id="healthcheck/2"></span>
+
+  <div class="detail-header">
+    <a href="#healthcheck/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">healthcheck(pipeline, command, options \\ [])</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> healthcheck(
+  <a href="#t:t/0">t</a>(),
+  command :: nil | <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ...],
+  options :: <a href="#t:options/0">options</a>()
+) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#healthcheck"><code class="inline">HEALTHCHECK</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="label/2">
+
+  <div class="detail-header">
+    <a href="#label/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">label(pipeline, labels)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> label(<a href="#t:t/0">t</a>(), labels :: <a href="https://hexdocs.pm/elixir/Enumerable.html#t:t/1">Enumerable.t</a>({<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()})) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#label"><code class="inline">LABEL</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="output/2">
+
+  <div class="detail-header">
+    <a href="#output/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">output(pipeline, path)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> output(<a href="#t:t/0">t</a>(), <a href="https://hexdocs.pm/elixir/Path.html#t:t/0">Path.t</a>() | [<a href="https://hexdocs.pm/elixir/Path.html#t:t/0">Path.t</a>(), ...]) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Declare a stage output artifact.</p><p>This function doesn't add any instruction to the Dockerfile.
+It's used to declare the output of the stage.</p>
+  </section>
+</section>
+<section class="detail" id="pipeline/2">
+
+  <div class="detail-header">
+    <a href="#pipeline/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">pipeline(name, options)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> pipeline(name :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  description: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  dockerignore: [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()]
+) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Creates a new pipeline.</p>
+  </section>
+</section>
+<section class="detail" id="pipeline_ctx/0">
+
+  <div class="detail-header">
+    <a href="#pipeline_ctx/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">pipeline_ctx()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> pipeline_ctx() :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>Build context name of the pipeline ctx directory.</p><p><code class="inline">Pix.Pipeline.SDK.copy(&quot;foo.sh&quot;, &quot;.&quot;, from: Pix.Pipeline.SDK.pipeline_ctx())</code></p>
+  </section>
+</section>
+<section class="detail" id="run/3">
+
+    <span id="run/2"></span>
+
+  <div class="detail-header">
+    <a href="#run/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">run(pipeline, command, options \\ [])</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> run(<a href="#t:t/0">t</a>(), command :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ...], <a href="#t:options/0">options</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#run"><code class="inline">RUN</code></a> instruction.</p><p>For <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string see <a href="#sigil_h/2"><code class="inline">sigil_h/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="shell/2">
+
+  <div class="detail-header">
+    <a href="#shell/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">shell(pipeline, command)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> shell(<a href="#t:t/0">t</a>(), command :: [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ...]) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#shell"><code class="inline">SHELL</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="sigil_h/2">
+
+  <div class="detail-header">
+    <a href="#sigil_h/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">sigil_h(str, opts)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> sigil_h(str :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), opts :: <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()</pre>
+
+      </div>
+
+<p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p><p>It expands to:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1647984096-1">&lt;&lt;</span><span class="nc">EOT</span><span class="w">
+</span><span class="n">...</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">here</span><span class="w"> </span><span class="n">...</span><span class="w">
+</span><span class="nc">EOT</span></code></pre><p>Example:</p><pre><code class="makeup elixir" translate="no"><span class="n">run</span><span class="p" data-group-id="7039294929-1">(</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="sx">~h&quot;&quot;&quot;
+  if [ &quot;$X&quot; == &quot;x&quot; ]; then
+    echo &quot;x!&quot;
+  fi
+&quot;&quot;&quot;</span><span class="p" data-group-id="7039294929-1">)</span></code></pre><p>For more heredoc advance feature simply encode the heredoc yourself.</p>
+  </section>
+</section>
+<section class="detail" id="stage/3">
+
+    <span id="stage/2"></span>
+
+  <div class="detail-header">
+    <a href="#stage/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">stage(pipeline, stage_name, options \\ [])</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stage(<a href="#t:t/0">t</a>(), stage_name :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  from: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  private: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>(),
+  cache: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()
+) ::
+  <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p><pre><code class="makeup elixir" translate="no"><span class="n">stage</span><span class="p" data-group-id="5274234619-1">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p" data-group-id="5274234619-1">)</span></code></pre><p>the optional <code class="inline">private</code> and <code class="inline">cache</code> options can be used to control the behavior of the stage:</p><ul><li><code class="inline">private: true</code> - the stage will not be accessible as a build target, only from other stages.</li><li><code class="inline">cache: false</code> - the stage will not be cached, the stage will be built from scratch every time.</li></ul>
+  </section>
+</section>
+<section class="detail" id="stopsignal/2">
+
+  <div class="detail-header">
+    <a href="#stopsignal/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">stopsignal(pipeline, signal)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stopsignal(<a href="#t:t/0">t</a>(), name :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#stopsignal"><code class="inline">STOPSIGNAL</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="user/2">
+
+  <div class="detail-header">
+    <a href="#user/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">user(pipeline, user)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> user(<a href="#t:t/0">t</a>(), user :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#user"><code class="inline">USER</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="volume/2">
+
+  <div class="detail-header">
+    <a href="#volume/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">volume(pipeline, volume)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> volume(<a href="#t:t/0">t</a>(), volume :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ...]) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#volume"><code class="inline">VOLUME</code></a> instruction.</p>
+  </section>
+</section>
+<section class="detail" id="workdir/2">
+
+  <div class="detail-header">
+    <a href="#workdir/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">workdir(pipeline, workdir)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> workdir(<a href="#t:t/0">t</a>(), workdir :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#workdir"><code class="inline">WORKDIR</code></a> instruction.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

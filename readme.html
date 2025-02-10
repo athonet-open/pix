@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.36.1">
+    <meta name="project" content="pix v0.0.0">
+
+
+    <title>PIX — pix v0.0.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-DBD78430.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
+
+  </head>
+  <body class="sidebar-closed">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+pix
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
+
+
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of pix</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+
+    <span>PIX</span>
+  </h1>
+
+<p><a href="https://github.com/visciang/pix/actions/workflows/ci.yml"><img src="https://github.com/visciang/pix/actions/workflows/ci.yml/badge.svg" alt=".github/workflows/ci.yml"/></a> <a href="https://visciang.github.io/pix/readme.html"><img src="https://img.shields.io/badge/docs-latest-green.svg" alt="Docs"/></a></p><p>Pipelines for buildx.</p><h2 id="introduction" class="section-heading">
+  <a href="#introduction" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Introduction</span>
+</h2>
+<p>Pix is a portable pipeline executor - a CI framework to define and execute pipelines that can run on any host with docker support.
+Pipelines are defined as code and executed via docker <code class="inline">buildkit</code>.</p><h2 id="basic-concepts" class="section-heading">
+  <a href="#basic-concepts" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Basic concepts</span>
+</h2>
+<h3 id="the-pipeline" class="section-heading">
+  <a href="#the-pipeline" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The pipeline</span>
+</h3>
+<p>The pipeline is the core of the Pix framework.
+It's just an instrumented docker multistage build programmatically defined via Elixir code (using the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>).</p><h3 id="the-pipeline-executor" class="section-heading">
+  <a href="#the-pipeline-executor" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The pipeline executor</span>
+</h3>
+<p>Pix generates the multistage docker build definition and execute it via <code class="inline">docker buildx build</code>.
+The execution semantics (parallelism, cache, etc) are the same as a standard docker build.</p><h2 id="installation" class="section-heading">
+  <a href="#installation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Installation</span>
+</h2>
+<p>Pix can be installed nativelly as an Elixir escript.</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">mix escript.install github visciang/pix ref vX.Y.Z
+</span></code></pre><p>alternatively, you can use it as a docker image:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">docker run --rm -it \
+</span><span class="">  --volume $PWD:/code --workdir /code \
+</span><span class="">  # docker outside of docker mode \
+</span><span class="">  --volume /var/run/docker.sock:/var/run/docker.sock \
+</span><span class="">  # SSH forwarding \
+</span><span class="">  --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
+</span><span class="">  --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
+</span><span class="">  ghcr.io/visciang/pix:X.Y.Z
+</span></code></pre><p>in this case is important to give the pix container access the docker engine
+You can use the Docker Socket Mounting (DooD - Docker outside of docker) or the Docker-in-Docker (dind) mode.</p><p>If you need SSH access, you need to forward the SSH agent socket to the pix container.
+Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is accessible via:</p><pre><code class="makeup bash" translate="no"><span class="">--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
+</span><span class="">--env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
+</span></code></pre><h2 id="quick-start" class="section-heading">
+  <a href="#quick-start" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Quick start</span>
+</h2>
+<p>For this quick start, we will use pix project itself.
+The pix project defines a pix pipeline that can be used to build and test pix itself.</p><p>The project is defined with a <a href=".pix.exs">.pix.exs</a> file.</p><p>In the .pix.exs file, we setup a single pipelines - <code class="inline">pix</code> - with their default arguments and targets.
+The pipeline definition is imported <code class="inline">from</code> a local <code class="inline">path</code> (in this case <code class="inline">.</code>, root directory).</p><p>In the root directory we have the <a href="pipeline.exs">pipeline.exs</a> file that defines the pipeline.
+The pipeline definition is composed of a set of targets, each target is a named docker stage.</p><p>To run the project pipeline, we can use the <code class="inline">pix run</code> command.</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">pix run pix
+</span></code></pre><p>This will build the project, the docs, run the tests, etc..</p><p>The <code class="inline">pix ls pix</code> command can be used to list all the pipelines defined in the project along with their configuration.</p><p>Then the <code class="inline">pix graph pix</code> command can be used to generate a graph of a specific pipeline.</p><p>The Pix Elixir documentation is built by the pipeline, run <code class="inline">pix run --output pix</code> to run the pipeline and output the produced artifacts to the current directory. The docs will be available under <code class="inline">.pipeline/output/doc/index.html</code>.</p><p>For more information about the available commands and their options, run <code class="inline">pix help</code>.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="api-reference.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+API Reference
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>
