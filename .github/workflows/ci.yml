@@ -82,4 +82,11 @@ jobs:
             --env PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
-            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run pix
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run --output pix
+      
+      - name: Docs Publish
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .pipeline/output/doc
