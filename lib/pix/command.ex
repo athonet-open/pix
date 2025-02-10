@@ -43,10 +43,11 @@ defmodule Pix.Command do
 
         OPTIONS:
             #{opt.("--arg")}*              Set pipeline one or more ARG (format KEY=value)
-            #{opt.("--progress")}          Set type of progress output - "auto", "plain", "tty", "rawjson" (default "auto")
-            #{opt.("--target")}            Run PIPELINE for a specific TARGET (default: all the PIPELINE targets)
-            #{opt.("--tag")}               Tag the TARGET's docker image (default: no tag)
             #{opt.("--no-cache-filter")}*  Do not cache specified targets
+            #{opt.("--progress")}          Set type of progress output - "auto", "plain", "tty", "rawjson" (default "auto")
+            #{opt.("--ssh")}               Forward SSH agent to `buildx build`
+            #{opt.("--tag")}               Tag the TARGET's docker image (default: no tag)
+            #{opt.("--target")}            Run PIPELINE for a specific TARGET (default: all the PIPELINE targets)
 
     #{cmd.("pix shell")} [#{opt.("--target TARGET")}] [#{opt.("--host")}] PIPELINE [COMMAND]
         Shell into the specified target of the PIPELINE.
@@ -59,6 +60,7 @@ defmodule Pix.Command do
             #{opt.("--host")}              The shell bind mounts the current working dir (reflect files changes between the host and the shell container)
 
         OPTIONS:
+            #{opt.("--ssh")}               Forward SSH agent to shell container
             #{opt.("--target")}            The shell target
 
     #{cmd.("pix upgrade")}
@@ -273,12 +275,13 @@ defmodule Pix.Command do
   @spec run(Pix.Config.t(), OptionParser.argv()) :: :ok
   @cli_args_run [
     arg: [:string, :keep],
+    no_cache: :boolean,
+    no_cache_filter: [:string, :keep],
     output: :boolean,
     progress: :string,
+    ssh: :boolean,
     tag: :string,
-    target: :string,
-    no_cache: :boolean,
-    no_cache_filter: [:string, :keep]
+    target: :string
   ]
   def run(config, argv) do
     {cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args_run)
@@ -304,7 +307,11 @@ defmodule Pix.Command do
   end
 
   @spec shell(Pix.Config.t(), OptionParser.argv()) :: :ok
-  @cli_args_shell [target: :string, host: :boolean]
+  @cli_args_shell [
+    host: :boolean,
+    ssh: :boolean,
+    target: :string
+  ]
   def shell(config, argv) do
     {cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args_shell)
     config_pipelines = config.pipelines

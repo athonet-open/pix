@@ -7,12 +7,14 @@ defmodule Pix.Pipeline do
           | {:no_cache, boolean()}
           | {:output, boolean()}
           | {:progress, String.t()}
+          | {:ssh, boolean()}
           | {:tag, String.t()}
           | {:target, String.t()}
         ]
 
   @type shell_cli_opts :: [
           {:host, boolean()}
+          | {:ssh, boolean()}
           | {:target, String.t()}
         ]
 
@@ -72,7 +74,7 @@ defmodule Pix.Pipeline do
     dockerfile_path = write_pipeline_files(Pix.Pipeline.SDK.dump(pipeline), pipeline.dockerignore)
     build_opts = shell_build_options(shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path)
 
-    execute_shell_build(build_opts, shell_target)
+    execute_shell_build(build_opts, shell_target, cli_opts)
 
     # Enter the shell
     enter_shell(shell_docker_image, shell_target, from, cli_opts, cmd_args)
@@ -181,7 +183,7 @@ defmodule Pix.Pipeline do
     Pix.Log.info("\nRunning pipeline (targets: #{inspect(targets)})\n\n")
 
     build_opts = Keyword.put(build_opts, :file, dockerfile_path)
-    Pix.Docker.build(build_opts, ".") |> halt_on_error()
+    Pix.Docker.build(cli_opts[:ssh], build_opts, ".") |> halt_on_error()
 
     if cli_opts[:output] do
       Pix.Log.info("\nExported pipeline outputs to .pipeline/output:\n")
@@ -201,7 +203,7 @@ defmodule Pix.Pipeline do
       |> Keyword.put(:file, dockerfile_path)
       |> add_run_tag_option(cli_opts)
 
-    Pix.Docker.build(build_opts, ".") |> halt_on_error()
+    Pix.Docker.build(cli_opts[:ssh], build_opts, ".") |> halt_on_error()
 
     :ok
   end
@@ -256,11 +258,11 @@ defmodule Pix.Pipeline do
     base_opts ++ tty_opts ++ host_opts ++ pipeline_envs(shell_target, from)
   end
 
-  @spec execute_shell_build(Pix.Docker.opts(), String.t()) :: :ok
-  defp execute_shell_build(build_opts, shell_target) do
+  @spec execute_shell_build(Pix.Docker.opts(), String.t(), shell_cli_opts()) :: :ok
+  defp execute_shell_build(build_opts, shell_target, cli_opts) do
     Pix.Log.info("\nBuilding pipeline (target=#{shell_target})\n\n")
 
-    Pix.Docker.build(build_opts, ".")
+    Pix.Docker.build(cli_opts[:ssh], build_opts, ".")
     |> halt_on_error()
 
     :ok
@@ -273,7 +275,7 @@ defmodule Pix.Pipeline do
     opts = shell_run_options(shell_target, from, cli_opts)
 
     shell_docker_image
-    |> Pix.Docker.run(opts, cmd_args)
+    |> Pix.Docker.run(cli_opts[:ssh], opts, cmd_args)
     |> halt_on_error()
 
     :ok

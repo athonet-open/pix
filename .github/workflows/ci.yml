@@ -45,15 +45,48 @@ jobs:
           echo "push=$PUSH" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build and push to Docker image
+      - name: Build and push Pix Docker image to GHCR
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
           context: .
           file: ./Dockerfile
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=image-ghcr
+          cache-to: type=gha,scope=image-ghcr,mode=max
           build-args: |
             VERSION=${{ steps.version.outputs.version }}
           push: ${{ steps.version.outputs.push }}
           tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
+
+      # ---- Pix in Pix ----
+
+      - name: Build docker image for Pix
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          cache-from: type=gha,scope=image-ghcr
+          build-args: |
+            VERSION=${{ steps.version.outputs.version }}
+          tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
+          load: true
+
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v3
+
+      - name: Pix run Pix
+        run: |
+          CACHE="type=gha,scope=pix,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
+          docker run --rm \
+            --env PIX_DEBUG=true \
+            --env PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
+            --volume="$PWD:$PWD" --workdir="$PWD" \
+            --volume /var/run/docker.sock:/var/run/docker.sock \
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run --output pix
+      
+      - name: Docs Publish
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .pipeline/output/doc
