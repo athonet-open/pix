@@ -40,9 +40,10 @@ defmodule Pix.Docker do
     JSON.decode!(json)
   end
 
-  @spec run(image :: String.t(), opts(), cmd_args :: [String.t()]) :: status :: non_neg_integer()
-  def run(image, opts, cmd_args) do
-    opts = opts ++ run_opts_ssh_forward() ++ run_opts_docker_outside_of_docker()
+  @spec run(image :: String.t(), ssh_fwd? :: boolean(), opts(), cmd_args :: [String.t()]) :: status :: non_neg_integer()
+  def run(image, ssh_fwd?, opts, cmd_args) do
+    ssh_opts = if ssh_fwd?, do: run_opts_ssh_forward(), else: []
+    opts = opts ++ ssh_opts ++ run_opts_docker_outside_of_docker()
     args = ["run"] ++ opts_encode(opts) ++ Pix.Env.pix_docker_run_opts() ++ [image] ++ cmd_args
 
     debug_docker(opts, args)
@@ -87,9 +88,10 @@ defmodule Pix.Docker do
     [volume: "#{docker_socket}:#{docker_socket}"]
   end
 
-  @spec build(opts(), String.t()) :: exit_status :: non_neg_integer()
-  def build(opts, ctx) do
-    opts = [builder: buildx_builder(), ssh: "default"] ++ opts
+  @spec build(ssh_fwd? :: boolean(), opts(), String.t()) :: exit_status :: non_neg_integer()
+  def build(ssh_fwd?, opts, ctx) do
+    ssh_opts = if ssh_fwd?, do: [ssh: "default"], else: []
+    opts = [builder: buildx_builder()] ++ ssh_opts ++ opts
 
     args =
       [System.find_executable("docker"), "buildx", "build"] ++
