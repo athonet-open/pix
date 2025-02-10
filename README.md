@@ -1,4 +1,6 @@
-# pix
+# PIX
+
+[![.github/workflows/ci.yml](https://github.com/visciang/pix/actions/workflows/ci.yml/badge.svg)](https://github.com/visciang/pix/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://visciang.github.io/pix/readme.html)
 
 Pipelines for buildx.
 

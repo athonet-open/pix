@@ -6,12 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-push:
-    name: Build and Push Docker Image
+  ci:
+    name: Pix CI
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
@@ -60,7 +60,7 @@ jobs:
 
       # ---- Pix in Pix ----
 
-      - name: Build docker image for Pix
+      - name: Load Pix docker image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -74,6 +74,7 @@ jobs:
       - name: Expose GitHub Runtime
         uses: crazy-max/ghaction-github-runtime@v3
 
+      # Run the Pix pipeline with pix dockerized
       - name: Pix run Pix
         run: |
           CACHE="type=gha,scope=pix,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
