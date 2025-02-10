@@ -40,9 +40,16 @@ defmodule Pix.MixProject do
   defp version do
     version =
       case System.get_env("VERSION") do
-        nil -> "0.0.0"
-        "" -> "0.0.0"
-        version -> String.trim(version)
+        nil ->
+          "0.0.0"
+
+        "" ->
+          "0.0.0"
+
+        version ->
+          version
+          |> String.trim()
+          |> String.trim_leading("v")
       end
 
     File.write!("VERSION", version)
