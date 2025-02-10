@@ -76,10 +76,11 @@ jobs:
 
       - name: Pix run Pix
         run: |
+          docker buildx build --load --tag pix .
           CACHE="type=gha,scope=pix,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
           docker run --rm \
             --env PIX_DEBUG=true \
             --env PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
-            ghcr.io/${{ github.repository }}:1.2.2 run pix
+            pix run pix
