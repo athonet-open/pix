@@ -77,12 +77,9 @@ jobs:
 
       - name: Pix run Pix
         run: |
-          PIX_DOCKER_BUILD_OPTS="--cache-from=type=gha --cache-to=type=gha,mode=max" \
+          CACHE="type=gha,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN,repository=${{ github.repository }},ghtoken=${{ secrets.GITHUB_TOKEN }}" \
+          PIX_DOCKER_BUILD_OPTS="--cache-from=$CACHE --cache-to=$CACHE,mode=max" \
           docker run --rm \
-            --env ACTIONS_RUNTIME_URL=$ACTIONS_RUNTIME_URL \
-            --env ACTIONS_RUNTIME_TOKEN=$ACTIONS_RUNTIME_TOKEN \
-            --env ACTIONS_CACHE_URL=$ACTIONS_CACHE_URL \
-            --env ACTIONS_RESULTS_URL=$ACTIONS_RESULTS_URL \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run pix
