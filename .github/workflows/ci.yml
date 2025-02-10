@@ -66,7 +66,6 @@ jobs:
           context: .
           file: ./Dockerfile
           cache-from: type=gha
-          cache-to: type=gha,mode=max
           build-args: |
             VERSION=${{ steps.version.outputs.version }}
           tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
@@ -80,7 +79,7 @@ jobs:
           CACHE="type=gha,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
           docker run --rm \
             --env PIX_DEBUG=true \
-            --env PIX_DOCKER_BUILD_OPTS="--cache-from=$CACHE --cache-to=mode=max,$CACHE" \
+            --env PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run pix
