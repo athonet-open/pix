@@ -77,9 +77,9 @@ jobs:
 
       - name: Pix run Pix
         run: |
+          CACHE="type=gha,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN,repository=${{ github.repository }},ghtoken=${{ secrets.GITHUB_TOKEN }}" \
           docker run --rm \
             --env PIX_DEBUG=true \
-            --env CACHE="type=gha,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN,repository=${{ github.repository }},ghtoken=${{ secrets.GITHUB_TOKEN }}" \
             --env PIX_DOCKER_BUILD_OPTS="--cache-from=$CACHE --cache-to=$CACHE,mode=max" \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
