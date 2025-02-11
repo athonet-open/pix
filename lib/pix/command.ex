@@ -83,10 +83,11 @@ defmodule Pix.Command do
     :ok
   end
 
-  @spec graph(Pix.Config.t(), OptionParser.argv()) :: :ok
+  @spec graph(Pix.UserSettings.t(), Pix.Config.t(), OptionParser.argv()) :: :ok
   @cli_args_graph [format: :string]
-  def graph(config, argv) do
+  def graph(user_settings, config, argv) do
     {cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args_graph)
+    cli_opts = Keyword.merge(cli_opts, user_settings.command.graph.cli_opts)
     config_pipelines = config.pipelines
 
     case args do
@@ -190,10 +191,11 @@ defmodule Pix.Command do
     end
   end
 
-  @spec ls(Pix.Config.t(), OptionParser.argv()) :: :ok
+  @spec ls(Pix.UserSettings.t(), Pix.Config.t(), OptionParser.argv()) :: :ok
   @cli_args_ls [all: :boolean]
-  def ls(config, argv) do
+  def ls(user_settings, config, argv) do
     {cli_opts, _args} = OptionParser.parse!(argv, strict: @cli_args_ls)
+    cli_opts = Keyword.merge(cli_opts, user_settings.command.ls.cli_opts)
     display_pipelines(config.pipelines, Keyword.get(cli_opts, :all, false))
     :ok
   end
@@ -272,7 +274,7 @@ defmodule Pix.Command do
     end
   end
 
-  @spec run(Pix.Config.t(), OptionParser.argv()) :: :ok
+  @spec run(Pix.UserSettings.t(), Pix.Config.t(), OptionParser.argv()) :: :ok
   @cli_args_run [
     arg: [:string, :keep],
     no_cache: :boolean,
@@ -283,8 +285,9 @@ defmodule Pix.Command do
     tag: :string,
     target: :string
   ]
-  def run(config, argv) do
+  def run(user_settings, config, argv) do
     {cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args_run)
+    cli_opts = Keyword.merge(cli_opts, user_settings.command.run.cli_opts)
     config_pipelines = config.pipelines
 
     validate_run_cli_opts!(cli_opts)
@@ -306,14 +309,15 @@ defmodule Pix.Command do
     :ok
   end
 
-  @spec shell(Pix.Config.t(), OptionParser.argv()) :: :ok
+  @spec shell(Pix.UserSettings.t(), Pix.Config.t(), OptionParser.argv()) :: :ok
   @cli_args_shell [
     host: :boolean,
     ssh: :boolean,
     target: :string
   ]
-  def shell(config, argv) do
+  def shell(user_settings, config, argv) do
     {cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args_shell)
+    cli_opts = Keyword.merge(cli_opts, user_settings.command.shell.cli_opts)
     config_pipelines = config.pipelines
 
     case args do

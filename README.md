@@ -81,3 +81,8 @@ Then the `pix graph pix` command can be used to generate a graph of a specific p
 The Pix Elixir documentation is built by `pix.docs` target of the pipeline, run `pix run --output pix` to run the pipeline and output the produced artifacts to the current directory. The docs will be available under `.pipeline/output/doc/index.html`.
 
 For more information about the available commands and their options, run `pix help`.
+
+## User settings
+
+User specific settings can be defined in the `~/.config/pix/settings.exs` file, the file is loaded automatically by pix.
+Refer to `Pix.UserSettings` for more information.

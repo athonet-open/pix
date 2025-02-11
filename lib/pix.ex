@@ -16,20 +16,22 @@ defmodule Pix do
     Pix.System.setup()
     Pix.Log.info("\n")
 
+    user_settings = load_user_setting()
+
     case argv do
       ["ls" | sub_argv] ->
-        Pix.Command.ls(Pix.Config.get(), sub_argv)
+        Pix.Command.ls(user_settings, Pix.Config.get(), sub_argv)
 
       ["graph" | sub_argv] ->
-        Pix.Command.graph(Pix.Config.get(), sub_argv)
+        Pix.Command.graph(user_settings, Pix.Config.get(), sub_argv)
 
       ["run" | sub_argv] ->
         Pix.Docker.setup_buildx()
-        Pix.Command.run(Pix.Config.get(), sub_argv)
+        Pix.Command.run(user_settings, Pix.Config.get(), sub_argv)
 
       ["shell" | sub_argv] ->
         Pix.Docker.setup_buildx()
-        Pix.Command.shell(Pix.Config.get(), sub_argv)
+        Pix.Command.shell(user_settings, Pix.Config.get(), sub_argv)
 
       ["upgrade"] ->
         Pix.Command.upgrade()
@@ -43,5 +45,16 @@ defmodule Pix do
     end
 
     :ok
+  end
+
+  @spec load_user_setting :: Pix.UserSettings.t()
+  defp load_user_setting do
+    user_settings = Pix.UserSettings.get()
+
+    for {var_name, var_value} <- user_settings.env do
+      System.put_env(var_name, var_value)
+    end
+
+    user_settings
   end
 end
