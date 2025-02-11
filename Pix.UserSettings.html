@@ -8,7 +8,7 @@
     <meta name="project" content="pix v0.0.0">
 
 
-    <title>Pix.Env — pix v0.0.0</title>
+    <title>Pix.UserSettings — pix v0.0.0</title>
     <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
@@ -111,14 +111,30 @@ Pages
 <div id="top-content">
   <h1>
 
-    <span translate="no">Pix.Env</span> 
+    <span translate="no">Pix.UserSettings</span> 
     <small class="app-vsn" translate="no">(pix v0.0.0)</small>
 
   </h1>
 
 
     <section id="moduledoc">
-<p>Environment information.</p>
+<p>Pix user settings.</p><p>You can set some global settings in your <code class="inline">~/.config/pix/settings.exs</code> file.</p><p>The file should evaluate to a map conform to <a href="#t:t/0"><code class="inline">t/0</code></a>.</p><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="0448087546-1">%{</span><span class="w">
+    </span><span class="ss">env</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0448087546-2">%{</span><span class="w">
+        </span><span class="s">&quot;PIX_DEBUG&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="no">true</span><span class="w">
+    </span><span class="p" data-group-id="0448087546-2">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">command</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0448087546-3">%{</span><span class="w">
+        </span><span class="ss">run</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0448087546-4">%{</span><span class="w">
+            </span><span class="ss">cli_opts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0448087546-5">[</span><span class="w">
+                </span><span class="ss">ssh</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+            </span><span class="p" data-group-id="0448087546-5">]</span><span class="w">
+        </span><span class="p" data-group-id="0448087546-4">}</span><span class="p">,</span><span class="w">
+        </span><span class="ss">shell</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0448087546-6">%{</span><span class="w">
+            </span><span class="ss">cli_opts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0448087546-7">[</span><span class="w">
+                </span><span class="ss">ssh</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
+            </span><span class="p" data-group-id="0448087546-7">]</span><span class="w">
+        </span><span class="p" data-group-id="0448087546-6">}</span><span class="w">
+    </span><span class="p" data-group-id="0448087546-3">}</span><span class="w">
+</span><span class="p" data-group-id="0448087546-1">}</span></code></pre>
     </section>
 
 </div>
@@ -130,6 +146,20 @@ Pages
       </a>
       <span class="text">Summary</span>
     </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
 <div class="summary-functions summary">
   <h2>
     <a href="#functions">Functions</a>
@@ -137,47 +167,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#arch/0" data-no-tooltip translate="no">arch()</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#ci?/0" data-no-tooltip translate="no">ci?()</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#git_commit_sha/0" data-no-tooltip translate="no">git_commit_sha()</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#git_project_name/0" data-no-tooltip translate="no">git_project_name()</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#pix_docker_build_opts/0" data-no-tooltip translate="no">pix_docker_build_opts()</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#pix_docker_run_opts/0" data-no-tooltip translate="no">pix_docker_run_opts()</a>
+        <a href="#get/0" data-no-tooltip translate="no">get()</a>
 
       </div>
 
@@ -188,6 +178,48 @@ Pages
   </section>
 
 
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">t()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Pix.UserSettings{
+  command: %{
+    run: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()},
+    shell: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()},
+    graph: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()},
+    ls: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()}
+  },
+  env: %{required(<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) =&gt; <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
   <section id="functions" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
@@ -196,13 +228,13 @@ Pages
       <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
-<section class="detail" id="arch/0">
+<section class="detail" id="get/0">
 
   <div class="detail-header">
-    <a href="#arch/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#get/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">arch()</h1>
+    <h1 class="signature" translate="no">get()</h1>
 
 
   </div>
@@ -211,117 +243,7 @@ Pages
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> arch() :: <a href="Pix.Config.html#t:supported_arch/0">Pix.Config.supported_arch</a>() | (forced_arch :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>())</pre>
-
-      </div>
-
-
-  </section>
-</section>
-<section class="detail" id="ci?/0">
-
-  <div class="detail-header">
-    <a href="#ci?/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">ci?()</h1>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@spec</span> ci?() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
-
-      </div>
-
-
-  </section>
-</section>
-<section class="detail" id="git_commit_sha/0">
-
-  <div class="detail-header">
-    <a href="#git_commit_sha/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">git_commit_sha()</h1>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@spec</span> git_commit_sha() :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()</pre>
-
-      </div>
-
-
-  </section>
-</section>
-<section class="detail" id="git_project_name/0">
-
-  <div class="detail-header">
-    <a href="#git_project_name/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">git_project_name()</h1>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@spec</span> git_project_name() :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()</pre>
-
-      </div>
-
-
-  </section>
-</section>
-<section class="detail" id="pix_docker_build_opts/0">
-
-  <div class="detail-header">
-    <a href="#pix_docker_build_opts/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">pix_docker_build_opts()</h1>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@spec</span> pix_docker_build_opts() :: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:argv/0">OptionParser.argv</a>()</pre>
-
-      </div>
-
-
-  </section>
-</section>
-<section class="detail" id="pix_docker_run_opts/0">
-
-  <div class="detail-header">
-    <a href="#pix_docker_run_opts/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">pix_docker_run_opts()</h1>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@spec</span> pix_docker_run_opts() :: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:argv/0">OptionParser.argv</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> get() :: <a href="#t:t/0">t</a>()</pre>
 
       </div>
 
