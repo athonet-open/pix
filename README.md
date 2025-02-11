@@ -55,12 +55,12 @@ Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is
 
 ## Quick start
 
-For this quick start, we will use pix project itself.
-The pix project defines a pix pipeline that can be used to build and test pix itself.
+For this quick start, we will use the pix project itself.
+The pix project declares a pipeline that can be used to build and test pix itself.
 
 The project is defined with a [.pix.exs](.pix.exs) file.
 
-In the .pix.exs file, we setup a single pipelines - `pix` - with their default arguments and targets.
+In the .pix.exs file, we setup a single pipeline - `pix` - with its default arguments and targets.
 The pipeline definition is imported `from` a local `path` (in this case `.`, root directory).
 
 In the root directory we have the [pipeline.exs](pipeline.exs) file that defines the pipeline.
@@ -74,10 +74,10 @@ $ pix run pix
 
 This will build the project, the docs, run the tests, etc..
 
-The `pix ls pix` command can be used to list all the pipelines defined in the project along with their configuration.
+The `pix ls pix` command can be used to list all the pipelines declared in the project along with their configuration.
 
 Then the `pix graph pix` command can be used to generate a graph of a specific pipeline.
 
-The Pix Elixir documentation is built by the pipeline, run `pix run --output pix` to run the pipeline and output the produced artifacts to the current directory. The docs will be available under `.pipeline/output/doc/index.html`.
+The Pix Elixir documentation is built by `pix.docs` target of the pipeline, run `pix run --output pix` to run the pipeline and output the produced artifacts to the current directory. The docs will be available under `.pipeline/output/doc/index.html`.
 
 For more information about the available commands and their options, run `pix help`.
