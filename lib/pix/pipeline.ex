@@ -110,20 +110,23 @@ defmodule Pix.Pipeline do
 
   @spec build_run_pipeline_dockerfile(Pix.Pipeline.SDK.t(), String.t(), [String.t()]) :: String.t()
   defp build_run_pipeline_dockerfile(pipeline, pipeline_target, targets) do
-    pipeline_run_stage =
+    pipeline = Pix.Pipeline.SDK.stage(pipeline, pipeline_target, from: "scratch", private: true)
+
+    pipeline =
       for target_id <- targets,
           stage = Enum.find(pipeline.stages, &(&1.stage == target_id)),
           outputs = if(stage.outputs == [], do: [nil], else: stage.outputs),
           output <- outputs,
-          into: "FROM scratch AS #{pipeline_target}\n" do
-        if output do
-          "COPY --from=#{target_id} #{output} /#{Path.basename(output)}\n"
-        else
-          "COPY --from=#{target_id} /pix.nothing* /\n"
-        end
+          reduce: pipeline do
+        pipeline ->
+          if output do
+            Pix.Pipeline.SDK.copy(pipeline, output, "/#{Path.basename(output)}", from: target_id)
+          else
+            Pix.Pipeline.SDK.copy(pipeline, "/pix.nothing*", "/", from: target_id)
+          end
       end
 
-    Pix.Pipeline.SDK.dump(pipeline) <> "\n" <> pipeline_run_stage
+    Pix.Pipeline.SDK.dump(pipeline)
   end
 
   @spec write_pipeline_files(String.t(), [String.t()]) :: Path.t()

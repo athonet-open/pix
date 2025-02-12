@@ -2,8 +2,8 @@ defmodule Pix.Pipeline.SDK do
   @moduledoc """
   Provides APIs for building Dockerfiles pipelines programmatically.
 
-  The names of the functions maps to the [Dockerfile](https://docs.docker.com/engine/reference/builder/) commands.
-  Some of the functions have addition options to extend the functionality of the commands (eg. `private` and `cache` in `stage/2`)
+  The names of the functions map to the [Dockerfile](https://docs.docker.com/engine/reference/builder/) commands.
+  Some of the functions have additional options to extend the functionality of the commands (eg. `private` and `cache` in `stage/2`)
   and some functions are extension to the commands (eg. `output/2`).
 
   For example:
