@@ -10,21 +10,21 @@ defmodule Pix.UserSettings do
 
   ```elixir
   %{
-      env: %{
-          "PIX_DEBUG" => true
+    env: %{
+      "PIX_DEBUG" => true
+    },
+    command: %{
+      run: %{
+        cli_opts: [
+          ssh: true
+        ]
       },
-      command: %{
-          run: %{
-              cli_opts: [
-                  ssh: true
-              ]
-          },
-          shell: %{
-              cli_opts: [
-                  ssh: true
-              ]
-          }
+      shell: %{
+        cli_opts: [
+          ssh: true
+        ]
       }
+    }
   }
   ```
   """
