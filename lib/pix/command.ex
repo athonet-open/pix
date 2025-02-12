@@ -39,8 +39,8 @@ defmodule Pix.Command do
             PIPELINE            The selected pipeline
 
         FLAGS:
-            #{opt.("--output")}            Output the target artifacts under .pipeline/output directory
             #{opt.("--no-cache")}          Do not use cache when building the image
+            #{opt.("--output")}            Output the target artifacts under .pipeline/output directory
 
         OPTIONS:
             #{opt.("--arg")}*              Set pipeline one or more ARG (format KEY=value)
