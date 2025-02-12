@@ -19,7 +19,7 @@ It's just an instrumented docker multistage build programmatically defined via E
 ### The pipeline executor
 
 Pix generates the multistage docker build definition and execute it via `docker buildx build`.
-The execution semantics (parallelism, cache, etc) are the same as a standard docker build.
+The execution semantic (parallelism, cache, etc) is the same as a standard docker build.
 
 ## Installation
 
