@@ -43,14 +43,14 @@ defmodule Pix.Command do
             #{opt.("--output")}            Output the target artifacts under .pipeline/output directory
 
         OPTIONS:
-            #{opt.("--arg")}*              Set pipeline one or more ARG (format KEY=value)
+            #{opt.("--arg")}*              Set one or more pipeline ARG (format KEY=value)
             #{opt.("--no-cache-filter")}*  Do not cache specified targets
             #{opt.("--progress")}          Set type of progress output - "auto", "plain", "tty", "rawjson" (default "auto")
             #{opt.("--ssh")}               Forward SSH agent to `buildx build`
             #{opt.("--tag")}               Tag the TARGET's docker image (default: no tag)
             #{opt.("--target")}            Run PIPELINE for a specific TARGET (default: all the PIPELINE targets)
 
-    #{cmd.("pix shell")} [#{opt.("--target TARGET")}] [#{opt.("--host")}] PIPELINE [COMMAND]
+    #{cmd.("pix shell")} [#{opt.("--arg ARG")}]* [#{opt.("--target TARGET")}] [#{opt.("--host")}] PIPELINE [COMMAND]
         Shell into the specified target of the PIPELINE.
 
         ARGS:
@@ -61,6 +61,7 @@ defmodule Pix.Command do
             #{opt.("--host")}              The shell bind mounts the current working dir (reflect files changes between the host and the shell container)
 
         OPTIONS:
+            #{opt.("--arg")}*              Set one or more pipeline ARG (format KEY=value)
             #{opt.("--ssh")}               Forward SSH agent to shell container
             #{opt.("--target")}            The shell target
 
@@ -319,6 +320,7 @@ defmodule Pix.Command do
 
   @spec shell(Pix.UserSettings.t(), Pix.Config.t(), OptionParser.argv()) :: :ok
   @cli_args_shell [
+    arg: [:string, :keep],
     host: :boolean,
     ssh: :boolean,
     target: :string

@@ -13,7 +13,8 @@ defmodule Pix.Pipeline do
         ]
 
   @type shell_cli_opts :: [
-          {:host, boolean()}
+          {:arg, String.t()}
+          | {:host, boolean()}
           | {:ssh, boolean()}
           | {:target, String.t()}
         ]
@@ -72,7 +73,9 @@ defmodule Pix.Pipeline do
     # Build shell image
     pipeline = pipeline_mod.shell(pipeline, shell_target, shell_from_target)
     dockerfile_path = write_pipeline_files(Pix.Pipeline.SDK.dump(pipeline), pipeline.dockerignore)
-    build_opts = shell_build_options(shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path)
+
+    build_opts =
+      shell_build_options(cli_opts, shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path)
 
     execute_shell_build(build_opts, shell_target, cli_opts)
 
@@ -234,8 +237,11 @@ defmodule Pix.Pipeline do
     :ok
   end
 
-  @spec shell_build_options(String.t(), String.t(), Pix.Config.from(), Path.t(), map(), Path.t()) :: Pix.Docker.opts()
-  defp shell_build_options(shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path) do
+  @spec shell_build_options(shell_cli_opts(), String.t(), String.t(), Pix.Config.from(), Path.t(), map(), Path.t()) ::
+          Pix.Docker.opts()
+  defp shell_build_options(cli_opts, shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path) do
+    cli_args = for {:arg, arg} <- cli_opts, do: arg
+
     [
       :load,
       target: shell_target,
@@ -243,7 +249,7 @@ defmodule Pix.Pipeline do
       build_context: "#{Pix.Pipeline.SDK.pipeline_ctx()}=#{ctx_dir}",
       platform: "linux/#{Pix.Env.arch()}",
       tag: shell_docker_image
-    ] ++ pipeline_build_args(shell_target, from, default_args, [])
+    ] ++ pipeline_build_args(shell_target, from, default_args, cli_args)
   end
 
   @spec shell_run_options(String.t(), Pix.Config.from(), shell_cli_opts()) :: Pix.Docker.opts()
