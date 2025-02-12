@@ -15,11 +15,12 @@ defmodule Pix.Command do
 
     #{section.("COMMANDS")}:
 
-    #{cmd.("pix ls")} [#{opt.("--all")}]
-        List the current project's pipelines configuration.
+    #{cmd.("pix ls")} [#{opt.("--verbose")}] [#{opt.("--hidden")}]
+        List the current project's pipelines.
 
         FLAGS:
-            #{opt.("--all")}               Show also private pipelines targets
+            #{opt.("--verbose")}           Show pipeline configuration details
+            #{opt.("--hidden")}            Show also private pipelines targets
 
     #{cmd.("pix graph")} [#{opt.("--format FORMAT")}] PIPELINE
         Prints the pipeline graph.
@@ -192,33 +193,40 @@ defmodule Pix.Command do
   end
 
   @spec ls(Pix.UserSettings.t(), Pix.Config.t(), OptionParser.argv()) :: :ok
-  @cli_args_ls [all: :boolean]
+  @cli_args_ls [verbose: :boolean, hidden: :boolean]
   def ls(user_settings, config, argv) do
     {cli_opts, _args} = OptionParser.parse!(argv, strict: @cli_args_ls)
     cli_opts = Keyword.merge(cli_opts, user_settings.command.ls.cli_opts)
-    display_pipelines(config.pipelines, Keyword.get(cli_opts, :all, false))
+    verbose? = Keyword.get(cli_opts, :verbose, false)
+    hidden? = Keyword.get(cli_opts, :hidden, false)
+    display_pipelines(config.pipelines, verbose?, hidden?)
     :ok
   end
 
-  defp display_pipelines(pipelines, show_all?) do
+  defp display_pipelines(pipelines, verbose?, hidden?) do
     IO.puts("")
 
     for {alias_, pipeline} <- pipelines do
-      display_pipeline_header(alias_, pipeline)
-      display_pipeline_details(pipeline)
-      display_pipeline_targets(pipeline, show_all?)
-      IO.puts("")
+      display_pipeline_header(alias_)
+
+      if verbose? do
+        display_pipeline_details(pipeline)
+        display_pipeline_targets(pipeline, hidden?)
+        IO.puts("")
+      end
     end
   end
 
-  defp display_pipeline_header(alias_, %{default_args: args}) do
+  defp display_pipeline_header(alias_) do
     IO.puts(IO.ANSI.format([:bright, :underline, alias_, "\n"]))
-    IO.puts("  default_args:")
-    display_args(args, "    ")
   end
 
-  defp display_pipeline_details(%{pipeline_mod: mod}) do
+  defp display_pipeline_details(%{pipeline_mod: mod, default_args: args}) do
     pipeline = mod.pipeline()
+
+    IO.puts("  default_args:")
+    display_args(args, "    ")
+
     IO.puts("  pipeline: #{IO.ANSI.format([:faint, pipeline.name])}")
 
     # Display description
@@ -236,12 +244,12 @@ defmodule Pix.Command do
     IO.puts("    shell: #{IO.ANSI.format([:faint, shell_status])}")
   end
 
-  defp display_pipeline_targets(%{default_targets: defaults, pipeline_mod: mod}, show_all?) do
+  defp display_pipeline_targets(%{default_targets: defaults, pipeline_mod: mod}, hidden?) do
     pipeline = mod.pipeline()
     IO.puts("    targets:")
     IO.puts("      default: #{IO.ANSI.format([:faint, :green, inspect(defaults)])}")
 
-    for stage <- pipeline.stages, show_all? or not stage.private do
+    for stage <- pipeline.stages, hidden? or not stage.private do
       display_stage(stage)
     end
   end

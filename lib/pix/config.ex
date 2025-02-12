@@ -48,8 +48,7 @@ defmodule Pix.Config do
       mod = Pix.Helper.compile_file(pix_exs_path)
       pix_exs = validate_pix_exs(mod.project())
 
-      pipelines = Map.keys(pix_exs.pipelines)
-      Pix.Log.internal("Loaded project manifest (pipelines: #{inspect(pipelines)})\n")
+      Pix.Log.internal("Loaded project manifest\n")
 
       require_pipelines(pix_exs)
     else
