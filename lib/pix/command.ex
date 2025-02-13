@@ -205,7 +205,7 @@ defmodule Pix.Command do
   end
 
   defp display_pipelines(pipelines, verbose?, hidden?) do
-    IO.puts("")
+    IO.puts(IO.ANSI.format([:bright, "\nAvailable pipelines:\n"]))
 
     for {alias_, pipeline} <- pipelines do
       display_pipeline_header(alias_)
@@ -219,36 +219,40 @@ defmodule Pix.Command do
   end
 
   defp display_pipeline_header(alias_) do
-    IO.puts(IO.ANSI.format([:bright, :underline, alias_, "\n"]))
+    IO.puts(IO.ANSI.format([:bright, "📦 #{alias_}"]))
+    IO.puts(String.duplicate("─", String.length(alias_) + 4))
+    IO.puts("")
   end
 
   defp display_pipeline_details(%{pipeline_mod: mod, default_args: args}) do
     pipeline = mod.pipeline()
 
-    IO.puts("  default_args:")
-    display_args(args, "    ")
+    if args != %{} do
+      IO.puts("📝 Default Arguments:")
+      display_args(args, "   ")
+      IO.puts("")
+    end
 
-    IO.puts("  pipeline: #{IO.ANSI.format([:faint, pipeline.name])}")
-
-    # Display description
-    IO.puts("    description:")
+    IO.puts("📝 Description:")
 
     pipeline.description
     |> String.trim()
     |> String.split("\n")
-    |> Enum.each(&IO.puts("      #{IO.ANSI.format([:faint, &1])}"))
+    |> Enum.each(&IO.puts("   #{IO.ANSI.format([:faint, &1])}"))
 
-    # Display args and shell status
-    IO.puts("    args:")
-    display_args(pipeline.args_, "      ")
-    shell_status = if function_exported?(mod, :shell, 3), do: "available", else: "not available"
-    IO.puts("    shell: #{IO.ANSI.format([:faint, shell_status])}")
+    IO.puts("")
+
+    shell_status = if function_exported?(mod, :shell, 3), do: "Available", else: "Not Available"
+    IO.puts("🐚 Shell Access: #{IO.ANSI.format([:faint, shell_status])}")
+    IO.puts("")
   end
 
   defp display_pipeline_targets(%{default_targets: defaults, pipeline_mod: mod}, hidden?) do
     pipeline = mod.pipeline()
-    IO.puts("    targets:")
-    IO.puts("      default: #{IO.ANSI.format([:faint, :green, inspect(defaults)])}")
+    IO.puts("🎯 Default Targets: #{IO.ANSI.format([:faint, :green, inspect(defaults)])}")
+    IO.puts("")
+    IO.puts("📋 Targets:")
+    IO.puts("")
 
     for stage <- pipeline.stages, hidden? or not stage.private do
       display_stage(stage)
@@ -262,19 +266,26 @@ defmodule Pix.Command do
          private: private,
          cache: cache
        }) do
-    # Stage name with formatting based on privacy
     stage_format = if private, do: [:faint, :green], else: [:green]
-    IO.puts("      #{IO.ANSI.format(stage_format ++ [name])}:")
+    IO.puts("   ▶️ #{IO.ANSI.format(stage_format ++ [name])}")
 
-    # Display stage properties
-    if private, do: IO.puts("        private: true")
-    if not cache, do: IO.puts("        cache: #{IO.ANSI.format([:faint, "disabled"])}")
+    if private, do: IO.puts("      • Private: true")
+    if not cache, do: IO.puts("      • Cache: #{IO.ANSI.format([:faint, "Disabled"])}")
 
-    # Display args and outputs
-    IO.puts("        args:")
-    display_args(args, "          ")
-    IO.puts("        outputs:")
-    for output <- outputs, do: IO.puts("          #{IO.ANSI.format([:yellow, :faint, "- #{inspect(output)}"])}")
+    if args != %{} do
+      IO.puts("      • Arguments:")
+      display_args(args, "        - ")
+    end
+
+    if outputs != [] do
+      IO.puts("      • Outputs:")
+
+      for output <- outputs do
+        IO.puts("        - #{IO.ANSI.format([:yellow, :faint, output])}")
+      end
+    end
+
+    IO.puts("")
   end
 
   defp display_args(args, indent) do
