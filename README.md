@@ -42,7 +42,7 @@ $ docker run --rm -it \
   ghcr.io/visciang/pix:X.Y.Z
 ```
 
-in this case is important to give the pix container access the docker engine
+in this case is important to give the pix container access the docker engine.
 You can use the Docker Socket Mounting (DooD - Docker outside of docker) or the Docker-in-Docker (dind) mode.
 
 If you need SSH access, you need to forward the SSH agent socket to the pix container.
