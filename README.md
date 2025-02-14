@@ -74,7 +74,7 @@ $ pix run pix
 
 This will build the project, the docs, run the tests, etc..
 
-The `pix ls pix` command can be used to list all the pipelines declared in the project along with their configuration.
+The `pix ls --verbose pix` command can be used to list all the pipelines declared in the project along with their configuration.
 
 Then the `pix graph pix` command can be used to generate a graph of a specific pipeline.
 
