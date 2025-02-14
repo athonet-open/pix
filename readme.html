@@ -157,7 +157,7 @@ The execution semantic (parallelism, cache, etc) is the same as a standard docke
 </span><span class="">  --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
 </span><span class="">  --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
 </span><span class="">  ghcr.io/visciang/pix:X.Y.Z
-</span></code></pre><p>in this case is important to give the pix container access the docker engine
+</span></code></pre><p>in this case is important to give the pix container access the docker engine.
 You can use the Docker Socket Mounting (DooD - Docker outside of docker) or the Docker-in-Docker (dind) mode.</p><p>If you need SSH access, you need to forward the SSH agent socket to the pix container.
 Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is accessible via:</p><pre><code class="makeup bash" translate="no"><span class="">--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
 </span><span class="">--env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
