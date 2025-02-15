@@ -12,9 +12,9 @@ defmodule Pix do
 
   @spec main(OptionParser.argv()) :: :ok
   def main(argv) do
-    Pix.Log.info("pix v#{version()}\n")
+    Pix.Report.info("pix v#{version()}\n")
     Pix.System.setup()
-    Pix.Log.info("\n")
+    Pix.Report.info("\n")
 
     user_settings = load_user_setting()
 
@@ -40,7 +40,7 @@ defmodule Pix do
         Pix.Command.help()
 
       cmd ->
-        Pix.Log.error("Unknown command #{inspect(cmd)}\n")
+        Pix.Report.error("Unknown command #{inspect(cmd)}\n")
         System.halt(1)
     end
 

@@ -1,4 +1,4 @@
-defmodule Pix.Log do
+defmodule Pix.Report do
   @moduledoc false
 
   @spec info(IO.chardata()) :: :ok
@@ -9,4 +9,11 @@ defmodule Pix.Log do
 
   @spec internal(IO.chardata()) :: :ok
   def internal(msg), do: IO.write(IO.ANSI.format([:faint, msg]))
+
+  @spec debug(IO.chardata()) :: :ok
+  def debug(msg) do
+    if System.get_env("PIX_DEBUG") == "true" do
+      IO.write(IO.ANSI.format([:faint, msg]))
+    end
+  end
 end

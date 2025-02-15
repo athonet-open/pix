@@ -102,8 +102,8 @@ defmodule Pix.Pipeline do
 
     for target <- targets do
       if target not in known_public_targets do
-        Pix.Log.error("Unknown target #{inspect(target)}\n")
-        Pix.Log.error("Available run targets #{inspect(known_public_targets)}\n")
+        Pix.Report.error("Unknown target #{inspect(target)}\n")
+        Pix.Report.error("Available run targets #{inspect(known_public_targets)}\n")
         System.halt(1)
       end
     end
@@ -186,14 +186,14 @@ defmodule Pix.Pipeline do
 
   @spec execute_run_build(Pix.Docker.opts(), Path.t(), run_cli_opts(), [String.t()]) :: :ok
   defp execute_run_build(build_opts, dockerfile_path, cli_opts, targets) do
-    Pix.Log.info("\nRunning pipeline (targets: #{inspect(targets)})\n\n")
+    Pix.Report.info("\nRunning pipeline (targets: #{inspect(targets)})\n\n")
 
     build_opts = Keyword.put(build_opts, :file, dockerfile_path)
     Pix.Docker.build(cli_opts[:ssh], build_opts, ".") |> halt_on_error()
 
     if cli_opts[:output] do
-      Pix.Log.info("\nExported pipeline outputs to .pipeline/output:\n")
-      for f <- File.ls!(".pipeline/output"), do: Pix.Log.info("- #{f}\n")
+      Pix.Report.info("\nExported pipeline outputs to .pipeline/output:\n")
+      for f <- File.ls!(".pipeline/output"), do: Pix.Report.info("- #{f}\n")
     end
 
     :ok
@@ -201,7 +201,7 @@ defmodule Pix.Pipeline do
 
   @spec execute_tag(Pix.Docker.opts(), Path.t(), run_cli_opts()) :: :ok
   defp execute_tag(build_opts, dockerfile_path, cli_opts) do
-    Pix.Log.info("\nTagging pipeline target #{inspect(cli_opts[:target])} as #{inspect(cli_opts[:tag])}\n\n")
+    Pix.Report.info("\nTagging pipeline target #{inspect(cli_opts[:target])} as #{inspect(cli_opts[:tag])}\n\n")
 
     build_opts =
       build_opts
@@ -217,7 +217,7 @@ defmodule Pix.Pipeline do
   @spec validate_shell_capability!(module(), String.t()) :: :ok
   defp validate_shell_capability!(pipeline_mod, pipeline_name) do
     unless function_exported?(pipeline_mod, :shell, 3) do
-      Pix.Log.error("Pipeline #{pipeline_name} does not provide a shell")
+      Pix.Report.error("Pipeline #{pipeline_name} does not provide a shell")
       System.halt(1)
     end
 
@@ -229,8 +229,8 @@ defmodule Pix.Pipeline do
     known_targets = pipeline_targets(pipeline, :all)
 
     if shell_from_target not in [:default | known_targets] do
-      Pix.Log.error("Pipeline #{pipeline.name} does not define a #{shell_from_target} target\n")
-      Pix.Log.error("Available shell targets #{inspect(known_targets)}\n")
+      Pix.Report.error("Pipeline #{pipeline.name} does not define a #{shell_from_target} target\n")
+      Pix.Report.error("Available shell targets #{inspect(known_targets)}\n")
       System.halt(1)
     end
 
@@ -269,7 +269,7 @@ defmodule Pix.Pipeline do
 
   @spec execute_shell_build(Pix.Docker.opts(), String.t(), shell_cli_opts()) :: :ok
   defp execute_shell_build(build_opts, shell_target, cli_opts) do
-    Pix.Log.info("\nBuilding pipeline (target=#{shell_target})\n\n")
+    Pix.Report.info("\nBuilding pipeline (target=#{shell_target})\n\n")
 
     Pix.Docker.build(cli_opts[:ssh], build_opts, ".")
     |> halt_on_error()
@@ -279,7 +279,7 @@ defmodule Pix.Pipeline do
 
   @spec enter_shell(String.t(), String.t(), Pix.Config.from(), shell_cli_opts(), [String.t()]) :: :ok
   defp enter_shell(shell_docker_image, shell_target, from, cli_opts, cmd_args) do
-    Pix.Log.info("\nEntering shell\n")
+    Pix.Report.info("\nEntering shell\n")
 
     opts = shell_run_options(shell_target, from, cli_opts)
 

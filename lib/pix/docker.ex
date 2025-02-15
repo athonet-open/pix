@@ -13,22 +13,22 @@ defmodule Pix.Docker do
   def setup_buildx do
     assert_docker_installed()
 
-    Pix.Log.internal("Setup docker buildx builder (#{buildx_builder()}, buildkit #{@buildkit_version}) ... ")
+    Pix.Report.internal("Setup docker buildx builder (#{buildx_builder()}, buildkit #{@buildkit_version}) ... ")
 
     case System.cmd("docker", ["buildx", "inspect", "--builder", buildx_builder()], stderr_to_stdout: true) do
       {_, 0} ->
-        Pix.Log.internal("already present\n")
+        Pix.Report.internal("already present\n")
 
       _ ->
         opts = ["--driver", "docker-container", "--driver-opt", "image=moby/buildkit:#{@buildkit_version}"]
         {_, 0} = System.cmd("docker", ["buildx", "create", "--bootstrap", "--name", buildx_builder() | opts])
 
-        Pix.Log.internal("\n\nCreated builder:`\n")
+        Pix.Report.internal("\n\nCreated builder:`\n")
 
         {inspect, 0} =
           System.cmd("docker", ["buildx", "inspect", "--builder", buildx_builder()], stderr_to_stdout: true)
 
-        Pix.Log.internal("\n#{inspect}\n")
+        Pix.Report.internal("\n#{inspect}\n")
     end
 
     :ok
@@ -61,16 +61,19 @@ defmodule Pix.Docker do
     ssh_sock =
       cond do
         :os.type() == {:unix, :darwin} ->
-          Pix.Log.internal(">>> detected Darwin OS - assuming 'docker desktop' environment for SSH socket forwarding\n")
+          Pix.Report.internal(
+            ">>> detected Darwin OS - assuming 'docker desktop' environment for SSH socket forwarding\n"
+          )
+
           @docker_desktop_socket
 
         System.get_env("SSH_AUTH_SOCK") == nil ->
-          Pix.Log.internal(">>> SSH socket NOT forwarded\n")
+          Pix.Report.internal(">>> SSH socket NOT forwarded\n")
           nil
 
         true ->
           ssh_auth_sock = System.get_env("SSH_AUTH_SOCK", "")
-          Pix.Log.internal(">>> forwarding SSH socket via #{inspect(ssh_auth_sock)}\n")
+          Pix.Report.internal(">>> forwarding SSH socket via #{inspect(ssh_auth_sock)}\n")
           ssh_auth_sock
       end
 
@@ -84,7 +87,7 @@ defmodule Pix.Docker do
   @spec run_opts_docker_outside_of_docker :: opts()
   defp run_opts_docker_outside_of_docker do
     docker_socket = "/var/run/docker.sock"
-    Pix.Log.internal(">>> Supporting docker outside-of docker via socket mount (#{docker_socket})\n")
+    Pix.Report.internal(">>> Supporting docker outside-of docker via socket mount (#{docker_socket})\n")
     [volume: "#{docker_socket}:#{docker_socket}"]
   end
 
@@ -108,23 +111,21 @@ defmodule Pix.Docker do
     case System.cmd("docker", ["info", "--format", "json"], stderr_to_stdout: true) do
       {info, 0} ->
         info = JSON.decode!(info)
-        Pix.Log.internal("Running on #{info["Name"]} #{info["OSType"]}-#{info["Architecture"]} ")
-        Pix.Log.internal("(client #{info["ClientInfo"]["Version"]}, ")
-        Pix.Log.internal("server #{info["ServerVersion"]} experimental_build=#{info["ExperimentalBuild"]})\n")
+        Pix.Report.internal("Running on #{info["Name"]} #{info["OSType"]}-#{info["Architecture"]} ")
+        Pix.Report.internal("(client #{info["ClientInfo"]["Version"]}, ")
+        Pix.Report.internal("server #{info["ServerVersion"]} experimental_build=#{info["ExperimentalBuild"]})\n")
 
       {err, _} ->
-        Pix.Log.error("Cannot run docker\n\n#{err}\n")
+        Pix.Report.error("Cannot run docker\n\n#{err}\n")
         System.halt(1)
     end
   end
 
   defp debug_docker(opts, args) do
-    if System.get_env("PIX_DEBUG") == "true" do
-      Pix.Log.internal("docker #{inspect(args)}\n")
+    Pix.Report.debug("docker #{inspect(args)}\n")
 
-      if opts[:file] do
-        Pix.Log.internal(File.read!(opts[:file]) <> "\n")
-      end
+    if opts[:file] do
+      Pix.Report.debug(File.read!(opts[:file]) <> "\n")
     end
   end
 

@@ -48,11 +48,11 @@ defmodule Pix.Config do
       mod = Pix.Helper.compile_file(pix_exs_path)
       pix_exs = validate_pix_exs(mod.project())
 
-      Pix.Log.internal("Loaded project manifest\n")
+      Pix.Report.internal("Loaded project manifest\n")
 
       require_pipelines(pix_exs)
     else
-      Pix.Log.error("Cannot find a #{pix_exs_path} file in the current working directory\n")
+      Pix.Report.error("Cannot find a #{pix_exs_path} file in the current working directory\n")
       System.halt(1)
     end
   end
@@ -102,7 +102,7 @@ defmodule Pix.Config do
 
   @spec get_git_pipeline(uri :: String.t(), ref :: String.t()) :: :ok
   defp get_git_pipeline(uri, ref) do
-    Pix.Log.internal("Fetching remote git pipeline #{uri} (#{ref}) ... ")
+    Pix.Report.internal("Fetching remote git pipeline #{uri} (#{ref}) ... ")
 
     checkout_dir = Path.join([".pipeline", "checkout", uri, ref])
     cmd_opts = [stderr_to_stdout: true, cd: checkout_dir]
@@ -111,17 +111,17 @@ defmodule Pix.Config do
       _ = System.cmd("git", ["fetch", "origin", ref], cmd_opts)
       _ = System.cmd("git", ["reset", "--hard", "FETCH_HEAD"], cmd_opts)
 
-      Pix.Log.internal("local checkout updated\n")
+      Pix.Report.internal("local checkout updated\n")
     else
       File.mkdir_p!(checkout_dir)
 
       case System.cmd("git", ["clone", "--depth", "1", "--branch", ref, uri, "."], cmd_opts) do
         {_, 0} ->
-          Pix.Log.internal("clone completed\n")
+          Pix.Report.internal("clone completed\n")
 
         {err_msg, _} ->
-          Pix.Log.internal("error\n\n")
-          Pix.Log.error(err_msg)
+          Pix.Report.internal("error\n\n")
+          Pix.Report.error(err_msg)
 
           File.rm_rf!(checkout_dir)
           System.halt(1)
@@ -143,7 +143,7 @@ defmodule Pix.Config do
     pipeline_exs_path = Path.join(pipeline_exs_dir, "pipeline.exs")
 
     if not File.exists?(pipeline_exs_path) do
-      Pix.Log.error("Pipeline specification '#{pipeline_exs_path}' file not found in #{inspect(from)}\n")
+      Pix.Report.error("Pipeline specification '#{pipeline_exs_path}' file not found in #{inspect(from)}\n")
 
       System.halt(1)
     end

@@ -13,7 +13,7 @@ defmodule Pix.Helper do
         Code.compile_file(path)
       rescue
         err ->
-          Pix.Log.error("Failed to compile #{path} due to errors #{inspect(err)}\n\n")
+          Pix.Report.error("Failed to compile #{path} due to errors #{inspect(err)}\n\n")
           System.halt(1)
       end
     end)
@@ -23,10 +23,10 @@ defmodule Pix.Helper do
         module
 
       {_, warnings} when warnings != [] ->
-        Pix.Log.error("Failed to compile #{path} due to warnings:\n\n")
+        Pix.Report.error("Failed to compile #{path} due to warnings:\n\n")
 
         for %{message: msg, position: {line, col}, severity: :warning} <- warnings,
-            do: Pix.Log.error("warning: #{msg}\n  at line #{line}, column #{col}\n\n")
+            do: Pix.Report.error("warning: #{msg}\n  at line #{line}, column #{col}\n\n")
 
         System.halt(1)
 
@@ -42,7 +42,7 @@ defmodule Pix.Helper do
         Code.eval_file(path)
       rescue
         err ->
-          Pix.Log.error("Failed to evaluate #{path} due to errors #{inspect(err)}\n\n")
+          Pix.Report.error("Failed to evaluate #{path} due to errors #{inspect(err)}\n\n")
           System.halt(1)
       end
     end)
@@ -52,10 +52,10 @@ defmodule Pix.Helper do
         data
 
       {_, warnings} when warnings != [] ->
-        Pix.Log.error("Failed to compile #{path} due to warnings:\n\n")
+        Pix.Report.error("Failed to compile #{path} due to warnings:\n\n")
 
         for %{message: msg, position: {line, col}, severity: :warning} <- warnings,
-            do: Pix.Log.error("warning: #{msg}\n  at line #{line}, column #{col}\n\n")
+            do: Pix.Report.error("warning: #{msg}\n  at line #{line}, column #{col}\n\n")
 
         System.halt(1)
     end

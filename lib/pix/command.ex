@@ -10,7 +10,7 @@ defmodule Pix.Command do
     opt = &IO.ANSI.format([:faint, :green, &1])
     var = &IO.ANSI.format([:blue, &1])
 
-    Pix.Log.info("""
+    Pix.Report.info("""
     Pix - Pipelines for buildx.
 
     #{section.("COMMANDS")}:
@@ -105,12 +105,12 @@ defmodule Pix.Command do
         end
 
       [unknown_pipeline_alias] ->
-        Pix.Log.error("Unknown pipeline #{inspect(unknown_pipeline_alias)}\n")
-        Pix.Log.error("Available pipelines #{inspect(Map.keys(config_pipelines))})\n")
+        Pix.Report.error("Unknown pipeline #{inspect(unknown_pipeline_alias)}\n")
+        Pix.Report.error("Available pipelines #{inspect(Map.keys(config_pipelines))})\n")
         System.halt(1)
 
       _ ->
-        Pix.Log.error("'graph' command accept exactly one pipeline but got #{inspect(args)}\n")
+        Pix.Report.error("'graph' command accept exactly one pipeline but got #{inspect(args)}\n")
         System.halt(1)
     end
 
@@ -131,7 +131,7 @@ defmodule Pix.Command do
 
     File.write!("graph.dot", dot)
 
-    Pix.Log.info("Generated graph.dot\n")
+    Pix.Report.info("Generated graph.dot\n")
   end
 
   defp display_graph(pipeline) do
@@ -160,7 +160,7 @@ defmodule Pix.Command do
 
     node_colors = dag |> Pix.Pipeline.Graph.nodes() |> Enum.zip(Stream.cycle(ansi_colors)) |> Map.new()
 
-    Pix.Log.info("\nPipeline graph:\n\n")
+    Pix.Report.info("\nPipeline graph:\n\n")
 
     IO.puts(IO.ANSI.format([:bright, pipeline.name]))
 
@@ -319,12 +319,12 @@ defmodule Pix.Command do
         Pix.Pipeline.run(config_pipelines[pipeline_alias], cli_opts)
 
       [unknown_pipeline_alias] ->
-        Pix.Log.error("Unknown pipeline #{inspect(unknown_pipeline_alias)}\n")
-        Pix.Log.error("Available pipelines #{inspect(Map.keys(config_pipelines))})\n")
+        Pix.Report.error("Unknown pipeline #{inspect(unknown_pipeline_alias)}\n")
+        Pix.Report.error("Available pipelines #{inspect(Map.keys(config_pipelines))})\n")
         System.halt(1)
 
       _ ->
-        Pix.Log.error("'run' command accept exactly one pipeline but got #{inspect(args)}\n")
+        Pix.Report.error("'run' command accept exactly one pipeline but got #{inspect(args)}\n")
         System.halt(1)
     end
 
@@ -348,8 +348,8 @@ defmodule Pix.Command do
         Pix.Pipeline.shell(config_pipelines[pipeline_alias], cli_opts, cmd_args)
 
       [unknown_pipeline_alias | _] ->
-        Pix.Log.error("Unknown pipeline #{inspect(unknown_pipeline_alias)}\n")
-        Pix.Log.error("Available pipelines #{inspect(Map.keys(config_pipelines))})\n")
+        Pix.Report.error("Unknown pipeline #{inspect(unknown_pipeline_alias)}\n")
+        Pix.Report.error("Available pipelines #{inspect(Map.keys(config_pipelines))})\n")
         System.halt(1)
     end
 
@@ -361,18 +361,18 @@ defmodule Pix.Command do
     latest_version = get_latest_version_from_github()
 
     if Version.compare(latest_version, Pix.version()) == :gt do
-      Pix.Log.info("A new version of Pix is available: #{latest_version}\n")
+      Pix.Report.info("A new version of Pix is available: #{latest_version}\n")
 
-      Pix.Log.info("Updating ...\n")
+      Pix.Report.info("Updating ...\n")
 
       {_, 0} =
         System.cmd("mix", ["escript.install", "--force", "github", @github_user_repo, "ref", "v#{latest_version}"],
           into: IO.stream()
         )
 
-      Pix.Log.info("Update complete\n")
+      Pix.Report.info("Update complete\n")
     else
-      Pix.Log.info("Pix is up to date\n")
+      Pix.Report.info("Pix is up to date\n")
     end
 
     :ok
@@ -392,13 +392,13 @@ defmodule Pix.Command do
             latest_tag
 
           _ ->
-            Pix.Log.error("Failed to parse latest version from GitHub\n")
-            Pix.Log.error("Body: #{inspect(body)}\n")
+            Pix.Report.error("Failed to parse latest version from GitHub\n")
+            Pix.Report.error("Body: #{inspect(body)}\n")
             System.halt(1)
         end
 
       {:error, reason} ->
-        Pix.Log.error("Failed to fetch latest version from GitHub: #{inspect(reason)}\n")
+        Pix.Report.error("Failed to fetch latest version from GitHub: #{inspect(reason)}\n")
         System.halt(1)
     end
   end
@@ -406,7 +406,7 @@ defmodule Pix.Command do
   @spec validate_run_cli_opts!(OptionParser.parsed()) :: :ok
   defp validate_run_cli_opts!(cli_opts) do
     if Keyword.has_key?(cli_opts, :tag) and not Keyword.has_key?(cli_opts, :target) do
-      Pix.Log.error("--tag option requires a --target\n")
+      Pix.Report.error("--tag option requires a --target\n")
       System.halt(1)
     end
 

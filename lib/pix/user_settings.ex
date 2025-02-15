@@ -11,7 +11,7 @@ defmodule Pix.UserSettings do
   ```elixir
   %{
     env: %{
-      "PIX_DEBUG" => true
+      "PIX_DEBUG" => "true"
     },
     command: %{
       run: %{
