@@ -150,13 +150,11 @@ The execution semantic (parallelism, cache, etc) is the same as a standard docke
 </h2>
 <p>Pix can be installed nativelly as an Elixir escript.</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">mix escript.install github visciang/pix ref vX.Y.Z
 </span></code></pre><p>alternatively, you can use it as a docker image:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">docker run --rm -it \
-</span><span class="">  --volume $PWD:/code --workdir /code \
-</span><span class="">  # docker outside of docker mode \
+</span><span class="">  --volume $PWD:/$PWD --workdir /$PWD \
 </span><span class="">  --volume /var/run/docker.sock:/var/run/docker.sock \
-</span><span class="">  # SSH forwarding \
 </span><span class="">  --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
 </span><span class="">  --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
-</span><span class="">  ghcr.io/visciang/pix:X.Y.Z
+</span><span class="">  ghcr.io/visciang/pix:X.Y.Z &quot;$@&quot;
 </span></code></pre><p>in this case is important to give the pix container access the docker engine.
 You can use the Docker Socket Mounting (DooD - Docker outside of docker) or the Docker-in-Docker (dind) mode.</p><p>If you need SSH access, you need to forward the SSH agent socket to the pix container.
 Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is accessible via:</p><pre><code class="makeup bash" translate="no"><span class="">--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
