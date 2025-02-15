@@ -8,27 +8,19 @@ defmodule Pix.Helper do
 
   @spec compile_file(Path.t()) :: module()
   def compile_file(path) do
-    Code.with_diagnostics([log: true], fn ->
+    res =
       try do
         Code.compile_file(path)
       rescue
-        err ->
-          Pix.Report.error("Failed to compile #{path} due to errors #{inspect(err)}\n\n")
+        e ->
+          Exception.message(e) |> IO.puts()
           System.halt(1)
       end
-    end)
-    |> case do
+
+    case res do
       # accept exactly one module per file
-      {[{module, _}], []} ->
+      [{module, _}] ->
         module
-
-      {_, warnings} when warnings != [] ->
-        Pix.Report.error("Failed to compile #{path} due to warnings:\n\n")
-
-        for %{message: msg, position: {line, col}, severity: :warning} <- warnings,
-            do: Pix.Report.error("warning: #{msg}\n  at line #{line}, column #{col}\n\n")
-
-        System.halt(1)
 
       _ ->
         raise "Expected #{path} to define exactly one module per file"
@@ -37,27 +29,10 @@ defmodule Pix.Helper do
 
   @spec eval_file(Path.t()) :: term()
   def eval_file(path) do
-    Code.with_diagnostics([log: true], fn ->
-      try do
-        Code.eval_file(path)
-      rescue
-        err ->
-          Pix.Report.error("Failed to evaluate #{path} due to errors #{inspect(err)}\n\n")
-          System.halt(1)
-      end
-    end)
-    |> case do
-      # accept exactly one module per file
-      {data, []} ->
-        data
-
-      {_, warnings} when warnings != [] ->
-        Pix.Report.error("Failed to compile #{path} due to warnings:\n\n")
-
-        for %{message: msg, position: {line, col}, severity: :warning} <- warnings,
-            do: Pix.Report.error("warning: #{msg}\n  at line #{line}, column #{col}\n\n")
-
-        System.halt(1)
-    end
+    Code.eval_file(path)
+  rescue
+    e ->
+      Exception.message(e) |> IO.puts()
+      System.halt(1)
   end
 end
