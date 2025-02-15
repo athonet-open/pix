@@ -33,13 +33,11 @@ alternatively, you can use it as a docker image:
 
 ```bash
 $ docker run --rm -it \
-  --volume $PWD:/code --workdir /code \
-  # docker outside of docker mode \
+  --volume $PWD:/$PWD --workdir /$PWD \
   --volume /var/run/docker.sock:/var/run/docker.sock \
-  # SSH forwarding \
   --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
   --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
-  ghcr.io/visciang/pix:X.Y.Z
+  ghcr.io/visciang/pix:X.Y.Z "$@"
 ```
 
 in this case is important to give the pix container access the docker engine.
