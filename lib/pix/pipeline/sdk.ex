@@ -54,6 +54,7 @@ defmodule Pix.Pipeline.SDK do
       :instructions,
       :args_,
       :outputs,
+      :description,
       :private,
       :cache
     ]
@@ -64,6 +65,7 @@ defmodule Pix.Pipeline.SDK do
             instructions: [Pix.Pipeline.SDK.instruction()],
             args_: Pix.Pipeline.SDK.args(),
             outputs: [Path.t()],
+            description: nil | String.t(),
             private: boolean(),
             cache: boolean()
           }
@@ -115,12 +117,15 @@ defmodule Pix.Pipeline.SDK do
   - `private: true` - the stage will not be accessible as a build target, only from other stages.
   - `cache: false` - the stage will not be cached, the stage will be built from scratch every time.
   """
-  @spec stage(t(), stage_name :: String.t(), [{:from, String.t()} | {:private, boolean()} | {:cache, boolean()}]) :: t()
+  @spec stage(t(), stage_name :: String.t(), [
+          {:from, String.t()} | {:description, String.t()} | {:private, boolean()} | {:cache, boolean()}
+        ]) :: t()
   def stage(%__MODULE__{stages: stages} = pipeline, stage_name, options \\ []) do
-    options = Keyword.validate!(options, from: "scratch", private: false, cache: true)
+    options = Keyword.validate!(options, from: "scratch", description: nil, private: false, cache: true)
 
     new_stage = %Stage{
       stage: stage_name,
+      description: options[:description],
       private: options[:private],
       cache: options[:cache],
       args_: %{},

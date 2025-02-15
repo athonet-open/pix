@@ -75,28 +75,28 @@ defmodule Pix2Pix.Pipeline do
 
   defp stage_dialyzer(pipeline) do
     pipeline
-    |> stage("pix.dialyzer", from: "pix.compile_dev")
+    |> stage("pix.dialyzer", from: "pix.compile_dev", description: "Run Dialyzer static analysis")
     |> copy("#{@workdir}/_build/dev/dialyxir_*", "./_build/dev/", from: "pix.dialyzer_plt")
     |> run("mix dialyzer --no-check")
   end
 
   defp stage_format(pipeline) do
     pipeline
-    |> stage("pix.format", from: "pix.compile_dev")
+    |> stage("pix.format", from: "pix.compile_dev", description: "Check code formatting")
     |> copy(".formatter.exs", ".")
     |> run("mix format --check-formatted")
   end
 
   defp stage_credo(pipeline) do
     pipeline
-    |> stage("pix.credo", from: "pix.compile_dev")
+    |> stage("pix.credo", from: "pix.compile_dev", description: "Run Credo static analysis")
     |> copy(".credo.exs", ".")
     |> run("mix credo --strict --all")
   end
 
   defp stage_docs(pipeline) do
     pipeline
-    |> stage("pix.docs", from: "pix.compile_dev")
+    |> stage("pix.docs", from: "pix.compile_dev", description: "Generate ExDoc documentation")
     |> copy("README.md", ".")
     |> run("mix docs")
     |> output("#{@workdir}/doc")
@@ -104,14 +104,14 @@ defmodule Pix2Pix.Pipeline do
 
   defp stage_escript(pipeline) do
     pipeline
-    |> stage("pix.escript", from: "pix.compile_prod", private: true)
+    |> stage("pix.escript", from: "pix.compile_prod", private: true, description: "Build Pix escript")
     |> arg("VERSION")
     |> run("VERSION=${VERSION} mix escript.build")
   end
 
   defp stage_app(pipeline) do
     pipeline
-    |> stage("pix.app", from: "docker.io/hexpm/elixir:#{@elixir_image_tag}")
+    |> stage("pix.app", from: "docker.io/hexpm/elixir:#{@elixir_image_tag}", description: "Build Pix Docker image")
     |> run("""
       apk add --no-cache \
           bash \

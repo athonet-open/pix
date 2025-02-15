@@ -263,12 +263,14 @@ defmodule Pix.Command do
          stage: name,
          args_: args,
          outputs: outputs,
+         description: description,
          private: private,
          cache: cache
        }) do
     stage_format = if private, do: [:faint, :green], else: [:green]
     IO.puts("   ▶️ #{IO.ANSI.format(stage_format ++ [name])}")
 
+    if description, do: IO.puts("      • Description: #{IO.ANSI.format([:faint, description])}")
     if private, do: IO.puts("      • Private: true")
     if not cache, do: IO.puts("      • Cache: #{IO.ANSI.format([:faint, "Disabled"])}")
 
