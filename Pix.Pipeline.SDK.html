@@ -123,17 +123,17 @@ Some of the functions have additional options to extend the functionality of the
 and some functions are extension to the commands (eg. <a href="#output/2"><code class="inline">output/2</code></a>).</p><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Pix.Pipeline.SDK</span><span class="w">
 
 </span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span><span class="w">
-  </span><span class="n">pipeline</span><span class="p" data-group-id="4331099417-1">(</span><span class="s">&quot;gohello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My pipeline description&quot;</span><span class="p" data-group-id="4331099417-1">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="4331099417-2">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">private</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="4331099417-2">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="4331099417-3">(</span><span class="s">&quot;hello.go&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="4331099417-3">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="4331099417-4">(</span><span class="s">&quot;go build -o hello hello.go&quot;</span><span class="p" data-group-id="4331099417-4">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="4331099417-5">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scratch&quot;</span><span class="p" data-group-id="4331099417-5">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="4331099417-6">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;build&quot;</span><span class="p" data-group-id="4331099417-6">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">cmd</span><span class="p" data-group-id="4331099417-7">(</span><span class="p" data-group-id="4331099417-8">[</span><span class="s">&quot;/hello&quot;</span><span class="p" data-group-id="4331099417-8">]</span><span class="p" data-group-id="4331099417-7">)</span><span class="w">
+  </span><span class="n">pipeline</span><span class="p" data-group-id="6960869394-1">(</span><span class="s">&quot;gohello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My pipeline description&quot;</span><span class="p" data-group-id="6960869394-1">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="6960869394-2">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">private</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6960869394-2">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="6960869394-3">(</span><span class="s">&quot;hello.go&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="6960869394-3">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="6960869394-4">(</span><span class="s">&quot;go build -o hello hello.go&quot;</span><span class="p" data-group-id="6960869394-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="6960869394-5">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scratch&quot;</span><span class="p" data-group-id="6960869394-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="6960869394-6">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;build&quot;</span><span class="p" data-group-id="6960869394-6">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">cmd</span><span class="p" data-group-id="6960869394-7">(</span><span class="p" data-group-id="6960869394-8">[</span><span class="s">&quot;/hello&quot;</span><span class="p" data-group-id="6960869394-8">]</span><span class="p" data-group-id="6960869394-7">)</span><span class="w">
 
 </span><span class="n">pipeline</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">dump</span><span class="p" data-group-id="4331099417-9">(</span><span class="p" data-group-id="4331099417-9">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="4331099417-10">(</span><span class="p" data-group-id="4331099417-10">)</span></code></pre><h2 id="module-output" class="section-heading">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">dump</span><span class="p" data-group-id="6960869394-9">(</span><span class="p" data-group-id="6960869394-9">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="6960869394-10">(</span><span class="p" data-group-id="6960869394-10">)</span></code></pre><h2 id="module-output" class="section-heading">
   <a href="#module-output" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -1002,13 +1002,13 @@ It's used to declare the output of the stage.</p>
 
       </div>
 
-<p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p><p>It expands to:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6157780127-1">&lt;&lt;</span><span class="nc">EOT</span><span class="w">
+<p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p><p>It expands to:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7343734828-1">&lt;&lt;</span><span class="nc">EOT</span><span class="w">
 </span><span class="n">...</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">here</span><span class="w"> </span><span class="n">...</span><span class="w">
-</span><span class="nc">EOT</span></code></pre><p>Example:</p><pre><code class="makeup elixir" translate="no"><span class="n">run</span><span class="p" data-group-id="4899276812-1">(</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="sx">~h&quot;&quot;&quot;
+</span><span class="nc">EOT</span></code></pre><p>Example:</p><pre><code class="makeup elixir" translate="no"><span class="n">run</span><span class="p" data-group-id="9181068437-1">(</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="sx">~h&quot;&quot;&quot;
   if [ &quot;$X&quot; == &quot;x&quot; ]; then
     echo &quot;x!&quot;
   fi
-&quot;&quot;&quot;</span><span class="p" data-group-id="4899276812-1">)</span></code></pre><p>For more heredoc advance feature simply encode the heredoc yourself.</p>
+&quot;&quot;&quot;</span><span class="p" data-group-id="9181068437-1">)</span></code></pre><p>For more heredoc advance feature simply encode the heredoc yourself.</p>
   </section>
 </section>
 <section class="detail" id="stage/3">
@@ -1030,14 +1030,14 @@ It's used to declare the output of the stage.</p>
 
           <pre translate="no"><span class="attribute">@spec</span> stage(<a href="#t:t/0">t</a>(), stage_name :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
   from: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  description: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
   private: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>(),
   cache: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()
-) ::
-  <a href="#t:t/0">t</a>()</pre>
+) :: <a href="#t:t/0">t</a>()</pre>
 
       </div>
 
-<p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p><pre><code class="makeup elixir" translate="no"><span class="n">stage</span><span class="p" data-group-id="0448004583-1">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p" data-group-id="0448004583-1">)</span></code></pre><p>the optional <code class="inline">private</code> and <code class="inline">cache</code> options can be used to control the behavior of the stage:</p><ul><li><code class="inline">private: true</code> - the stage will not be accessible as a build target, only from other stages.</li><li><code class="inline">cache: false</code> - the stage will not be cached, the stage will be built from scratch every time.</li></ul>
+<p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p><pre><code class="makeup elixir" translate="no"><span class="n">stage</span><span class="p" data-group-id="4751484563-1">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p" data-group-id="4751484563-1">)</span></code></pre><p>the optional <code class="inline">private</code> and <code class="inline">cache</code> options can be used to control the behavior of the stage:</p><ul><li><code class="inline">private: true</code> - the stage will not be accessible as a build target, only from other stages.</li><li><code class="inline">cache: false</code> - the stage will not be cached, the stage will be built from scratch every time.</li></ul>
   </section>
 </section>
 <section class="detail" id="stopsignal/2">
