@@ -115,7 +115,7 @@ Pages
     <span>PIX</span>
   </h1>
 
-<p><a href="https://github.com/visciang/pix/actions/workflows/ci.yml"><img src="https://github.com/visciang/pix/actions/workflows/ci.yml/badge.svg" alt=".github/workflows/ci.yml"/></a> <a href="https://visciang.github.io/pix"><img src="https://img.shields.io/badge/docs-latest-green.svg" alt="Docs"/></a></p><p>Pipelines for buildx.</p><p>Documentation <a href="https://visciang.github.io/pix">website</a>.</p><h2 id="introduction" class="section-heading">
+<p><a href="https://github.com/athonet-open/pix/actions/workflows/ci.yml"><img src="https://github.com/athonet-open/pix/actions/workflows/ci.yml/badge.svg" alt=".github/workflows/ci.yml"/></a> <a href="https://athonet-open.github.io/pix"><img src="https://img.shields.io/badge/docs-latest-green.svg" alt="Docs"/></a></p><p>Pipelines for buildx.</p><p>Documentation <a href="https://athonet-open.github.io/pix">website</a>.</p><h2 id="introduction" class="section-heading">
   <a href="#introduction" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -174,13 +174,13 @@ It is composed of a set of targets, each target is a named docker build stage an
   </a>
   <span class="text">Installation options</span>
 </h3>
-<p>Pix can be installed natively as an Elixir escript, in this can you need erlang/elixir installed on your system:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">mix escript.install github visciang/pix ref vX.Y.Z
+<p>Pix can be installed natively as an Elixir escript, in this can you need erlang/elixir installed on your system:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">mix escript.install github athonet-open/pix ref vX.Y.Z
 </span></code></pre><p>alternatively, you can use it as a docker image:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">docker run --rm -it \
 </span><span class="">  --volume $PWD:/$PWD --workdir /$PWD \
 </span><span class="">  --volume /var/run/docker.sock:/var/run/docker.sock \
 </span><span class="">  --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
 </span><span class="">  --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
-</span><span class="">  ghcr.io/visciang/pix:X.Y.Z &quot;$@&quot;
+</span><span class="">  ghcr.io/athonet-open/pix:X.Y.Z &quot;$@&quot;
 </span></code></pre><p>in this case is important to give the pix container access the docker engine.
 You can use the Docker Socket Mounting (DooD - Docker outside of docker) or the Docker-in-Docker (dind) mode.</p><p>If you need SSH access, you need to forward the SSH agent socket to the pix container.
 Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is accessible via:</p><pre><code class="makeup bash" translate="no"><span class="">--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
@@ -192,7 +192,7 @@ Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is
   <span class="text">Quick start</span>
 </h2>
 <p>For this quick start, we will use the pix project itself.
-The pix project declares a pipeline that can be used to build and test pix itself.</p><p>The project is declared with a <a href="https://github.com/visciang/pix/blob/main/.pix.exs">.pix.exs</a> file, where a single pipeline - <code class="inline">pix</code> - has been defined with its default arguments and targets.</p><p>The <a href="https://github.com/visciang/pix/blob/main/pipeline.exs">pipeline.exs</a> file define the <code class="inline">pix</code> pipeline.</p><p>To run the project pipeline, we can use the <code class="inline">pix run</code> command.</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">pix run pix
+The pix project declares a pipeline that can be used to build and test pix itself.</p><p>The project is declared with a <a href="https://github.com/athonet-open/pix/blob/main/.pix.exs">.pix.exs</a> file, where a single pipeline - <code class="inline">pix</code> - has been defined with its default arguments and targets.</p><p>The <a href="https://github.com/athonet-open/pix/blob/main/pipeline.exs">pipeline.exs</a> file define the <code class="inline">pix</code> pipeline.</p><p>To run the project pipeline, we can use the <code class="inline">pix run</code> command.</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">pix run pix
 </span></code></pre><p>This will build the project, the docs, run the tests, etc..</p><p>The <code class="inline">pix ls --verbose pix</code> command can be used to list all the pipelines declared in the project along with their configuration.</p><p>Then the <code class="inline">pix graph pix</code> command can be used to generate a graph of a specific pipeline.</p><p>The Pix Elixir documentation is built by <code class="inline">pix.docs</code> target of the pipeline, run <code class="inline">pix run --output pix</code> to run the pipeline and output the produced artifacts to the current directory. The docs will be available under <code class="inline">.pipeline/output/doc/index.html</code>.</p><p>For more information about the available commands and their options, run <code class="inline">pix help</code>.</p><h2 id="user-settings" class="section-heading">
   <a href="#user-settings" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
