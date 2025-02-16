@@ -1,29 +1,58 @@
 # PIX
 
-[![.github/workflows/ci.yml](https://github.com/visciang/pix/actions/workflows/ci.yml/badge.svg)](https://github.com/visciang/pix/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://visciang.github.io/pix/readme.html)
+[![.github/workflows/ci.yml](https://github.com/visciang/pix/actions/workflows/ci.yml/badge.svg)](https://github.com/visciang/pix/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://visciang.github.io/pix)
 
 Pipelines for buildx.
+
+Documentation [website](https://visciang.github.io/pix):
 
 ## Introduction
 
 Pix is a portable pipeline executor - a CI framework to define and execute pipelines that can run on any host with docker support.
-Pipelines are defined as code and executed via docker `buildkit`.
+Pipelines are defined as code and executed via docker [BuildKit](https://github.com/moby/buildkit).
 
 ## Basic concepts
 
 ### The pipeline
 
 The pipeline is the core of the Pix framework.
-It's just an instrumented docker multistage build programmatically defined via Elixir code (using the `Pix.Pipeline.SDK`).
+
+The building blocks of a pipeline are:
+- **stage**: this is where the actual work is done (ie. execute tests, build an application, permorme a deployment, etc). A stage can be parameterized via **arguments**.
+- **output**: a stage can produce outputs (ie. running a test suite and output a coverage report, generate documentation, etc).
+- **dependency**: stages are connected via **dependencies** to define an execution graph.
+
+Under the hood, a pipeline is a instrumented docker multistage build, it is programmatically defined via Elixir code (using the `Pix.Pipeline.SDK`).
 
 ### The pipeline executor
 
 Pix generates the multistage docker build definition and execute it via `docker buildx build`.
-The execution semantic (parallelism, cache, etc) is the same as a standard docker build.
+The execution semantic (parallelism, cache, etc) is the same of a docker build graph.
+
+### The Project
+
+At the root of your project you can define a `.pix.exs` file that declare the pipeline available for your project.
+In the .pix.exs file you declare the pipelines with their default arguments and targets.
+The pipelines definition can be imported `from` a local `path` or a remote `git` repository.
+
+More details in the `Pix.Project` module documentation.
+
+### The Pipeline definition
+
+The pipeline is a programmatic definition of a docker multistage build.
+It is composed of a set of targets, each target is a named docker build stage and defined in a `pipeline.exs` using the `Pix.Pipeline.SDK`.
+
+More details in the `Pix.Pipeline.SDK` module documentation.
 
 ## Installation
 
-Pix can be installed nativelly as an Elixir escript.
+### Prerequisites
+
+Pix requires a `docker` engine to be installed on the host.
+
+### Installation options
+
+Pix can be installed natively as an Elixir escript, in this can you need erlang/elixir installed on your system:
 
 ```bash
 $ mix escript.install github visciang/pix ref vX.Y.Z
@@ -56,13 +85,9 @@ Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is
 For this quick start, we will use the pix project itself.
 The pix project declares a pipeline that can be used to build and test pix itself.
 
-The project is defined with a [.pix.exs](.pix.exs) file.
+The project is declared with a [.pix.exs](https://github.com/visciang/pix/blob/main/.pix.exs) file, where a single pipeline - `pix` - has been defined with its default arguments and targets.
 
-In the .pix.exs file, we setup a single pipeline - `pix` - with its default arguments and targets.
-The pipeline definition is imported `from` a local `path` (in this case `.`, root directory).
-
-In the root directory we have the [pipeline.exs](pipeline.exs) file that defines the pipeline.
-The pipeline definition is composed of a set of targets, each target is a named docker stage.
+The [pipeline.exs](https://github.com/visciang/pix/blob/main/pipeline.exs) file define the `pix` pipeline.
 
 To run the project pipeline, we can use the `pix run` command.
 
