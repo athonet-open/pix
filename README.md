@@ -1,10 +1,10 @@
 # PIX
 
-[![.github/workflows/ci.yml](https://github.com/visciang/pix/actions/workflows/ci.yml/badge.svg)](https://github.com/visciang/pix/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://visciang.github.io/pix)
+[![.github/workflows/ci.yml](https://github.com/athonet-open/pix/actions/workflows/ci.yml/badge.svg)](https://github.com/athonet-open/pix/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://athonet-open.github.io/pix)
 
 Pipelines for buildx.
 
-Documentation [website](https://visciang.github.io/pix).
+Documentation [website](https://athonet-open.github.io/pix).
 
 ## Introduction
 
@@ -55,7 +55,7 @@ Pix requires a `docker` engine to be installed on the host.
 Pix can be installed natively as an Elixir escript, in this can you need erlang/elixir installed on your system:
 
 ```bash
-$ mix escript.install github visciang/pix ref vX.Y.Z
+$ mix escript.install github athonet-open/pix ref vX.Y.Z
 ```
 
 alternatively, you can use it as a docker image:
@@ -66,7 +66,7 @@ $ docker run --rm -it \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
   --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
-  ghcr.io/visciang/pix:X.Y.Z "$@"
+  ghcr.io/athonet-open/pix:X.Y.Z "$@"
 ```
 
 in this case is important to give the pix container access the docker engine.
@@ -85,9 +85,9 @@ Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is
 For this quick start, we will use the pix project itself.
 The pix project declares a pipeline that can be used to build and test pix itself.
 
-The project is declared with a [.pix.exs](https://github.com/visciang/pix/blob/main/.pix.exs) file, where a single pipeline - `pix` - has been defined with its default arguments and targets.
+The project is declared with a [.pix.exs](https://github.com/athonet-open/pix/blob/main/.pix.exs) file, where a single pipeline - `pix` - has been defined with its default arguments and targets.
 
-The [pipeline.exs](https://github.com/visciang/pix/blob/main/pipeline.exs) file define the `pix` pipeline.
+The [pipeline.exs](https://github.com/athonet-open/pix/blob/main/pipeline.exs) file define the `pix` pipeline.
 
 To run the project pipeline, we can use the `pix run` command.
 

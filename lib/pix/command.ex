@@ -1,7 +1,7 @@
 defmodule Pix.Command do
   @moduledoc false
 
-  @github_user_repo "visciang/pix"
+  @github_user_repo "athonet-open/pix"
 
   @spec help :: :ok
   def help do
