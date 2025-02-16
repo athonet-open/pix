@@ -4,7 +4,7 @@
 
 Pipelines for buildx.
 
-Documentation [website](https://visciang.github.io/pix):
+Documentation [website](https://visciang.github.io/pix).
 
 ## Introduction
 
