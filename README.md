@@ -2,7 +2,7 @@
 
 [![.github/workflows/ci.yml](https://github.com/athonet-open/pix/actions/workflows/ci.yml/badge.svg)](https://github.com/athonet-open/pix/actions/workflows/ci.yml) [![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://athonet-open.github.io/pix)
 
-Pipelines for buildx.
+BuildKit pipelines.
 
 Documentation [website](https://athonet-open.github.io/pix).
 
