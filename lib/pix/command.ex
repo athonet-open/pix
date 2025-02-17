@@ -32,7 +32,7 @@ defmodule Pix.Command do
             #{opt.("--format")}            Output format - "pretty", "dot" (default "pretty").
                                 "dot" produces a DOT graph description of the pipeline graph in graph.dot in the current directory (dot -Tpng graph.dot -o graph.png).
 
-    #{cmd.("pix run")} [#{opt.("--output")}] [#{opt.("--arg ARG")}]* [#{opt.("--progress PROGRESS")}] [#{opt.("--target TARGET")} [#{opt.("--tag TAG")}]] [#{opt.("--no-cache")}] [#{opt.("--no-cache-filter TARGET")}]* PIPELINE
+    #{cmd.("pix run")} [#{opt.("--output")}] [#{opt.("--ssh")}] [#{opt.("--arg ARG")}]* [#{opt.("--progress PROGRESS")}] [#{opt.("--target TARGET")} [#{opt.("--tag TAG")}]] [#{opt.("--no-cache")}] [#{opt.("--no-cache-filter TARGET")}]* PIPELINE
         Run PIPELINE.
 
         ARGS:
@@ -50,7 +50,7 @@ defmodule Pix.Command do
             #{opt.("--tag")}               Tag the TARGET's docker image (default: no tag)
             #{opt.("--target")}            Run PIPELINE for a specific TARGET (default: all the PIPELINE targets)
 
-    #{cmd.("pix shell")} [#{opt.("--arg ARG")}]* [#{opt.("--target TARGET")}] [#{opt.("--host")}] PIPELINE [COMMAND]
+    #{cmd.("pix shell")} [#{opt.("--ssh")}] [#{opt.("--arg ARG")}]* [#{opt.("--target TARGET")}] [#{opt.("--host")}] PIPELINE [COMMAND]
         Shell into the specified target of the PIPELINE.
 
         ARGS:
