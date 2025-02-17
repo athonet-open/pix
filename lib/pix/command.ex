@@ -132,6 +132,15 @@ defmodule Pix.Command do
     File.write!("graph.dot", dot)
 
     Pix.Report.info("Generated graph.dot\n")
+
+    case System.find_executable("dot") do
+      nil ->
+        Pix.Report.info("'dot' command not found, cannot generate graph.png\n")
+
+      dot ->
+        System.cmd(dot, ["-Tpng", "graph.dot", "-o", "graph.png"])
+        Pix.Report.info("Generated graph.png\n")
+    end
   end
 
   defp display_graph(pipeline) do
