@@ -122,7 +122,7 @@ defmodule Pix.Docker do
   end
 
   defp debug_docker(opts, args) do
-    Pix.Report.debug("docker #{inspect(args)}\n")
+    Pix.Report.debug("docker #{inspect(args, limit: :infinity)}\n")
 
     if opts[:file] do
       Pix.Report.debug(File.read!(opts[:file]) <> "\n")
