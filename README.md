@@ -15,14 +15,12 @@ Pipelines are defined as code and executed via docker [BuildKit](https://github.
 
 ### The pipeline
 
-The pipeline is the core of the Pix framework.
-
 The building blocks of a pipeline are:
-- **stage**: this is where the actual work is done (ie. execute tests, build an application, performe a deployment, etc). A stage can be parameterized via **arguments**.
+- **stage**: this is where the actual work is done (ie. execute tests, build an application, perform a deployment, etc). A stage can be parameterized via **arguments**.
 - **output**: a stage can produce outputs (ie. running a test suite and output a coverage report, generate documentation, etc).
 - **dependency**: stages are connected via **dependencies** to define an execution graph.
 
-Under the hood, a pipeline is a instrumented docker multistage build, it is programmatically defined via Elixir code (using the `Pix.Pipeline.SDK`).
+Under the hood, a pipeline is an instrumented docker multistage build, it is programmatically defined via Elixir code (using the `Pix.Pipeline.SDK`).
 
 ### The pipeline executor
 
