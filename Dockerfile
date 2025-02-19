@@ -3,6 +3,7 @@ ARG ELIXIR_VERSION=1.18.2-erlang-27.2.2-alpine-3.21.2
 
 FROM docker.io/hexpm/elixir:${ELIXIR_VERSION} AS bootstrap
 ARG VERSION
+ENV VERSION=${VERSION}
 # ERL_FLAGS="+JPperf true" is a workaround to "fix" the problem of docker cross-platform builds via QEMU.
 # REF:  https://elixirforum.com/t/mix-deps-get-memory-explosion-when-doing-cross-platform-docker-build/57157
 ENV ERL_FLAGS="+JPperf true"
