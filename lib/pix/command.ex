@@ -76,10 +76,11 @@ defmodule Pix.Command do
 
       These environment variables can be used to force/override some "internal" behaviour of pix.
 
-      #{var.("PIX_DEBUG")}:                Set to "true" to diplay debug logs
-      #{var.("PIX_FORCE_PLATFORM_ARCH")}:  Set to "amd64"/"arm64" if you want to run the pipeline (and build docker images) with a non-native architecture
-      #{var.("PIX_DOCKER_RUN_OPTS")}:      Set extra options for the `docker run` command
-      #{var.("PIX_DOCKER_BUILD_OPTS")}:    Set extra options for the `docker buildx build` command
+      #{var.("PIX_DEBUG")}:                    Set to "true" to diplay debug logs
+      #{var.("PIX_FORCE_PLATFORM_ARCH")}:      Set to "amd64"/"arm64" if you want to run the pipeline (and build docker images) with a non-native architecture
+      #{var.("PIX_DOCKER_RUN_OPTS")}:          Set extra options for the `docker run` command
+      #{var.("PIX_DOCKER_BUILD_OPTS")}:        Set extra options for the `docker buildx build` command
+      #{var.("PIX_DOCKER_BUILDKIT_VERSION")}:  Use a specific version of docker buildkit
     """)
 
     :ok

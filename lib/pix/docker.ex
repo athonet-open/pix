@@ -1,37 +1,26 @@
 defmodule Pix.Docker do
   @moduledoc false
 
-  @buildkit_version "v0.19.0"
-
   @docker_desktop_socket "/run/host-services/ssh-auth.sock"
   @type opts() :: [Keyword.key() | {Keyword.key(), Keyword.value()}]
 
-  @spec buildx_builder :: String.t()
-  defp buildx_builder, do: "pix-buildkit-#{@buildkit_version}-"
+  @spec buildx_builder :: String.t() | nil
+  defp buildx_builder, do: :persistent_term.get(:pix_buildx_builder, nil)
+  defp set_buildx_builder(builder_id), do: :persistent_term.put(:pix_buildx_builder, builder_id)
 
   @spec setup_buildx :: :ok
   def setup_buildx do
     assert_docker_installed()
 
-    Pix.Report.internal("Setup docker buildx builder (#{buildx_builder()}, buildkit #{@buildkit_version}) ... ")
+    case System.get_env("PIX_DOCKER_BUILDKIT_VERSION") do
+      nil ->
+        # use the default builder
+        :ok
 
-    case System.cmd("docker", ["buildx", "inspect", "--builder", buildx_builder()], stderr_to_stdout: true) do
-      {_, 0} ->
-        Pix.Report.internal("already present\n")
-
-      _ ->
-        opts = ["--driver", "docker-container", "--driver-opt", "image=moby/buildkit:#{@buildkit_version}"]
-        {_, 0} = System.cmd("docker", ["buildx", "create", "--bootstrap", "--name", buildx_builder() | opts])
-
-        Pix.Report.internal("\n\nCreated builder:`\n")
-
-        {inspect, 0} =
-          System.cmd("docker", ["buildx", "inspect", "--builder", buildx_builder()], stderr_to_stdout: true)
-
-        Pix.Report.internal("\n#{inspect}\n")
+      buildkit_version ->
+        set_buildx_builder("pix-buildkit-#{buildkit_version}-")
+        create_buildx_builder(buildkit_version)
     end
-
-    :ok
   end
 
   @spec version :: map()
@@ -54,6 +43,29 @@ defmodule Pix.Docker do
     receive do
       {^port, {:exit_status, exit_status}} -> exit_status
     end
+  end
+
+  @spec create_buildx_builder(String.t()) :: :ok
+  defp create_buildx_builder(buildkit_version) do
+    Pix.Report.internal("Setup docker buildx builder (#{buildx_builder()}, buildkit #{buildkit_version}) ... ")
+
+    case System.cmd("docker", ["buildx", "inspect", "--builder", buildx_builder()], stderr_to_stdout: true) do
+      {_, 0} ->
+        Pix.Report.internal("already present\n")
+
+      _ ->
+        opts = ["--driver", "docker-container", "--driver-opt", "image=moby/buildkit:#{buildkit_version}"]
+        {_, 0} = System.cmd("docker", ["buildx", "create", "--bootstrap", "--name", buildx_builder() | opts])
+
+        Pix.Report.internal("\n\nCreated builder:`\n")
+
+        {inspect, 0} =
+          System.cmd("docker", ["buildx", "inspect", "--builder", buildx_builder()], stderr_to_stdout: true)
+
+        Pix.Report.internal("\n#{inspect}\n")
+    end
+
+    :ok
   end
 
   @spec run_opts_ssh_forward :: opts()
@@ -94,7 +106,14 @@ defmodule Pix.Docker do
   @spec build(ssh_fwd? :: boolean(), opts(), String.t()) :: exit_status :: non_neg_integer()
   def build(ssh_fwd?, opts, ctx) do
     ssh_opts = if ssh_fwd?, do: [ssh: "default"], else: []
-    opts = [builder: buildx_builder()] ++ ssh_opts ++ opts
+
+    builder_opts =
+      case buildx_builder() do
+        nil -> []
+        builder_id -> [builder: builder_id]
+      end
+
+    opts = builder_opts ++ ssh_opts ++ opts
 
     args =
       [System.find_executable("docker"), "buildx", "build"] ++
