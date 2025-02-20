@@ -394,7 +394,7 @@ defmodule Pix.Command do
 
     case :httpc.request(:get, {endpoint_uri, headers}, [], []) do
       {:ok, {{_, 200, _}, _headers, body}} ->
-        body = body |> IO.iodata_to_binary() |> JSON.decode!()
+        body = body |> IO.iodata_to_binary() |> Jason.decode!()
 
         case body do
           [%{"name" => "v" <> latest_tag}] ->

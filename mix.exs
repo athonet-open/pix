@@ -5,7 +5,7 @@ defmodule Pix.MixProject do
     [
       app: :pix,
       version: version(),
-      elixir: "~> 1.18",
+      elixir: "~> 1.17",
       deps: deps(),
       escript: [
         main_module: Pix,
@@ -23,6 +23,7 @@ defmodule Pix.MixProject do
 
   defp deps do
     [
+      {:jason, "~> 1.0"},
       {:ex_doc, "~> 0.16", only: [:dev], runtime: false},
       {:credo, "~> 1.0", only: [:dev], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}

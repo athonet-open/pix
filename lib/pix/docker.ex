@@ -37,7 +37,7 @@ defmodule Pix.Docker do
   @spec version :: map()
   def version do
     {json, 0} = System.cmd("docker", ~w[version --format json])
-    JSON.decode!(json)
+    Jason.decode!(json)
   end
 
   @spec run(image :: String.t(), ssh_fwd? :: boolean(), opts(), cmd_args :: [String.t()]) :: status :: non_neg_integer()
@@ -110,7 +110,7 @@ defmodule Pix.Docker do
   defp assert_docker_installed do
     case System.cmd("docker", ["info", "--format", "json"], stderr_to_stdout: true) do
       {info, 0} ->
-        info = JSON.decode!(info)
+        info = Jason.decode!(info)
         Pix.Report.internal("Running on #{info["Name"]} #{info["OSType"]}-#{info["Architecture"]} ")
         Pix.Report.internal("(client #{info["ClientInfo"]["Version"]}, ")
         Pix.Report.internal("server #{info["ServerVersion"]} experimental_build=#{info["ExperimentalBuild"]})\n")
