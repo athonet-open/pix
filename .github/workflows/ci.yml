@@ -77,9 +77,11 @@ jobs:
       # Run the Pix pipeline with pix dockerized
       - name: Pix run Pix
         run: |
+          PIX_DOCKER_BUILDKIT_VERSION=v0.20.0
           CACHE="type=gha,scope=pix,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
           docker run --rm \
             --env PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
+            --env PIX_DOCKER_BUILDKIT_VERSION="$PIX_DOCKER_BUILDKIT_VERSION" \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run --output pix
