@@ -92,6 +92,9 @@ defmodule Pix.Project do
   - `PIX_PROJECT_NAME`: Name of the current Git project
   - `PIX_COMMIT_SHA`: Current Git commit SHA
   - `PIX_PIPELINE_TARGET`: Name of the current pipeline target being executed
+  - `PIX_HOST_OS`: host OS Name (`uname -s`, ie. Darwin, Linux, ...)
+  - `PIX_HOST_USERID`: host user ID (`id -u`)
+  - `PIX_HOST_GROUPID`: host group ID (`id -g`)
 
   If the pipeline is defined from a local path, the following variables are also available:
 

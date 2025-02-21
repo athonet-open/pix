@@ -49,4 +49,22 @@ defmodule Pix.Env do
     |> System.get_env("")
     |> OptionParser.split()
   end
+
+  @spec os :: String.t()
+  def os do
+    {res, 0} = System.cmd("uname", ~w[-s])
+    String.trim(res)
+  end
+
+  @spec userid :: String.t()
+  def userid do
+    {res, 0} = System.cmd("id", ~w[-u])
+    String.trim(res)
+  end
+
+  @spec groupid :: String.t()
+  def groupid do
+    {res, 0} = System.cmd("id", ~w[-g])
+    String.trim(res)
+  end
 end

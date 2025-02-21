@@ -326,7 +326,10 @@ defmodule Pix.Pipeline do
     base = %{
       "PIX_PROJECT_NAME" => Pix.Env.git_project_name(),
       "PIX_COMMIT_SHA" => Pix.Env.git_commit_sha(),
-      "PIX_PIPELINE_TARGET" => target
+      "PIX_PIPELINE_TARGET" => target,
+      "PIX_HOST_OS" => Pix.Env.os(),
+      "PIX_HOST_USERID" => Pix.Env.userid(),
+      "PIX_HOST_GROUPID" => Pix.Env.groupid()
     }
 
     from_vars =
