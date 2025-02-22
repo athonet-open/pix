@@ -28,10 +28,12 @@ defmodule Pix.Pipeline.Project do
 
     @impl true
     def shell(pipeline, shell_stage, from_target) do
+      from_target = if from_target == :default, do: "base", else: from_target
+
       pipeline
       |> stage(shell_stage, from: from_target)
       |> run("apk add --no-cache bash")
-      |> cmd("bash")
+      |> cmd(["bash"])
     end
   end
   ```

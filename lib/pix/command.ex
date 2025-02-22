@@ -80,7 +80,9 @@ defmodule Pix.Command do
       #{var.("PIX_FORCE_PLATFORM_ARCH")}:      Set to "amd64"/"arm64" if you want to run the pipeline (and build docker images) with a non-native architecture
       #{var.("PIX_DOCKER_RUN_OPTS")}:          Set extra options for the `docker run` command
       #{var.("PIX_DOCKER_BUILD_OPTS")}:        Set extra options for the `docker buildx build` command
-      #{var.("PIX_DOCKER_BUILDKIT_VERSION")}:  Use a specific version of docker buildkit
+      #{var.("PIX_DOCKER_BUILDKIT_VERSION")}:  Use a specific version of docker buildkit.
+                                    If specified, pix will start and use a buildkit docker instance with the specified version.
+                                    Otherwise, pix will use the current selected builder instance (ref: docker buildx ls, docker buildx use)
     """)
 
     :ok
