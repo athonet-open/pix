@@ -118,23 +118,23 @@ Pages
 
 
     <section id="moduledoc">
-<p>Pix user settings.</p><p>You can set some global settings in your <code class="inline">~/.config/pix/settings.exs</code> file.</p><p>The file should evaluate to a map conform to <a href="#t:t/0"><code class="inline">t/0</code></a>.</p><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6018444688-1">%{</span><span class="w">
-  </span><span class="ss">env</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6018444688-2">%{</span><span class="w">
+<p>Pix user settings.</p><p>You can set some global settings in your <code class="inline">~/.config/pix/settings.exs</code> file.</p><p>The file should evaluate to a map conform to <a href="#t:t/0"><code class="inline">t/0</code></a>.</p><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9172497577-1">%{</span><span class="w">
+  </span><span class="ss">env</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9172497577-2">%{</span><span class="w">
     </span><span class="s">&quot;PIX_DEBUG&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w">
-  </span><span class="p" data-group-id="6018444688-2">}</span><span class="p">,</span><span class="w">
-  </span><span class="ss">command</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6018444688-3">%{</span><span class="w">
-    </span><span class="ss">run</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6018444688-4">%{</span><span class="w">
-      </span><span class="ss">cli_opts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6018444688-5">[</span><span class="w">
+  </span><span class="p" data-group-id="9172497577-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">command</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9172497577-3">%{</span><span class="w">
+    </span><span class="ss">run</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9172497577-4">%{</span><span class="w">
+      </span><span class="ss">cli_opts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9172497577-5">[</span><span class="w">
         </span><span class="ss">ssh</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
-      </span><span class="p" data-group-id="6018444688-5">]</span><span class="w">
-    </span><span class="p" data-group-id="6018444688-4">}</span><span class="p">,</span><span class="w">
-    </span><span class="ss">shell</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6018444688-6">%{</span><span class="w">
-      </span><span class="ss">cli_opts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6018444688-7">[</span><span class="w">
+      </span><span class="p" data-group-id="9172497577-5">]</span><span class="w">
+    </span><span class="p" data-group-id="9172497577-4">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">shell</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9172497577-6">%{</span><span class="w">
+      </span><span class="ss">cli_opts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9172497577-7">[</span><span class="w">
         </span><span class="ss">ssh</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="w">
-      </span><span class="p" data-group-id="6018444688-7">]</span><span class="w">
-    </span><span class="p" data-group-id="6018444688-6">}</span><span class="w">
-  </span><span class="p" data-group-id="6018444688-3">}</span><span class="w">
-</span><span class="p" data-group-id="6018444688-1">}</span></code></pre>
+      </span><span class="p" data-group-id="9172497577-7">]</span><span class="w">
+    </span><span class="p" data-group-id="9172497577-6">}</span><span class="w">
+  </span><span class="p" data-group-id="9172497577-3">}</span><span class="w">
+</span><span class="p" data-group-id="9172497577-1">}</span></code></pre>
     </section>
 
 </div>
@@ -206,7 +206,8 @@ Pages
     run: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()},
     shell: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()},
     graph: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()},
-    ls: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()}
+    ls: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()},
+    upgrade: %{cli_opts: <a href="https://hexdocs.pm/elixir/OptionParser.html#t:parsed/0">OptionParser.parsed</a>()}
   },
   env: %{required(<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) =&gt; <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}
 }</pre>
