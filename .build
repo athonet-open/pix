@@ -2,6 +2,7 @@
 Pix.Config.html
 Pix.Env.html
 Pix.Pipeline.Project.html
+Pix.Pipeline.SDK.Extra.html
 Pix.Pipeline.SDK.Stage.html
 Pix.Pipeline.SDK.html
 Pix.Project.html
@@ -24,8 +25,8 @@ dist/lato-latin-ext-300-normal-VPGGJKJL.woff2
 dist/lato-latin-ext-400-normal-N27NCBWW.woff2
 dist/lato-latin-ext-700-normal-Q2L5DVMW.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_data-14EDA700.js
-dist/sidebar_items-6B6CD425.js
+dist/search_data-81F58819.js
+dist/sidebar_items-7172E9B0.js
 index.html
 readme.html
 search.html

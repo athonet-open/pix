@@ -8,9 +8,7 @@
     <meta name="project" content="pix v0.0.0">
 
 
-      <meta name="robots" content="noindex">
-
-    <title>Search — pix v0.0.0</title>
+    <title>Pix.Pipeline.SDK.Extra — pix v0.0.0</title>
     <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
@@ -85,7 +83,7 @@ Pages
 
 <output role="status" id="toast"></output>
 
-<main class="content page-search" id="main" data-type="search">
+<main class="content page-module" id="main" data-type="modules">
   <div id="content" class="content-inner">
     <div class="top-search">
       <div class="search-settings">
@@ -110,14 +108,83 @@ Pages
       </div>
     </div>
 
-<div id="search">
+<div id="top-content">
   <h1>
-    <span></span>
+
+    <span translate="no">Pix.Pipeline.SDK.Extra</span> 
+    <small class="app-vsn" translate="no">(pix v0.0.0)</small>
+
   </h1>
 
-  <div class="loading"><div></div><div></div><div></div><div></div></div>
+
+    <section id="moduledoc">
+<p>Extra functions to be used in Pix.Pipeline.SDK.</p>
+    </section>
+
 </div>
-<script src="dist/search_data-81F58819.js"></script>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#assert_required_arg/2" data-no-tooltip translate="no">assert_required_arg(pipeline, arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Assert ARG <code class="inline">arg</code> is non-empty.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="assert_required_arg/2">
+
+  <div class="detail-header">
+    <a href="#assert_required_arg/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">assert_required_arg(pipeline, arg)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> assert_required_arg(<a href="Pix.Pipeline.SDK.html#t:t/0">Pix.Pipeline.SDK.t</a>(), arg :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()) ::
+  <a href="Pix.Pipeline.SDK.html#t:t/0">Pix.Pipeline.SDK.t</a>()</pre>
+
+      </div>
+
+<p>Assert ARG <code class="inline">arg</code> is non-empty.</p><p>The assertion is implemented with a <code class="inline">RUN</code> instruction: <code class="inline">test -n &quot;${MY_REQUIRED_ARG}&quot;</code>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
     <footer class="footer">
       <p>
 
