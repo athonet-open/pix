@@ -65,8 +65,11 @@ defmodule Pix.Command do
             #{opt.("--ssh")}               Forward SSH agent to shell container
             #{opt.("--target")}            The shell target
 
-    #{cmd.("pix upgrade")}
+    #{cmd.("pix upgrade [#{opt.("--dry-run")}]")}
         Upgrade pix to the latest version.
+
+        FLAGS:
+            #{opt.("--dry-run")}           Only check if an upgrade is available
 
     #{cmd.("pix help")}
         This help.
@@ -368,21 +371,19 @@ defmodule Pix.Command do
     :ok
   end
 
-  @spec upgrade() :: :ok
-  def upgrade do
+  @spec upgrade(Pix.UserSettings.t(), OptionParser.argv()) :: :ok
+  @cli_args_upgrade [dry_run: :boolean]
+  def upgrade(user_settings, argv) do
+    {cli_opts, _args} = OptionParser.parse!(argv, strict: @cli_args_upgrade)
+    cli_opts = Keyword.merge(cli_opts, user_settings.command.upgrade.cli_opts)
+    dry_run? = Keyword.get(cli_opts, :dry_run, false)
+
     latest_version = get_latest_version_from_github()
 
     if Version.compare(latest_version, Pix.version()) == :gt do
       Pix.Report.info("A new version of Pix is available: #{latest_version}\n")
 
-      Pix.Report.info("Updating ...\n")
-
-      {_, 0} =
-        System.cmd("mix", ["escript.install", "--force", "github", @github_user_repo, "ref", "v#{latest_version}"],
-          into: IO.stream()
-        )
-
-      Pix.Report.info("Update complete\n")
+      if not dry_run?, do: do_upgrade(latest_version)
     else
       Pix.Report.info("Pix is up to date\n")
     end
@@ -413,6 +414,20 @@ defmodule Pix.Command do
         Pix.Report.error("Failed to fetch latest version from GitHub: #{inspect(reason)}\n")
         System.halt(1)
     end
+  end
+
+  @spec do_upgrade(String.t()) :: :ok
+  defp do_upgrade(latest_version) do
+    Pix.Report.info("Updating ...\n")
+
+    {_, 0} =
+      System.cmd("mix", ["escript.install", "--force", "github", @github_user_repo, "ref", "v#{latest_version}"],
+        into: IO.stream()
+      )
+
+    Pix.Report.info("Update complete\n")
+
+    :ok
   end
 
   @spec validate_run_cli_opts!(OptionParser.parsed()) :: :ok

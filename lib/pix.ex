@@ -33,8 +33,8 @@ defmodule Pix do
         Pix.Docker.setup_buildx()
         Pix.Command.shell(user_settings, Pix.Config.get(), sub_argv)
 
-      ["upgrade"] ->
-        Pix.Command.upgrade()
+      ["upgrade" | sub_argv] ->
+        Pix.Command.upgrade(user_settings, sub_argv)
 
       ["help"] ->
         Pix.Command.help()

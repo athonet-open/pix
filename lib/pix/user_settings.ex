@@ -38,7 +38,8 @@ defmodule Pix.UserSettings do
             run: %{cli_opts: OptionParser.parsed()},
             shell: %{cli_opts: OptionParser.parsed()},
             graph: %{cli_opts: OptionParser.parsed()},
-            ls: %{cli_opts: OptionParser.parsed()}
+            ls: %{cli_opts: OptionParser.parsed()},
+            upgrade: %{cli_opts: OptionParser.parsed()}
           }
         }
 
@@ -68,6 +69,9 @@ defmodule Pix.UserSettings do
         },
         ls: %{
           cli_opts: get_in(user_settings[:command][:ls][:cli_opts]) || []
+        },
+        upgrade: %{
+          cli_opts: get_in(user_settings[:command][:upgrade][:cli_opts]) || []
         }
       }
     }
