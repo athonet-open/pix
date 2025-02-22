@@ -413,3 +413,23 @@ defmodule Pix.Pipeline.SDK do
     |> Enum.join(" ")
   end
 end
+
+defmodule Pix.Pipeline.SDK.Extra do
+  @moduledoc """
+  Extra functions to be used in Pix.Pipeline.SDK.
+  """
+
+  import Pix.Pipeline.SDK
+
+  @doc """
+  Assert ARG `arg` is non-empty.
+
+  The assertion is implemented with a `RUN` instruction: `test -n "${MY_REQUIRED_ARG}"`.
+  """
+  @spec assert_required_arg(Pix.Pipeline.SDK.t(), arg :: String.t() | atom()) :: Pix.Pipeline.SDK.t()
+  def assert_required_arg(pipeline, arg) do
+    run(pipeline, ~h"""
+      test -n "${#{arg}}" || (echo "ERROR: '#{arg}' is required" && exit 1)
+    """)
+  end
+end
