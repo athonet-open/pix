@@ -82,6 +82,7 @@ jobs:
           docker run --rm \
             --env PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
             --env PIX_DOCKER_BUILDKIT_VERSION="$PIX_DOCKER_BUILDKIT_VERSION" \
+            --env VERSION="${{ steps.version.outputs.version }}" \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run --output pix
