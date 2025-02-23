@@ -126,6 +126,7 @@ defmodule Pix.Docker do
     exit_status
   end
 
+  @spec assert_docker_installed() :: :ok
   defp assert_docker_installed do
     case System.cmd("docker", ["info", "--format", "json"], stderr_to_stdout: true) do
       {info, 0} ->
@@ -140,6 +141,7 @@ defmodule Pix.Docker do
     end
   end
 
+  @spec debug_docker(opts(), OptionParser.argv()) :: :ok
   defp debug_docker(opts, args) do
     Pix.Report.debug("docker #{inspect(args, limit: :infinity)}\n")
 
