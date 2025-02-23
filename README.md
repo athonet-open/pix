@@ -107,3 +107,7 @@ For more information about the available commands and their options, run `pix he
 
 User specific settings can be defined in the `~/.config/pix/settings.exs` file, the file is loaded automatically by pix.
 Refer to `Pix.UserSettings` for more information.
+
+## Security
+
+- Import remote pipelines only from trusted sources.
