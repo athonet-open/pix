@@ -378,41 +378,42 @@ defmodule Pix.Command do
     cli_opts = Keyword.merge(cli_opts, user_settings.command.upgrade.cli_opts)
     dry_run? = Keyword.get(cli_opts, :dry_run, false)
 
-    latest_version = get_latest_version_from_github()
-
-    if Version.compare(latest_version, Pix.version()) == :gt do
+    with {:ok, latest_version} <- get_latest_version_from_github(),
+         {:vsn, :gt} <- {:vsn, Version.compare(latest_version, Pix.version())} do
       Pix.Report.info("A new version of Pix is available: #{latest_version}\n")
 
       if not dry_run?, do: do_upgrade(latest_version)
     else
-      Pix.Report.info("Pix is up to date\n")
+      {:error, reason} ->
+        Pix.Report.error("Upgrade failed: #{inspect(reason)}\n")
+
+      {:vsn, _} ->
+        Pix.Report.info("Pix is up to date\n")
     end
 
     :ok
   end
 
-  @spec get_latest_version_from_github() :: String.t()
+  @spec get_latest_version_from_github() :: {:ok, String.t()} | {:error, term()}
   defp get_latest_version_from_github do
+    timeout = 3_000
     endpoint_uri = "https://api.github.com/repos/#{@github_user_repo}/tags?per_page=1"
     headers = [{~c"User-Agent", ~c"pix"}, {~c"Accept", ~c"application/vnd.github+json"}]
 
-    case :httpc.request(:get, {endpoint_uri, headers}, [], []) do
+    case :httpc.request(:get, {endpoint_uri, headers}, [timeout: timeout], []) do
       {:ok, {{_, 200, _}, _headers, body}} ->
         body = body |> IO.iodata_to_binary() |> Jason.decode!()
 
         case body do
           [%{"name" => "v" <> latest_tag}] ->
-            latest_tag
+            {:ok, latest_tag}
 
           _ ->
-            Pix.Report.error("Failed to parse latest version from GitHub\n")
-            Pix.Report.error("Body: #{inspect(body)}\n")
-            System.halt(1)
+            {:error, "Failed to parse latest version from GitHub"}
         end
 
       {:error, reason} ->
-        Pix.Report.error("Failed to fetch latest version from GitHub: #{inspect(reason)}\n")
-        System.halt(1)
+        {:error, "Failed to fetch latest version from GitHub: #{inspect(reason)}"}
     end
   end
 
