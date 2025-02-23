@@ -85,14 +85,14 @@ jobs:
             --env VERSION="${{ steps.version.outputs.version }}" \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
-            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run --output pix
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run --output --no-cache-filter="pix.docs" pix
 
       - name: Fix pipeline output artifacts permissions
         run: |
           sudo chown -R $(whoami):$(whoami) .pipeline
 
       - name: Docs Publish
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
