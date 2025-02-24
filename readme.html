@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-A75C63F0.js"></script>
+    <script src="dist/sidebar_items-C91E3B19.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -206,7 +206,13 @@ Refer to <a href="Pix.UserSettings.html"><code class="inline">Pix.UserSettings</
   </a>
   <span class="text">Security</span>
 </h2>
-<ul><li>Import remote pipelines only from trusted sources.</li></ul>
+<ul><li>Import remote pipelines only from trusted sources.</li></ul><h2 id="limitations" class="section-heading">
+  <a href="#limitations" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Limitations</span>
+</h2>
+<ul><li>Service containers: currently service containers are not supported - ie. long-running sidecar containers that can be used to run integration tests. Simply leverage your CI/CD provider (Gitlab <a href="https://docs.gitlab.com/ci/services/">services</a>, Github Action <a href="https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idservices">services</a>, etc) to attach sidecar services to the pix container running the job.</li></ul>
 </div>
 
 <div class="bottom-actions" id="bottom-actions">
