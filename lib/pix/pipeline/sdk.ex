@@ -72,7 +72,7 @@ defmodule Pix.Pipeline.SDK do
   end
 
   @enforce_keys [:name]
-  defstruct @enforce_keys ++ [description: "", args: [], stages: [], args_: %{}, dockerignore: []]
+  defstruct @enforce_keys ++ [description: "", args: [], stages: [], args_: %{}, dockerignore: [], directives: []]
 
   @type t :: %__MODULE__{
           name: String.t(),
@@ -80,7 +80,8 @@ defmodule Pix.Pipeline.SDK do
           args: [instruction()],
           stages: [Stage.t()],
           args_: args(),
-          dockerignore: [String.t()]
+          dockerignore: [String.t()],
+          directives: [String.t()]
         }
 
   @doc """
@@ -93,15 +94,25 @@ defmodule Pix.Pipeline.SDK do
 
   @doc """
   Creates a new pipeline.
+
+  ## Options
+
+  - `description` - pipeline description
+  - `dockerignore` - list of files and directories to ignore in the context
+  - `directives` - list of [parser directives](https://docs.docker.com/reference/dockerfile/#parser-directives), ie `syntax=docker/dockerfile:1.4`
   """
-  @spec pipeline(name :: String.t(), [{:description, String.t()} | {:dockerignore, [String.t()]}]) :: t()
+  @spec pipeline(
+          name :: String.t(),
+          [{:description, String.t()} | {:dockerignore, [String.t()]} | {:directives, [String.t()]}]
+        ) :: t()
   def pipeline(name, options) do
-    options = Keyword.validate!(options, description: "", dockerignore: [])
+    options = Keyword.validate!(options, description: "", dockerignore: [], directives: [])
 
     %__MODULE__{
       name: name,
       description: options[:description],
-      dockerignore: options[:dockerignore]
+      dockerignore: options[:dockerignore],
+      directives: options[:directives]
     }
   end
 
@@ -368,10 +379,13 @@ defmodule Pix.Pipeline.SDK do
   end
 
   @doc """
-  Converts the Dockerfile into a string representation.
+  Converts the pipeline into a multistage Dockerfile string representation.
   """
   @spec dump(t()) :: String.t()
-  def dump(%__MODULE__{args: args, stages: stages}) do
+  def dump(%__MODULE__{args: args, stages: stages, directives: directives}) do
+    parser_directives_string =
+      Enum.map_join(directives, "\n", &serialize_parser_directive/1)
+
     global_args_string =
       args
       |> Enum.reverse()
@@ -382,7 +396,7 @@ defmodule Pix.Pipeline.SDK do
       |> Enum.reverse()
       |> Enum.map_join("\n\n", &serialize_stage/1)
 
-    global_args_string <> "\n\n" <> stages_string
+    parser_directives_string <> "\n" <> global_args_string <> "\n" <> stages_string
   end
 
   @spec shell_or_exec_form(String.t() | [String.t()]) :: iargs()
@@ -394,6 +408,11 @@ defmodule Pix.Pipeline.SDK do
       command ->
         [command]
     end
+  end
+
+  @spec serialize_parser_directive(String.t()) :: String.t()
+  defp serialize_parser_directive(directive) do
+    "# #{directive}"
   end
 
   @spec serialize_stage(Stage.t()) :: String.t()
