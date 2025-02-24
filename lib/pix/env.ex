@@ -3,9 +3,18 @@ defmodule Pix.Env do
   Environment information.
   """
 
+  @doc """
+  Returns whether the code is running in a CI environment by checking the `CI` environment variable.
+  Returns `true` if `CI` env var is set, `false` otherwise.
+  """
   @spec ci? :: boolean()
   def ci?, do: System.get_env("CI", "") != ""
 
+  @doc """
+  Returns the current system architecture.
+  Detects amd64/x86_64 or arm64/aarch64 architectures.
+  Can be overridden by setting PIX_FORCE_PLATFORM_ARCH environment variable.
+  """
   @spec arch :: Pix.Config.supported_arch() | (forced_arch :: atom())
   def arch do
     case System.get_env("PIX_FORCE_PLATFORM_ARCH") do
@@ -22,12 +31,20 @@ defmodule Pix.Env do
     end
   end
 
+  @doc """
+  Returns the current git commit SHA as a string.
+  Executes `git rev-parse HEAD` command.
+  """
   @spec git_commit_sha :: String.t()
   def git_commit_sha do
     {res, 0} = System.cmd("git", ~w[rev-parse HEAD])
     String.trim(res)
   end
 
+  @doc """
+  Returns the git project name (repository name) as a string.
+  Gets the basename of the git root directory.
+  """
   @spec git_project_name :: String.t()
   def git_project_name do
     {res, 0} = System.cmd("git", ~w[rev-parse --show-toplevel])
@@ -36,6 +53,10 @@ defmodule Pix.Env do
     Path.basename(res)
   end
 
+  @doc """
+  Returns additional Docker run options from `PIX_DOCKER_RUN_OPTS` environment variable.
+  Parses the options string into command line arguments.
+  """
   @spec pix_docker_run_opts() :: OptionParser.argv()
   def pix_docker_run_opts do
     "PIX_DOCKER_RUN_OPTS"
@@ -43,6 +64,10 @@ defmodule Pix.Env do
     |> OptionParser.split()
   end
 
+  @doc """
+  Returns additional Docker build options from `PIX_DOCKER_BUILD_OPTS` environment variable.
+  Parses the options string into command line arguments.
+  """
   @spec pix_docker_build_opts() :: OptionParser.argv()
   def pix_docker_build_opts do
     "PIX_DOCKER_BUILD_OPTS"
@@ -50,18 +75,27 @@ defmodule Pix.Env do
     |> OptionParser.split()
   end
 
+  @doc """
+  Returns the operating system name by executing `uname -s`.
+  """
   @spec os :: String.t()
   def os do
     {res, 0} = System.cmd("uname", ~w[-s])
     String.trim(res)
   end
 
+  @doc """
+  Returns the current user ID by executing `id -u`.
+  """
   @spec userid :: String.t()
   def userid do
     {res, 0} = System.cmd("id", ~w[-u])
     String.trim(res)
   end
 
+  @doc """
+  Returns the current group ID by executing `id -g`.
+  """
   @spec groupid :: String.t()
   def groupid do
     {res, 0} = System.cmd("id", ~w[-g])
