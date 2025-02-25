@@ -114,4 +114,6 @@ Refer to `Pix.UserSettings` for more information.
 
 ## Limitations
 
-- Service containers: currently service containers are not supported - ie. long-running sidecar containers that can be used to run integration tests. Simply leverage your CI/CD provider (Gitlab [services](https://docs.gitlab.com/ci/services/), Github Action [services](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idservices), etc) to attach sidecar services to the pix container running the job.
+- Service containers: currently service containers are not supported - ie. long-running sidecar containers that can be used to run integration tests while executing the pipeline.
+
+A possible approach is to leverage docker compose to define and the test environment and run the tests.
