@@ -49,6 +49,7 @@ defmodule Pix.UserSettings do
 
     user_settings =
       if File.regular?(user_settings_path) do
+        Pix.Report.internal("Loading user settings from #{user_settings_path}\n")
         {user_settings, _} = Pix.Helper.eval_file(user_settings_path)
         user_settings
       else
