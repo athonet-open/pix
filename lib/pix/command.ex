@@ -15,8 +15,11 @@ defmodule Pix.Command do
 
     #{section.("COMMANDS")}:
 
-    #{cmd.("pix ls")} [#{opt.("--verbose")}] [#{opt.("--hidden")}]
+    #{cmd.("pix ls")} [#{opt.("--verbose")}] [#{opt.("--hidden")}] [PIPELINE]
         List the current project's pipelines.
+
+        ARGS:
+            PIPELINE            The selected pipeline (default: all the pipelines)
 
         FLAGS:
             #{opt.("--verbose")}           Show pipeline configuration details
@@ -211,11 +214,23 @@ defmodule Pix.Command do
   @spec ls(Pix.UserSettings.t(), Pix.Config.t(), OptionParser.argv()) :: :ok
   @cli_args_ls [verbose: :boolean, hidden: :boolean]
   def ls(user_settings, config, argv) do
-    {cli_opts, _args} = OptionParser.parse!(argv, strict: @cli_args_ls)
+    {cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args_ls)
     cli_opts = Keyword.merge(cli_opts, user_settings.command.ls.cli_opts)
     verbose? = Keyword.get(cli_opts, :verbose, false)
     hidden? = Keyword.get(cli_opts, :hidden, false)
-    display_pipelines(config.pipelines, verbose?, hidden?)
+    config_pipelines = config.pipelines
+
+    config_pipelines =
+      case args do
+        [pipeline_alias] when is_map_key(config_pipelines, pipeline_alias) ->
+          Map.take(config_pipelines, [pipeline_alias])
+
+        _ ->
+          config_pipelines
+      end
+
+    display_pipelines(config_pipelines, verbose?, hidden?)
+
     :ok
   end
 
