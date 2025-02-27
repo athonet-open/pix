@@ -116,4 +116,4 @@ Refer to `Pix.UserSettings` for more information.
 
 - Service containers: currently service containers are not supported - ie. long-running sidecar containers that can be used to run integration tests while executing the pipeline.
 
-A possible approach is to leverage docker compose to define and the test environment and run the tests.
+A possible approach is to leverage docker compose to define the test environment and run the tests.
