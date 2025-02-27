@@ -6,13 +6,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci:
-    name: Pix CI
+  bootstrap:
+    name: Pix Bootstrap
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
       packages: write
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -58,7 +61,14 @@ jobs:
           push: ${{ steps.version.outputs.push }}
           tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
 
-      # ---- Pix in Pix ----
+  pix_run_pix:
+    name: Pix Run Pix
+    needs: bootstrap
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Load Pix docker image
         uses: docker/build-push-action@v6
@@ -67,8 +77,8 @@ jobs:
           file: ./Dockerfile
           cache-from: type=gha,scope=image-ghcr
           build-args: |
-            VERSION=${{ steps.version.outputs.version }}
-          tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
+            VERSION=${{ needs.bootstrap.outputs.version }}
+          tags: ghcr.io/${{ github.repository }}:${{ needs.bootstrap.outputs.version }}
           load: true
 
       - name: Expose GitHub Runtime
@@ -82,18 +92,18 @@ jobs:
           docker run --rm \
             --env PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
             --env PIX_DOCKER_BUILDKIT_VERSION="$PIX_DOCKER_BUILDKIT_VERSION" \
-            --env VERSION="${{ steps.version.outputs.version }}" \
+            --env VERSION="${{ needs.bootstrap.outputs.version }}" \
             --volume="$PWD:$PWD" --workdir="$PWD" \
             --volume /var/run/docker.sock:/var/run/docker.sock \
-            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run --output --no-cache-filter="pix.docs" pix
+            ghcr.io/${{ github.repository }}:${{ needs.bootstrap.outputs.version }} run --output --no-cache-filter="pix.docs" pix
 
-      - name: Fix pipeline output artifacts permissions
-        run: |
-          sudo chown -R $(whoami):$(whoami) .pipeline
+      # - name: Fix pipeline output artifacts permissions
+      #   run: |
+      #     sudo chown -R $(whoami):$(whoami) .pipeline
 
-      - name: Docs Publish
-        if: github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .pipeline/output/doc
+      # - name: Docs Publish
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: peaceiris/actions-gh-pages@v4
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: .pipeline/output/doc
