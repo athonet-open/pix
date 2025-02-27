@@ -37,8 +37,10 @@ defmodule Pix.Env do
   """
   @spec git_commit_sha :: String.t()
   def git_commit_sha do
-    {res, 0} = System.cmd("git", ~w[rev-parse HEAD])
-    String.trim(res)
+    case System.cmd("git", ~w[rev-parse HEAD]) do
+      {res, 0} -> String.trim(res)
+      _ -> ""
+    end
   end
 
   @doc """
@@ -47,8 +49,11 @@ defmodule Pix.Env do
   """
   @spec git_project_name :: String.t()
   def git_project_name do
-    {res, 0} = System.cmd("git", ~w[rev-parse --show-toplevel])
-    res = String.trim(res)
+    res =
+      case System.cmd("git", ~w[rev-parse --show-toplevel]) do
+        {res, 0} -> String.trim(res)
+        _ -> File.cwd!()
+      end
 
     Path.basename(res)
   end
