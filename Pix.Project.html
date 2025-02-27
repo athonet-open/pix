@@ -118,46 +118,46 @@ Pages
 
 
     <section id="moduledoc">
-<p>Defines Pix projects.</p><p>A Pix project is defined by calling <code class="inline">use Pix.Project</code> in a module placed in <code class="inline">.pix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Pix.Project</span><span class="w"> </span><span class="k" data-group-id="5389680906-1">do</span><span class="w">
+<p>Defines Pix projects.</p><p>A Pix project is defined by calling <code class="inline">use Pix.Project</code> in a module placed in <code class="inline">.pix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Pix.Project</span><span class="w"> </span><span class="k" data-group-id="4553879173-1">do</span><span class="w">
   </span><span class="kn">use</span><span class="w"> </span><span class="nc">Pix.Project</span><span class="w">
 
   </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
-  </span><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="5389680906-2">do</span><span class="w">
-    </span><span class="p" data-group-id="5389680906-3">%{</span><span class="w">
-      </span><span class="ss">pipelines</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389680906-4">%{</span><span class="w">
-        </span><span class="s">&quot;elixir&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="5389680906-5">%{</span><span class="w">
-          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389680906-6">%{</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="4553879173-2">do</span><span class="w">
+    </span><span class="p" data-group-id="4553879173-3">%{</span><span class="w">
+      </span><span class="ss">pipelines</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4553879173-4">%{</span><span class="w">
+        </span><span class="s">&quot;elixir&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="4553879173-5">%{</span><span class="w">
+          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4553879173-6">%{</span><span class="w">
             </span><span class="ss">git</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git@github.com:user/group/repo.git&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1.0&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipeline/elixir&quot;</span><span class="w">
-          </span><span class="p" data-group-id="5389680906-6">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389680906-7">%{</span><span class="w">
+          </span><span class="p" data-group-id="4553879173-6">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4553879173-7">%{</span><span class="w">
             </span><span class="s">&quot;ELIXIR_APP_NAME&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;myapp&quot;</span><span class="w">
-          </span><span class="p" data-group-id="5389680906-7">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389680906-8">[</span><span class="w">
+          </span><span class="p" data-group-id="4553879173-7">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4553879173-8">[</span><span class="w">
             </span><span class="s">&quot;elixir.format&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.credo&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.dialyzer&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.test&quot;</span><span class="w">
-          </span><span class="p" data-group-id="5389680906-8">]</span><span class="w">
-        </span><span class="p" data-group-id="5389680906-5">}</span><span class="p">,</span><span class="w">
-        </span><span class="s">&quot;deploy_aws&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="5389680906-9">%{</span><span class="w">
-          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389680906-10">%{</span><span class="w">
+          </span><span class="p" data-group-id="4553879173-8">]</span><span class="w">
+        </span><span class="p" data-group-id="4553879173-5">}</span><span class="p">,</span><span class="w">
+        </span><span class="s">&quot;deploy_aws&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="4553879173-9">%{</span><span class="w">
+          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4553879173-10">%{</span><span class="w">
             </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipelines/deploy&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;aws&quot;</span><span class="w">
-          </span><span class="p" data-group-id="5389680906-10">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389680906-11">%{</span><span class="w">
+          </span><span class="p" data-group-id="4553879173-10">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4553879173-11">%{</span><span class="w">
             </span><span class="s">&quot;AWS_REGION&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;eu-west-1&quot;</span><span class="w">
-          </span><span class="p" data-group-id="5389680906-11">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5389680906-12">[</span><span class="w">
+          </span><span class="p" data-group-id="4553879173-11">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4553879173-12">[</span><span class="w">
             </span><span class="s">&quot;deploy.plan&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;deploy.apply&quot;</span><span class="w">
-          </span><span class="p" data-group-id="5389680906-12">]</span><span class="w">
-        </span><span class="p" data-group-id="5389680906-9">}</span><span class="w">
-      </span><span class="p" data-group-id="5389680906-4">}</span><span class="w">
-    </span><span class="p" data-group-id="5389680906-3">}</span><span class="w">
-  </span><span class="k" data-group-id="5389680906-2">end</span><span class="w">
-</span><span class="k" data-group-id="5389680906-1">end</span></code></pre><h2 id="module-project-configuration" class="section-heading">
+          </span><span class="p" data-group-id="4553879173-12">]</span><span class="w">
+        </span><span class="p" data-group-id="4553879173-9">}</span><span class="w">
+      </span><span class="p" data-group-id="4553879173-4">}</span><span class="w">
+    </span><span class="p" data-group-id="4553879173-3">}</span><span class="w">
+  </span><span class="k" data-group-id="4553879173-2">end</span><span class="w">
+</span><span class="k" data-group-id="4553879173-1">end</span></code></pre><h2 id="module-project-configuration" class="section-heading">
   <a href="#module-project-configuration" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -169,23 +169,23 @@ Pages
   </a>
   <span class="text">Pipeline Sources</span>
 </h3>
-<p>Pipeline sources can be defined in two ways:</p><ol><li>From a Git repository:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9497245495-1">%{</span><span class="w">
+<p>Pipeline sources can be defined in two ways:</p><ol><li>From a Git repository:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4790470033-1">%{</span><span class="w">
   </span><span class="ss">git</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git@github.com:user/group/repo.git&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1.0&quot;</span><span class="p">,</span><span class="w">                    </span><span class="c1"># Git reference (branch, tag, commit)</span><span class="w">
   </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipeline/elixir&quot;</span><span class="w">      </span><span class="c1"># Optional subdirectory containing pipeline.exs</span><span class="w">
-</span><span class="p" data-group-id="9497245495-1">}</span></code></pre><ol start="2"><li>From a local path:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2697508183-1">%{</span><span class="w">
+</span><span class="p" data-group-id="4790470033-1">}</span></code></pre><ol start="2"><li>From a local path:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8475178231-1">%{</span><span class="w">
   </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipelines/deploy&quot;</span><span class="p">,</span><span class="w">       </span><span class="c1"># Local directory path</span><span class="w">
   </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;aws&quot;</span><span class="w">                  </span><span class="c1"># Optional subdirectory containing pipeline.exs</span><span class="w">
-</span><span class="p" data-group-id="2697508183-1">}</span></code></pre><h3 id="module-pipeline-arguments" class="section-heading">
+</span><span class="p" data-group-id="8475178231-1">}</span></code></pre><h3 id="module-pipeline-arguments" class="section-heading">
   <a href="#module-pipeline-arguments" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Pipeline Arguments</span>
 </h3>
-<p>Default arguments for pipelines can be specified:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0443648229-1">%{</span><span class="w">
+<p>Default arguments for pipelines can be specified:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2289427583-1">%{</span><span class="w">
   </span><span class="s">&quot;AWS_REGION&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;eu-west-1&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;ANOTHER_ARG&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="w">
-</span><span class="p" data-group-id="0443648229-1">}</span></code></pre><h3 id="module-built-in-variables" class="section-heading">
+</span><span class="p" data-group-id="2289427583-1">}</span></code></pre><h3 id="module-built-in-variables" class="section-heading">
   <a href="#module-built-in-variables" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -197,10 +197,10 @@ Pages
   </a>
   <span class="text">Pipeline Targets</span>
 </h3>
-<p>Default targets define which pipeline stages should be executed by default when runninng <code class="inline">pix run PIPELINE_NAME</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1004968981-1">[</span><span class="w">
+<p>Default targets define which pipeline stages should be executed by default when runninng <code class="inline">pix run PIPELINE_NAME</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9966911878-1">[</span><span class="w">
   </span><span class="s">&quot;target1&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;target2&quot;</span><span class="w">
-</span><span class="p" data-group-id="1004968981-1">]</span></code></pre>
+</span><span class="p" data-group-id="9966911878-1">]</span></code></pre>
     </section>
 
 </div>
