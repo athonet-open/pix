@@ -6,13 +6,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci:
-    name: Pix CI
+  bootstrap:
+    name: Pix Bootstrap
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
       packages: write
+
+    outputs:
+      image: ${{ steps.version.outputs.image }}
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -35,15 +39,15 @@ jobs:
         id: version
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-            PUSH=true
             VERSION="${GITHUB_REF#refs/tags/v}"
+            IMAGE="ghcr.io/${{ github.repository }}:${VERSION}"
           else
-            PUSH=false
             VERSION="0.0.0-dev"
+            IMAGE="ttl.sh/$(uuidgen):2h"
           fi
 
-          echo "push=$PUSH" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
 
       - name: Build and push Pix Docker image to GHCR
         uses: docker/build-push-action@v6
@@ -55,41 +59,37 @@ jobs:
           cache-to: type=gha,scope=image-ghcr,mode=max
           build-args: |
             VERSION=${{ steps.version.outputs.version }}
-          push: ${{ steps.version.outputs.push }}
-          tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
+          push: true
+          tags: ${{ steps.version.outputs.image }}
 
-      # ---- Pix in Pix ----
+  pix_runs_pix:
+    name: Pix runs Pix
+    needs: bootstrap
 
-      - name: Load Pix docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          cache-from: type=gha,scope=image-ghcr
-          build-args: |
-            VERSION=${{ steps.version.outputs.version }}
-          tags: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
-          load: true
+    runs-on: ubuntu-latest
+
+    container:
+      image: ${{ needs.bootstrap.outputs.image }}
+      credentials:
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Expose GitHub Runtime
         uses: crazy-max/ghaction-github-runtime@v3
 
-      # Run the Pix pipeline with pix dockerized
       - name: Pix run Pix
         run: |
-          PIX_DOCKER_BUILDKIT_VERSION=v0.20.0
           CACHE="type=gha,scope=pix,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
-          docker run --rm \
-            --env PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
-            --env PIX_DOCKER_BUILDKIT_VERSION="$PIX_DOCKER_BUILDKIT_VERSION" \
-            --env VERSION="${{ steps.version.outputs.version }}" \
-            --volume="$PWD:$PWD" --workdir="$PWD" \
-            --volume /var/run/docker.sock:/var/run/docker.sock \
-            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} run --output --no-cache-filter="pix.docs" pix
-
-      - name: Fix pipeline output artifacts permissions
-        run: |
-          sudo chown -R $(whoami):$(whoami) .pipeline
+          
+          export PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
+          export PIX_DOCKER_BUILDKIT_VERSION="v0.20.0" \
+          export VERSION="${{ needs.bootstrap.outputs.version }}" \
+          
+          pix run --output pix
 
       - name: Docs Publish
         if: github.ref == 'refs/heads/main'
