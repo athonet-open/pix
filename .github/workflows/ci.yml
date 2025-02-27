@@ -5,14 +5,15 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+  pages: write
+
 jobs:
   bootstrap:
     name: Pix Bootstrap
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      packages: write
 
     outputs:
       image: ${{ steps.version.outputs.image }}
@@ -91,7 +92,29 @@ jobs:
           
           pix run --output pix
 
-      - name: Docs Publish
+      - name: Upload docs artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: .pipeline/output/doc
+
+  pix_publish_docs:
+    name: Publish docs
+    needs: pix_runs_pix
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download docs artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docs
+          path: .pipeline/output/doc
+
+      - name: Publish docs
         if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
