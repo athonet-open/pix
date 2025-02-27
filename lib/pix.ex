@@ -36,8 +36,8 @@ defmodule Pix do
       ["upgrade" | sub_argv] ->
         Pix.Command.upgrade(user_settings, sub_argv)
 
-      ["help"] ->
-        Pix.Command.help()
+      ["help" | sub_argv] ->
+        Pix.Command.help(sub_argv)
 
       cmd ->
         Pix.Report.error("Unknown command #{inspect(cmd)}\n")
