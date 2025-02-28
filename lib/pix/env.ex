@@ -34,25 +34,27 @@ defmodule Pix.Env do
   @doc """
   Returns the current git commit SHA as a string.
   Executes `git rev-parse HEAD` command.
+  Defaults to the given default value if git is not initialized or the command fails.
   """
-  @spec git_commit_sha :: String.t()
-  def git_commit_sha do
+  @spec git_commit_sha(default :: String.t()) :: String.t()
+  def git_commit_sha(default \\ "") do
     case System.cmd("git", ~w[rev-parse HEAD]) do
       {res, 0} -> String.trim(res)
-      _ -> ""
+      _ -> default
     end
   end
 
   @doc """
   Returns the git project name (repository name) as a string.
   Gets the basename of the git root directory.
+  Defaults to the given default value if git is not initialized or the command fails.
   """
-  @spec git_project_name :: String.t()
-  def git_project_name do
+  @spec git_project_name(default :: String.t()) :: String.t()
+  def git_project_name(default \\ File.cwd!()) do
     res =
       case System.cmd("git", ~w[rev-parse --show-toplevel]) do
         {res, 0} -> String.trim(res)
-        _ -> File.cwd!()
+        _ -> default
       end
 
     Path.basename(res)
