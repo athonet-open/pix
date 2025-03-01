@@ -8,37 +8,36 @@ Documentation [website](https://athonet-open.github.io/pix).
 
 ## Introduction
 
-Pix is a portable pipeline executor - a CI framework to define and execute pipelines that can run on any host with docker support.
-Pipelines are defined as code and executed via docker [BuildKit](https://github.com/moby/buildkit).
+Pix is a portable pipeline executor - a CI framework that enables you to define and execute pipelines that can run on any host with Docker support. Pipelines are defined as code and executed efficiently via Docker [BuildKit](https://github.com/moby/buildkit).
 
 ## Basic concepts
 
 ### The pipeline
 
 The building blocks of a pipeline are:
-- **stage**: this is where the actual work is done (ie. execute tests, build an application, perform a deployment, etc). A stage can be parameterized via **arguments**.
-- **output**: a stage can produce outputs (ie. running a test suite and output a coverage report, generate documentation, etc).
-- **dependency**: stages are connected via **dependencies** to define an execution graph.
+- **stage**: The core execution unit where work is performed (e.g., running tests, building applications, deploying services). Each stage can be customized via **arguments**.
+- **output**: Stages can produce tangible outputs (e.g., test coverage reports, documentation, build artifacts).
+- **dependency**: Stages are interconnected via **dependencies** to create a structured execution graph.
 
-Under the hood, a pipeline is an instrumented docker multistage build, it is programmatically defined via Elixir code (using the `Pix.Pipeline.SDK`).
+Under the hood, a pipeline is an intelligent Docker multistage build, programmatically defined using Elixir code through the `Pix.Pipeline.SDK`.
 
 ### The pipeline executor
 
-Pix generates the multistage docker build definition and execute it via `docker buildx build`.
-The execution semantic (parallelism, cache, etc) is the same of a docker build graph.
+Pix generates optimized multistage Docker build definitions and executes them via `docker buildx build`.
+The execution follows Docker build semantics for parallelism, caching, and resource management.
 
 ### The Project
 
-At the root of your project you can define a `.pix.exs` file that declare the pipeline available for your project.
-In the .pix.exs file you declare the pipelines with their default arguments and targets.
-The pipelines definition can be imported `from` a local `path` or a remote `git` repository.
+Your project's root directory can contain a `.pix.exs` file that declares available pipelines.
+This configuration file specifies pipelines with their default arguments and targets.
+Pipeline definitions can be imported either from a local `path` or a remote `git` repository.
 
 More details in the `Pix.Project` module documentation.
 
 ### The Pipeline definition
 
-The pipeline is a programmatic definition of a docker multistage build.
-It is composed of a set of targets, each target is a named docker build stage and defined in a `pipeline.exs` using the `Pix.Pipeline.SDK`.
+A pipeline is a programmatic definition of a Docker multistage build.
+It consists of targets (named Docker build stages) defined in `pipeline.exs` using the `Pix.Pipeline.SDK`.
 
 More details in the `Pix.Pipeline.SDK` module documentation.
 
@@ -46,17 +45,17 @@ More details in the `Pix.Pipeline.SDK` module documentation.
 
 ### Prerequisites
 
-Pix requires a `docker` engine to be installed on the host.
+Pix requires a `docker` engine installed and running on your host system.
 
 ### Installation options
 
-Pix can be installed natively as an Elixir escript, in this can you need erlang/elixir installed on your system:
+#### Option 1: Native Installation (Requires Erlang/Elixir)
 
 ```bash
 $ mix escript.install github athonet-open/pix ref vX.Y.Z
 ```
 
-alternatively, you can use it as a docker image:
+#### Option 2: Docker Installation
 
 ```bash
 $ docker run --rm -it \
@@ -67,12 +66,10 @@ $ docker run --rm -it \
   ghcr.io/athonet-open/pix:X.Y.Z "$@"
 ```
 
-in this case is important to give the pix container access the docker engine.
-You can use the Docker Socket Mounting (DooD - Docker outside of docker) or the Docker-in-Docker (dind) mode.
-
-If you need SSH access, you need to forward the SSH agent socket to the pix container.
-Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is accessible via:
-
+Important considerations:
+- Docker engine access is required via either Docker Socket Mounting (DooD) or Docker-in-Docker (dind)
+- For SSH access, forward the SSH agent socket to the Pix container
+- For macOS users with Docker Desktop:
 ```bash
 --volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
 --env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
@@ -80,40 +77,35 @@ Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is
 
 ## Quick start
 
-For this quick start, we will use the pix project itself.
-The pix project declares a pipeline that can be used to build and test pix itself.
+Let's explore Pix using its own project as an example:
 
-The project is declared with a [.pix.exs](https://github.com/athonet-open/pix/blob/main/.pix.exs) file, where a single pipeline - `pix` - has been defined with its default arguments and targets.
+1. The project configuration is in [.pix.exs](https://github.com/athonet-open/pix/blob/main/.pix.exs), defining the `pix` pipeline with default settings.
+2. The [pipeline.exs](https://github.com/athonet-open/pix/blob/main/pipeline.exs) contains the actual pipeline definition.
 
-The [pipeline.exs](https://github.com/athonet-open/pix/blob/main/pipeline.exs) file define the `pix` pipeline.
-
-To run the project pipeline, we can use the `pix run` command.
+Key commands:
 
 ```bash
-$ pix run pix
+$ pix run pix                   # Run the complete pipeline
+$ pix ls --verbose pix          # List pipeline configuration
+$ pix graph pix                 # Generate pipeline visualization
+$ pix run --output pix          # Run pipeline and output artifacts
 ```
 
-This will build the project, the docs, run the tests, etc..
+Access documentation at `.pipeline/output/doc/index.html` after running with output.
 
-The `pix ls --verbose pix` command can be used to list all the pipelines declared in the project along with their configuration.
-
-Then the `pix graph pix` command can be used to generate a graph of a specific pipeline.
-
-The Pix Elixir documentation is built by `pix.docs` target of the pipeline, run `pix run --output pix` to run the pipeline and output the produced artifacts to the current directory. The docs will be available under `.pipeline/output/doc/index.html`.
-
-For more information about the available commands and their options, run `pix help`.
+For detailed command information, use `pix help`.
 
 ## User settings
 
-User specific settings can be defined in the `~/.config/pix/settings.exs` file, the file is loaded automatically by pix.
-Refer to `Pix.UserSettings` for more information.
+Customize Pix behavior through `~/.config/pix/settings.exs`.
+See `Pix.UserSettings` documentation for configuration options.
 
 ## Security
 
-- Import remote pipelines only from trusted sources.
+- Only import remote pipelines from verified, trusted sources
 
-## Limitations
+## Current limitations
 
-- Service containers: currently service containers are not supported - ie. long-running sidecar containers that can be used to run integration tests while executing the pipeline.
+- Service containers are not currently supported (e.g., sidecar containers for integration testing)
 
-A possible approach is to leverage docker compose to define the test environment and run the tests.
+Workaround: Use Docker Compose to define and manage test environments.
