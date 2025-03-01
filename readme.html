@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-36A7811F.js"></script>
+    <script src="dist/sidebar_items-586BBA60.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -121,8 +121,7 @@ Pages
   </a>
   <span class="text">Introduction</span>
 </h2>
-<p>Pix is a portable pipeline executor - a CI framework to define and execute pipelines that can run on any host with docker support.
-Pipelines are defined as code and executed via docker <a href="https://github.com/moby/buildkit">BuildKit</a>.</p><h2 id="basic-concepts" class="section-heading">
+<p>Pix is a portable pipeline executor - a CI framework that enables you to define and execute pipelines that can run on any host with Docker support. Pipelines are defined as code and executed efficiently via Docker <a href="https://github.com/moby/buildkit">BuildKit</a>.</p><h2 id="basic-concepts" class="section-heading">
   <a href="#basic-concepts" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -134,29 +133,29 @@ Pipelines are defined as code and executed via docker <a href="https://github.co
   </a>
   <span class="text">The pipeline</span>
 </h3>
-<p>The building blocks of a pipeline are:</p><ul><li><strong>stage</strong>: this is where the actual work is done (ie. execute tests, build an application, perform a deployment, etc). A stage can be parameterized via <strong>arguments</strong>.</li><li><strong>output</strong>: a stage can produce outputs (ie. running a test suite and output a coverage report, generate documentation, etc).</li><li><strong>dependency</strong>: stages are connected via <strong>dependencies</strong> to define an execution graph.</li></ul><p>Under the hood, a pipeline is an instrumented docker multistage build, it is programmatically defined via Elixir code (using the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>).</p><h3 id="the-pipeline-executor" class="section-heading">
+<p>The building blocks of a pipeline are:</p><ul><li><strong>stage</strong>: The core execution unit where work is performed (e.g., running tests, building applications, deploying services). Each stage can be customized via <strong>arguments</strong>.</li><li><strong>output</strong>: Stages can produce tangible outputs (e.g., test coverage reports, documentation, build artifacts).</li><li><strong>dependency</strong>: Stages are interconnected via <strong>dependencies</strong> to create a structured execution graph.</li></ul><p>Under the hood, a pipeline is an intelligent Docker multistage build, programmatically defined using Elixir code through the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>.</p><h3 id="the-pipeline-executor" class="section-heading">
   <a href="#the-pipeline-executor" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">The pipeline executor</span>
 </h3>
-<p>Pix generates the multistage docker build definition and execute it via <code class="inline">docker buildx build</code>.
-The execution semantic (parallelism, cache, etc) is the same of a docker build graph.</p><h3 id="the-project" class="section-heading">
+<p>Pix generates optimized multistage Docker build definitions and executes them via <code class="inline">docker buildx build</code>.
+The execution follows Docker build semantics for parallelism, caching, and resource management.</p><h3 id="the-project" class="section-heading">
   <a href="#the-project" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">The Project</span>
 </h3>
-<p>At the root of your project you can define a <code class="inline">.pix.exs</code> file that declare the pipeline available for your project.
-In the .pix.exs file you declare the pipelines with their default arguments and targets.
-The pipelines definition can be imported <code class="inline">from</code> a local <code class="inline">path</code> or a remote <code class="inline">git</code> repository.</p><p>More details in the <a href="Pix.Project.html"><code class="inline">Pix.Project</code></a> module documentation.</p><h3 id="the-pipeline-definition" class="section-heading">
+<p>Your project's root directory can contain a <code class="inline">.pix.exs</code> file that declares available pipelines.
+This configuration file specifies pipelines with their default arguments and targets.
+Pipeline definitions can be imported either from a local <code class="inline">path</code> or a remote <code class="inline">git</code> repository.</p><p>More details in the <a href="Pix.Project.html"><code class="inline">Pix.Project</code></a> module documentation.</p><h3 id="the-pipeline-definition" class="section-heading">
   <a href="#the-pipeline-definition" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">The Pipeline definition</span>
 </h3>
-<p>The pipeline is a programmatic definition of a docker multistage build.
-It is composed of a set of targets, each target is a named docker build stage and defined in a <code class="inline">pipeline.exs</code> using the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>.</p><p>More details in the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a> module documentation.</p><h2 id="installation" class="section-heading">
+<p>A pipeline is a programmatic definition of a Docker multistage build.
+It consists of targets (named Docker build stages) defined in <code class="inline">pipeline.exs</code> using the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>.</p><p>More details in the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a> module documentation.</p><h2 id="installation" class="section-heading">
   <a href="#installation" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -168,51 +167,51 @@ It is composed of a set of targets, each target is a named docker build stage an
   </a>
   <span class="text">Prerequisites</span>
 </h3>
-<p>Pix requires a <code class="inline">docker</code> engine to be installed on the host.</p><h3 id="installation-options" class="section-heading">
+<p>Pix requires a <code class="inline">docker</code> engine installed and running on your host system.</p><h3 id="installation-options" class="section-heading">
   <a href="#installation-options" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Installation options</span>
 </h3>
-<p>Pix can be installed natively as an Elixir escript, in this can you need erlang/elixir installed on your system:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">mix escript.install github athonet-open/pix ref vX.Y.Z
-</span></code></pre><p>alternatively, you can use it as a docker image:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">docker run --rm -it \
+<h4>Option 1: Native Installation (Requires Erlang/Elixir)</h4><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">mix escript.install github athonet-open/pix ref vX.Y.Z
+</span></code></pre><h4>Option 2: Docker Installation</h4><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">docker run --rm -it \
 </span><span class="">  --volume $PWD:/$PWD --workdir /$PWD \
 </span><span class="">  --volume /var/run/docker.sock:/var/run/docker.sock \
 </span><span class="">  --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
 </span><span class="">  --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
 </span><span class="">  ghcr.io/athonet-open/pix:X.Y.Z &quot;$@&quot;
-</span></code></pre><p>in this case is important to give the pix container access the docker engine.
-You can use the Docker Socket Mounting (DooD - Docker outside of docker) or the Docker-in-Docker (dind) mode.</p><p>If you need SSH access, you need to forward the SSH agent socket to the pix container.
-Note: if running on a Mac via docker-desktop, the SSH socket of the docker VM is accessible via:</p><pre><code class="makeup bash" translate="no"><span class="">--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
+</span></code></pre><p>Important considerations:</p><ul><li>Docker engine access is required via either Docker Socket Mounting (DooD) or Docker-in-Docker (dind)</li><li>For SSH access, forward the SSH agent socket to the Pix container</li><li>For macOS users with Docker Desktop:<pre><code class="makeup bash" translate="no"><span class="">--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
 </span><span class="">--env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
-</span></code></pre><h2 id="quick-start" class="section-heading">
+</span></code></pre></li></ul><h2 id="quick-start" class="section-heading">
   <a href="#quick-start" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Quick start</span>
 </h2>
-<p>For this quick start, we will use the pix project itself.
-The pix project declares a pipeline that can be used to build and test pix itself.</p><p>The project is declared with a <a href="https://github.com/athonet-open/pix/blob/main/.pix.exs">.pix.exs</a> file, where a single pipeline - <code class="inline">pix</code> - has been defined with its default arguments and targets.</p><p>The <a href="https://github.com/athonet-open/pix/blob/main/pipeline.exs">pipeline.exs</a> file define the <code class="inline">pix</code> pipeline.</p><p>To run the project pipeline, we can use the <code class="inline">pix run</code> command.</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">pix run pix
-</span></code></pre><p>This will build the project, the docs, run the tests, etc..</p><p>The <code class="inline">pix ls --verbose pix</code> command can be used to list all the pipelines declared in the project along with their configuration.</p><p>Then the <code class="inline">pix graph pix</code> command can be used to generate a graph of a specific pipeline.</p><p>The Pix Elixir documentation is built by <code class="inline">pix.docs</code> target of the pipeline, run <code class="inline">pix run --output pix</code> to run the pipeline and output the produced artifacts to the current directory. The docs will be available under <code class="inline">.pipeline/output/doc/index.html</code>.</p><p>For more information about the available commands and their options, run <code class="inline">pix help</code>.</p><h2 id="user-settings" class="section-heading">
+<p>Let's explore Pix using its own project as an example:</p><ol><li>The project configuration is in <a href="https://github.com/athonet-open/pix/blob/main/.pix.exs">.pix.exs</a>, defining the <code class="inline">pix</code> pipeline with default settings.</li><li>The <a href="https://github.com/athonet-open/pix/blob/main/pipeline.exs">pipeline.exs</a> contains the actual pipeline definition.</li></ol><p>Key commands:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">pix run pix                   # Run the complete pipeline
+</span><span class="gp unselectable">$ </span><span class="">pix ls --verbose pix          # List pipeline configuration
+</span><span class="gp unselectable">$ </span><span class="">pix graph pix                 # Generate pipeline visualization
+</span><span class="gp unselectable">$ </span><span class="">pix run --output pix          # Run pipeline and output artifacts
+</span></code></pre><p>Access documentation at <code class="inline">.pipeline/output/doc/index.html</code> after running with output.</p><p>For detailed command information, use <code class="inline">pix help</code>.</p><h2 id="user-settings" class="section-heading">
   <a href="#user-settings" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">User settings</span>
 </h2>
-<p>User specific settings can be defined in the <code class="inline">~/.config/pix/settings.exs</code> file, the file is loaded automatically by pix.
-Refer to <a href="Pix.UserSettings.html"><code class="inline">Pix.UserSettings</code></a> for more information.</p><h2 id="security" class="section-heading">
+<p>Customize Pix behavior through <code class="inline">~/.config/pix/settings.exs</code>.
+See <a href="Pix.UserSettings.html"><code class="inline">Pix.UserSettings</code></a> documentation for configuration options.</p><h2 id="security" class="section-heading">
   <a href="#security" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Security</span>
 </h2>
-<ul><li>Import remote pipelines only from trusted sources.</li></ul><h2 id="limitations" class="section-heading">
-  <a href="#limitations" class="hover-link">
+<ul><li>Only import remote pipelines from verified, trusted sources</li></ul><h2 id="current-limitations" class="section-heading">
+  <a href="#current-limitations" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  <span class="text">Limitations</span>
+  <span class="text">Current limitations</span>
 </h2>
-<ul><li>Service containers: currently service containers are not supported - ie. long-running sidecar containers that can be used to run integration tests while executing the pipeline.</li></ul><p>A possible approach is to leverage docker compose to define the test environment and run the tests.</p>
+<ul><li>Service containers are not currently supported (e.g., sidecar containers for integration testing)</li></ul><p>Workaround: Use Docker Compose to define and manage test environments.</p>
 </div>
 
 <div class="bottom-actions" id="bottom-actions">
