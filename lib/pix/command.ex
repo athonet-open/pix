@@ -31,6 +31,9 @@ defmodule Pix.Command do
       #{_var("PIX_DOCKER_BUILDKIT_VERSION")}:  Use a specific version of docker buildkit.
                                     If specified, pix will start and use a buildkit docker instance with the specified version.
                                     Otherwise, pix will use the current selected builder instance (ref: docker buildx ls, docker buildx use)
+      #{_var("PIX_DOCKER_BUILDX_DEBUG")}:      Set to "true" to enable `docker buildx debug`.
+                                    If enabled and an error occurs in a `RUN` command, an interactive shell is presented
+                                    which can be used for investigating the error interactively.
     """)
 
     :ok

@@ -29,6 +29,17 @@ defmodule Pix.Docker do
     Jason.decode!(json)
   end
 
+  @spec info :: {:ok, map()} | {:error, String.t()}
+  def info do
+    case System.cmd("docker", ~w[info --format json]) do
+      {json, 0} ->
+        {:ok, Jason.decode!(json)}
+
+      {err, _} ->
+        {:error, err}
+    end
+  end
+
   @spec run(image :: String.t(), ssh_fwd? :: boolean(), opts(), cmd_args :: [String.t()]) :: status :: non_neg_integer()
   def run(image, ssh_fwd?, opts, cmd_args) do
     ssh_opts = if ssh_fwd?, do: run_opts_ssh_forward(), else: []
@@ -115,25 +126,37 @@ defmodule Pix.Docker do
 
     opts = builder_opts ++ ssh_opts ++ opts
 
+    debug_opt = if System.get_env("PIX_DOCKER_BUILDX_DEBUG") == "true", do: ["debug"], else: []
+
     args =
-      [System.find_executable("docker"), "buildx", "build"] ++
+      [System.find_executable("docker"), "buildx"] ++
+        debug_opt ++
+        ["build"] ++
         opts_encode(opts) ++ Pix.Env.pix_docker_build_opts() ++ [ctx]
 
     debug_docker(opts, args)
 
-    {_, exit_status} = System.cmd(Pix.System.cmd_wrapper_path(), args)
+    {_, exit_status} = System.cmd(Pix.System.cmd_wrapper_path(), args, env: [{"BUILDX_EXPERIMENTAL", "1"}])
 
     exit_status
   end
 
   @spec assert_docker_installed() :: :ok
   defp assert_docker_installed do
-    case System.cmd("docker", ["info", "--format", "json"], stderr_to_stdout: true) do
-      {info, 0} ->
-        info = Jason.decode!(info)
+    case info() do
+      {:ok, info} ->
         Pix.Report.internal("Running on #{info["Name"]} #{info["OSType"]}-#{info["Architecture"]} ")
         Pix.Report.internal("(client #{info["ClientInfo"]["Version"]}, ")
-        Pix.Report.internal("server #{info["ServerVersion"]} experimental_build=#{info["ExperimentalBuild"]})\n")
+        Pix.Report.internal("server #{info["ServerVersion"]} experimental_build=#{info["ExperimentalBuild"]}, ")
+
+        case Enum.find(info["ClientInfo"]["Plugins"], &match?(%{"Name" => "buildx"}, &1)) do
+          nil ->
+            Pix.Report.error("buildx plugin not installed\n")
+            System.halt(1)
+
+          %{"Version" => version} ->
+            Pix.Report.internal("buildx plugin version #{version})\n\n")
+        end
 
       {err, _} ->
         Pix.Report.error("Cannot run docker\n\n#{err}\n")
