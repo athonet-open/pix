@@ -1,3 +1,1 @@
-- pix run --interactive
-    https://github.com/moby/buildkit/issues/1472#issuecomment-2645902565
 - pix version requirements `Pix.Project` / `Pix.Pipeline.Project`
