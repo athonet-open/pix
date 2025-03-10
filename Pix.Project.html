@@ -4,34 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.36.1">
+    <meta name="generator" content="ExDoc v0.37.3">
     <meta name="project" content="pix v0.0.0">
 
 
     <title>Pix.Project — pix v0.0.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-586BBA60.js"></script>
-    <script src="docs_config.js"></script>
-    <script async src="dist/html-HJ5ACJPS.js"></script>
+    <link rel="stylesheet" href="dist/html-elixir-6X3L5KMG.css" />
+
+    <script defer src="dist/sidebar_items-586BBA60.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-ALU6OERS.js"></script>
 
   </head>
-  <body class="sidebar-closed">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
 
 <div class="body-wrapper">
 
@@ -53,32 +41,8 @@ pix
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-        <li>
-          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
-            Modules
-          </button>
-        </li>
-
-
-    </ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
   </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
-      <ul id="modules-full-list" class="full-list"></ul>
-    </div>
-
-
 </nav>
 
 <output role="status" id="toast"></output>
@@ -109,55 +73,57 @@ Pages
     </div>
 
 <div id="top-content">
-  <h1>
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pix.Project</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(pix v0.0.0)</small>
 
-    <span translate="no">Pix.Project</span> <small>behaviour</small>
-    <small class="app-vsn" translate="no">(pix v0.0.0)</small>
+    </h1>
 
-  </h1>
+  </div>
 
 
     <section id="moduledoc">
-<p>Defines Pix projects.</p><p>A Pix project is defined by calling <code class="inline">use Pix.Project</code> in a module placed in <code class="inline">.pix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Pix.Project</span><span class="w"> </span><span class="k" data-group-id="9655478993-1">do</span><span class="w">
+<p>Defines Pix projects.</p><p>A Pix project is defined by calling <code class="inline">use Pix.Project</code> in a module placed in <code class="inline">.pix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Pix.Project</span><span class="w"> </span><span class="k" data-group-id="4975379678-1">do</span><span class="w">
   </span><span class="kn">use</span><span class="w"> </span><span class="nc">Pix.Project</span><span class="w">
 
   </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
-  </span><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="9655478993-2">do</span><span class="w">
-    </span><span class="p" data-group-id="9655478993-3">%{</span><span class="w">
-      </span><span class="ss">pipelines</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9655478993-4">%{</span><span class="w">
-        </span><span class="s">&quot;elixir&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="9655478993-5">%{</span><span class="w">
-          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9655478993-6">%{</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="4975379678-2">do</span><span class="w">
+    </span><span class="p" data-group-id="4975379678-3">%{</span><span class="w">
+      </span><span class="ss">pipelines</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4975379678-4">%{</span><span class="w">
+        </span><span class="s">&quot;elixir&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="4975379678-5">%{</span><span class="w">
+          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4975379678-6">%{</span><span class="w">
             </span><span class="ss">git</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git@github.com:user/group/repo.git&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1.0&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipeline/elixir&quot;</span><span class="w">
-          </span><span class="p" data-group-id="9655478993-6">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9655478993-7">%{</span><span class="w">
+          </span><span class="p" data-group-id="4975379678-6">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4975379678-7">%{</span><span class="w">
             </span><span class="s">&quot;ELIXIR_APP_NAME&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;myapp&quot;</span><span class="w">
-          </span><span class="p" data-group-id="9655478993-7">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9655478993-8">[</span><span class="w">
+          </span><span class="p" data-group-id="4975379678-7">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4975379678-8">[</span><span class="w">
             </span><span class="s">&quot;elixir.format&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.credo&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.dialyzer&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.test&quot;</span><span class="w">
-          </span><span class="p" data-group-id="9655478993-8">]</span><span class="w">
-        </span><span class="p" data-group-id="9655478993-5">}</span><span class="p">,</span><span class="w">
-        </span><span class="s">&quot;deploy_aws&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="9655478993-9">%{</span><span class="w">
-          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9655478993-10">%{</span><span class="w">
+          </span><span class="p" data-group-id="4975379678-8">]</span><span class="w">
+        </span><span class="p" data-group-id="4975379678-5">}</span><span class="p">,</span><span class="w">
+        </span><span class="s">&quot;deploy_aws&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="4975379678-9">%{</span><span class="w">
+          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4975379678-10">%{</span><span class="w">
             </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipelines/deploy&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;aws&quot;</span><span class="w">
-          </span><span class="p" data-group-id="9655478993-10">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9655478993-11">%{</span><span class="w">
+          </span><span class="p" data-group-id="4975379678-10">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4975379678-11">%{</span><span class="w">
             </span><span class="s">&quot;AWS_REGION&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;eu-west-1&quot;</span><span class="w">
-          </span><span class="p" data-group-id="9655478993-11">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9655478993-12">[</span><span class="w">
+          </span><span class="p" data-group-id="4975379678-11">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4975379678-12">[</span><span class="w">
             </span><span class="s">&quot;deploy.plan&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;deploy.apply&quot;</span><span class="w">
-          </span><span class="p" data-group-id="9655478993-12">]</span><span class="w">
-        </span><span class="p" data-group-id="9655478993-9">}</span><span class="w">
-      </span><span class="p" data-group-id="9655478993-4">}</span><span class="w">
-    </span><span class="p" data-group-id="9655478993-3">}</span><span class="w">
-  </span><span class="k" data-group-id="9655478993-2">end</span><span class="w">
-</span><span class="k" data-group-id="9655478993-1">end</span></code></pre><h2 id="module-project-configuration" class="section-heading">
+          </span><span class="p" data-group-id="4975379678-12">]</span><span class="w">
+        </span><span class="p" data-group-id="4975379678-9">}</span><span class="w">
+      </span><span class="p" data-group-id="4975379678-4">}</span><span class="w">
+    </span><span class="p" data-group-id="4975379678-3">}</span><span class="w">
+  </span><span class="k" data-group-id="4975379678-2">end</span><span class="w">
+</span><span class="k" data-group-id="4975379678-1">end</span></code></pre><h2 id="module-project-configuration" class="section-heading">
   <a href="#module-project-configuration" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -169,23 +135,23 @@ Pages
   </a>
   <span class="text">Pipeline Sources</span>
 </h3>
-<p>Pipeline sources can be defined in two ways:</p><ol><li>From a Git repository:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3826043528-1">%{</span><span class="w">
+<p>Pipeline sources can be defined in two ways:</p><ol><li>From a Git repository:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8623030413-1">%{</span><span class="w">
   </span><span class="ss">git</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git@github.com:user/group/repo.git&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1.0&quot;</span><span class="p">,</span><span class="w">                    </span><span class="c1"># Git reference (branch, tag, commit)</span><span class="w">
   </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipeline/elixir&quot;</span><span class="w">      </span><span class="c1"># Optional subdirectory containing pipeline.exs</span><span class="w">
-</span><span class="p" data-group-id="3826043528-1">}</span></code></pre><ol start="2"><li>From a local path:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4981620256-1">%{</span><span class="w">
+</span><span class="p" data-group-id="8623030413-1">}</span></code></pre><ol start="2"><li>From a local path:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9136420928-1">%{</span><span class="w">
   </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipelines/deploy&quot;</span><span class="p">,</span><span class="w">       </span><span class="c1"># Local directory path</span><span class="w">
   </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;aws&quot;</span><span class="w">                  </span><span class="c1"># Optional subdirectory containing pipeline.exs</span><span class="w">
-</span><span class="p" data-group-id="4981620256-1">}</span></code></pre><h3 id="module-pipeline-arguments" class="section-heading">
+</span><span class="p" data-group-id="9136420928-1">}</span></code></pre><h3 id="module-pipeline-arguments" class="section-heading">
   <a href="#module-pipeline-arguments" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Pipeline Arguments</span>
 </h3>
-<p>Default arguments for pipelines can be specified:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5581104276-1">%{</span><span class="w">
+<p>Default arguments for pipelines can be specified:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3321798739-1">%{</span><span class="w">
   </span><span class="s">&quot;AWS_REGION&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;eu-west-1&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;ANOTHER_ARG&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="w">
-</span><span class="p" data-group-id="5581104276-1">}</span></code></pre><h3 id="module-built-in-variables" class="section-heading">
+</span><span class="p" data-group-id="3321798739-1">}</span></code></pre><h3 id="module-built-in-variables" class="section-heading">
   <a href="#module-built-in-variables" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -197,10 +163,10 @@ Pages
   </a>
   <span class="text">Pipeline Targets</span>
 </h3>
-<p>Default targets define which pipeline stages should be executed by default when runninng <code class="inline">pix run PIPELINE_NAME</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4794145043-1">[</span><span class="w">
+<p>Default targets define which pipeline stages should be executed by default when runninng <code class="inline">pix run PIPELINE_NAME</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4876413729-1">[</span><span class="w">
   </span><span class="s">&quot;target1&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;target2&quot;</span><span class="w">
-</span><span class="p" data-group-id="4794145043-1">]</span></code></pre>
+</span><span class="p" data-group-id="4876413729-1">]</span></code></pre>
     </section>
 
 </div>
@@ -219,7 +185,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:project/0" data-no-tooltip translate="no">project()</a>
+        <a href="#c:project/0" data-no-tooltip="" translate="no">project()</a>
 
       </div>
 
@@ -241,12 +207,14 @@ Pages
 <section class="detail" id="c:project/0">
 
   <div class="detail-header">
-    <a href="#c:project/0" class="detail-link" data-no-tooltip aria-label="Link to this callback">
+    <a href="#c:project/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">project()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">project()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -277,7 +245,7 @@ Pages
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.3) for the
 
           <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
