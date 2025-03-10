@@ -435,8 +435,10 @@ defmodule Pix.Command do
     cli_opts = Keyword.merge(cli_opts, user_settings.command.upgrade.cli_opts)
     dry_run? = Keyword.get(cli_opts, :dry_run, false)
 
+    current_version = Application.fetch_env!(:pix, :version)
+
     with {:ok, latest_version} <- get_latest_version_from_github(),
-         {:vsn, :gt} <- {:vsn, Version.compare(latest_version, Pix.version())} do
+         {:vsn, :gt} <- {:vsn, Version.compare(latest_version, current_version)} do
       Pix.Report.info("A new version of Pix is available: #{latest_version}\n")
 
       if not dry_run?, do: do_upgrade(latest_version)

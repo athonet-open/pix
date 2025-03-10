@@ -1,12 +1,9 @@
 defmodule Pix do
   @moduledoc false
 
-  @spec version :: String.t()
-  def version, do: Application.fetch_env!(:pix, :version)
-
   @spec main(OptionParser.argv()) :: :ok
   def main(argv) do
-    Pix.Report.info("pix v#{version()}\n")
+    Pix.Report.info("pix v#{Application.fetch_env!(:pix, :version)}\n")
     Pix.System.setup()
     Pix.Report.info("\n")
 
