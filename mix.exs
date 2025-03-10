@@ -4,7 +4,7 @@ defmodule Pix.MixProject do
   def project do
     [
       app: :pix,
-      version: version(),
+      version: "0.0.0",
       elixir: "~> 1.17",
       deps: deps(),
       escript: [
@@ -36,29 +36,5 @@ defmodule Pix.MixProject do
       extras: ["README.md"],
       formatters: ["html"]
     ]
-  end
-
-  defp version do
-    git_tag =
-      case System.cmd("git", ["describe", "--tags", "--abbrev"]) do
-        {git_tag, 0} -> git_tag
-        _ -> nil
-      end
-
-    env_version =
-      case System.get_env("VERSION", nil) do
-        nil -> nil
-        "" -> nil
-        env_version -> env_version
-      end
-
-    version =
-      (env_version || git_tag || "v0.0.0")
-      |> String.trim()
-      |> String.trim_leading("v")
-
-    File.write!("VERSION", version)
-
-    version
   end
 end
