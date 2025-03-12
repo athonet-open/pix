@@ -146,8 +146,8 @@ defmodule Pix.Pipeline do
           Pix.Docker.opts()
   defp run_build_options(cli_opts, pipeline, pipeline_target, from, ctx_dir, default_args) do
     no_cache_filter_opts =
-      for(%{cache: false, stage: stage} <- pipeline.stages, do: {:"no-cache-filter", stage}) ++
-        for {:no_cache_filter, filter} <- cli_opts, do: {:"no-cache-filter", filter}
+      for(%{cache: false, stage: stage} <- pipeline.stages, do: {:no_cache_filter, stage}) ++
+        for {:no_cache_filter, filter} <- cli_opts, do: {:no_cache_filter, filter}
 
     base_opts = [
       target: pipeline_target,
@@ -181,14 +181,14 @@ defmodule Pix.Pipeline do
 
   @spec add_run_cache_options(Pix.Docker.opts(), run_cli_opts(), Pix.Docker.opts()) :: Pix.Docker.opts()
   defp add_run_cache_options(opts, cli_opts, no_cache_filter_opts) do
-    if cli_opts[:no_cache], do: opts ++ [:"no-cache"], else: opts ++ no_cache_filter_opts
+    if cli_opts[:no_cache], do: opts ++ [:no_cache], else: opts ++ no_cache_filter_opts
   end
 
   @spec execute_run_build(Pix.Docker.opts(), Path.t(), run_cli_opts(), [String.t()]) :: :ok
   defp execute_run_build(build_opts, dockerfile_path, cli_opts, targets) do
     Pix.Report.info("\nRunning pipeline (targets: #{inspect(targets)})\n\n")
 
-    build_opts = Keyword.put(build_opts, :file, dockerfile_path)
+    build_opts = build_opts ++ [file: dockerfile_path]
     Pix.Docker.build(cli_opts[:ssh], build_opts, ".") |> halt_on_error()
 
     if cli_opts[:output] do
@@ -203,11 +203,9 @@ defmodule Pix.Pipeline do
   defp execute_tag(build_opts, dockerfile_path, cli_opts) do
     Pix.Report.info("\nTagging pipeline target #{inspect(cli_opts[:target])} as #{inspect(cli_opts[:tag])}\n\n")
 
-    build_opts =
-      build_opts
-      |> Keyword.put(:target, cli_opts[:target])
-      |> Keyword.put(:file, dockerfile_path)
-      |> add_run_tag_option(cli_opts)
+    build_opts = Enum.reject(build_opts, &(match?(:no_cache, &1) or match?({:no_cache_filter, _}, &1)))
+    build_opts = build_opts ++ [target: cli_opts[:target], file: dockerfile_path]
+    build_opts = add_run_tag_option(build_opts, cli_opts)
 
     Pix.Docker.build(cli_opts[:ssh], build_opts, ".") |> halt_on_error()
 
