@@ -47,13 +47,7 @@ defmodule Pix.Docker do
     args = ["run"] ++ opts_encode(opts) ++ Pix.Env.pix_docker_run_opts() ++ [image] ++ cmd_args
 
     debug_docker(opts, args)
-
-    port_opts = [:nouse_stdio, :exit_status, args: args]
-    port = Port.open({:spawn_executable, System.find_executable("docker")}, port_opts)
-
-    receive do
-      {^port, {:exit_status, exit_status}} -> exit_status
-    end
+    docker_cmd_with_stdio(args)
   end
 
   @spec create_buildx_builder(String.t()) :: :ok
@@ -126,19 +120,20 @@ defmodule Pix.Docker do
 
     opts = builder_opts ++ ssh_opts ++ opts
 
-    debug_opt = if System.get_env("PIX_DOCKER_BUILDX_DEBUG") == "true", do: ["debug"], else: []
+    buildx_args = ["build"] ++ opts_encode(opts) ++ Pix.Env.pix_docker_build_opts() ++ [ctx]
 
-    args =
-      [System.find_executable("docker"), "buildx"] ++
-        debug_opt ++
-        ["build"] ++
-        opts_encode(opts) ++ Pix.Env.pix_docker_build_opts() ++ [ctx]
+    if System.get_env("PIX_DOCKER_BUILDX_DEBUG") == "true" do
+      args = ["buildx", "debug" | buildx_args]
+      envs = [{"BUILDX_EXPERIMENTAL", "1"}]
 
-    debug_docker(opts, args)
+      debug_docker(opts, args)
+      docker_cmd_with_stdio(args, envs)
+    else
+      args = [System.find_executable("docker"), "buildx" | buildx_args]
 
-    {_, exit_status} = System.cmd(Pix.System.cmd_wrapper_path(), args, env: [{"BUILDX_EXPERIMENTAL", "1"}])
-
-    exit_status
+      {_, exit_status} = System.cmd(Pix.System.cmd_wrapper_path(), args)
+      exit_status
+    end
   end
 
   @spec assert_docker_installed() :: :ok
@@ -184,5 +179,17 @@ defmodule Pix.Docker do
       {opt_key, opt_value} -> [k_fn.(opt_key), to_string(opt_value)]
       opt_key -> [k_fn.(opt_key)]
     end)
+  end
+
+  @spec docker_cmd_with_stdio(args :: [String.t()], envs :: [{String.t(), String.t()}]) ::
+          exit_status :: non_neg_integer()
+  defp docker_cmd_with_stdio(args, envs \\ []) do
+    env = Enum.map(envs, fn {a, b} -> {to_charlist(a), to_charlist(b)} end)
+    port_opts = [:nouse_stdio, :exit_status, args: args, env: env]
+    port = Port.open({:spawn_executable, System.find_executable("docker")}, port_opts)
+
+    receive do
+      {^port, {:exit_status, exit_status}} -> exit_status
+    end
   end
 end
