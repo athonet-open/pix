@@ -11,24 +11,24 @@ defmodule Pix do
 
     case argv do
       ["ls" | sub_argv] ->
-        Pix.Command.ls(user_settings, Pix.Config.get(), sub_argv)
+        Pix.Command.Ls.cmd(user_settings, Pix.Config.get(), sub_argv)
 
       ["graph" | sub_argv] ->
-        Pix.Command.graph(user_settings, Pix.Config.get(), sub_argv)
+        Pix.Command.Graph.cmd(user_settings, Pix.Config.get(), sub_argv)
 
       ["run" | sub_argv] ->
         Pix.Docker.setup_buildx()
-        Pix.Command.run(user_settings, Pix.Config.get(), sub_argv)
+        Pix.Command.Run.cmd(user_settings, Pix.Config.get(), sub_argv)
 
       ["shell" | sub_argv] ->
         Pix.Docker.setup_buildx()
-        Pix.Command.shell(user_settings, Pix.Config.get(), sub_argv)
+        Pix.Command.Shell.cmd(user_settings, Pix.Config.get(), sub_argv)
 
       ["upgrade" | sub_argv] ->
-        Pix.Command.upgrade(user_settings, sub_argv)
+        Pix.Command.Upgrade.cmd(user_settings, sub_argv)
 
       ["help" | sub_argv] ->
-        Pix.Command.help(sub_argv)
+        Pix.Command.Help.cmd(sub_argv)
 
       cmd ->
         Pix.Report.error("Unknown command #{inspect(cmd)}\n")
