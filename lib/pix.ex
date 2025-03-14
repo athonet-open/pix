@@ -10,6 +10,9 @@ defmodule Pix do
     user_settings = load_user_setting()
 
     case argv do
+      ["cache" | sub_argv] ->
+        Pix.Command.Cache.cmd(Pix.Config.get(), sub_argv)
+
       ["ls" | sub_argv] ->
         Pix.Command.Ls.cmd(user_settings, Pix.Config.get(), sub_argv)
 

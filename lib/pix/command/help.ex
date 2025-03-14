@@ -8,7 +8,7 @@ defmodule Pix.Command.Help do
 
   @spec cmd(OptionParser.argv()) :: :ok
   def cmd(argv) do
-    argv = if argv == [], do: ["ls", "graph", "run", "shell", "upgrade", "help"], else: argv
+    argv = if argv == [], do: ["ls", "graph", "run", "shell", "upgrade", "cache", "help"], else: argv
     commands = Enum.map_join(argv, "\n", &help_cmd/1)
 
     Pix.Report.info("""
@@ -118,6 +118,19 @@ defmodule Pix.Command.Help do
 
       FLAGS:
           #{_opt("--dry-run")}           Only check if an upgrade is available
+    """
+  end
+
+  defp help_cmd("cache") do
+    """
+    #{_cmd("pix cache")} #{_opt("info")}|#{_opt("update")}|#{_opt("clear")}
+
+      Cache management.
+
+      ARGS:
+          #{_opt("info")}                Show info about the cache
+          #{_opt("update")}              Update the cache of remote git pipelines
+          #{_opt("clear")}               Clear the cache of remote git pipelines
     """
   end
 
