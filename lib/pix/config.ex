@@ -57,6 +57,11 @@ defmodule Pix.Config do
     end
   end
 
+  @spec pipeline_checkout_dir(repo :: String.t(), ref :: String.t()) :: Path.t()
+  def pipeline_checkout_dir(repo, ref) do
+    Path.join([".pipeline", "checkout", repo, ref])
+  end
+
   @spec validate_pix_exs(map()) :: pix_exs()
   defp validate_pix_exs(pix_exs) do
     # TODO
@@ -70,7 +75,11 @@ defmodule Pix.Config do
     |> Stream.filter(&git_pipeline?/1)
     |> Stream.map(&extract_git_info/1)
     |> Stream.uniq()
-    |> Task.async_stream(&get_git_pipeline(&1.uri, &1.ref), ordered: false, timeout: :infinity)
+    |> Task.async_stream(
+      &get_git_pipeline(&1.uri, &1.ref),
+      ordered: false,
+      timeout: :infinity
+    )
     |> Stream.run()
 
     # Map pipeline configurations to their implementations
@@ -102,22 +111,17 @@ defmodule Pix.Config do
 
   @spec get_git_pipeline(uri :: String.t(), ref :: String.t()) :: :ok
   defp get_git_pipeline(uri, ref) do
-    Pix.Report.internal("Fetching remote git pipeline #{uri} (#{ref}) ... ")
-
-    checkout_dir = Path.join([".pipeline", "checkout", uri, ref])
+    checkout_dir = pipeline_checkout_dir(uri, ref)
     cmd_opts = [stderr_to_stdout: true, cd: checkout_dir]
 
-    if File.dir?(checkout_dir) do
-      _ = System.cmd("git", ["fetch", "origin", ref], cmd_opts)
-      _ = System.cmd("git", ["reset", "--hard", "FETCH_HEAD"], cmd_opts)
+    if not File.dir?(checkout_dir) do
+      Pix.Report.internal("Fetching remote git pipeline #{uri} (#{ref}) ... ")
 
-      Pix.Report.internal("local checkout updated\n")
-    else
       File.mkdir_p!(checkout_dir)
 
       case System.cmd("git", ["clone", "--depth", "1", "--branch", ref, uri, "."], cmd_opts) do
         {_, 0} ->
-          Pix.Report.internal("clone completed\n")
+          :ok
 
         {err_msg, _} ->
           Pix.Report.internal("error\n\n")
@@ -136,7 +140,7 @@ defmodule Pix.Config do
     ctx_dir =
       case from do
         %{path: path} -> path
-        %{git: uri, ref: ref} -> Path.join([".pipeline", "checkout", uri, ref])
+        %{git: uri, ref: ref} -> pipeline_checkout_dir(uri, ref)
       end
 
     pipeline_exs_dir = Path.join(ctx_dir, Map.get(from, :sub_dir, ""))
