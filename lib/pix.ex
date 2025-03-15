@@ -3,9 +3,9 @@ defmodule Pix do
 
   @spec main(OptionParser.argv()) :: :ok
   def main(argv) do
-    Pix.Report.info("pix v#{Application.fetch_env!(:pix, :version)}\n")
+    Pix.Report.info("pix v#{Application.fetch_env!(:pix, :version)}\n\n")
+
     Pix.System.setup()
-    Pix.Report.info("\n")
 
     user_settings = load_user_setting()
 
