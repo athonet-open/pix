@@ -131,6 +131,7 @@ defmodule Pix.Docker do
     else
       args = [System.find_executable("docker"), "buildx" | buildx_args]
 
+      debug_docker(opts, args)
       {_, exit_status} = System.cmd(Pix.System.cmd_wrapper_path(), args)
       exit_status
     end
