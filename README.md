@@ -75,6 +75,14 @@ Important considerations:
 --env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
 ```
 
+### Shell completion
+
+Shell completion scripts for the `fish` shell is available under the repo `shell_completions` directory.
+
+```bash
+cp shell_completions/pix.fish ~/.config/fish/completions/
+```
+
 ## Quick start
 
 Let's explore Pix using its own project as an example:
