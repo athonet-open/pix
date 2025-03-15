@@ -146,7 +146,14 @@ It consists of targets (named Docker build stages) defined in <code class="inlin
 </span><span class="">  ghcr.io/athonet-open/pix:X.Y.Z &quot;$@&quot;
 </span></code></pre><p>Important considerations:</p><ul><li>Docker engine access is required via either Docker Socket Mounting (DooD) or Docker-in-Docker (dind)</li><li>For SSH access, forward the SSH agent socket to the Pix container</li><li>For macOS users with Docker Desktop:<pre><code class="makeup bash" translate="no"><span class="">--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
 </span><span class="">--env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
-</span></code></pre></li></ul><h2 id="quick-start" class="section-heading">
+</span></code></pre></li></ul><h3 id="shell-completion" class="section-heading">
+  <a href="#shell-completion" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Shell completion</span>
+</h3>
+<p>Shell completion scripts for the <code class="inline">fish</code> shell is available under the repo <code class="inline">shell_completions</code> directory.</p><pre><code class="makeup bash" translate="no"><span class="">cp shell_completions/pix.fish ~/.config/fish/completions/
+</span></code></pre><h2 id="quick-start" class="section-heading">
   <a href="#quick-start" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
