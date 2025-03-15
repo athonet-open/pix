@@ -105,7 +105,7 @@ defmodule Pix.Pipeline.SDK do
           name :: String.t(),
           [{:description, String.t()} | {:dockerignore, [String.t()]} | {:directives, [String.t()]}]
         ) :: t()
-  def pipeline(name, options) do
+  def pipeline(name, options \\ []) do
     options = Keyword.validate!(options, description: "", dockerignore: [], directives: [])
 
     %__MODULE__{
