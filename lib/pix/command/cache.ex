@@ -27,7 +27,7 @@ defmodule Pix.Command.Cache do
 
   @spec info(Pix.Config.t()) :: :ok
   defp info(config) do
-    Pix.Report.info("\NPIPELINES:\n")
+    Pix.Report.info("\nPIPELINES:\n")
 
     for {pipeline_alias, pipeline} <- config.pipelines do
       case pipeline do
@@ -40,12 +40,12 @@ defmodule Pix.Command.Cache do
             Pix.Report.info("  - #{pipeline_alias}: git pipeline #{repo}@#{ref}\n    NOT CACHED\n")
           end
 
-        %{from: %{path: path}} ->
-          Pix.Report.info("  #{pipeline_alias}: local pipeline #{path}\n")
+        %{from: %{path: _} = from} ->
+          Pix.Report.info("  - #{pipeline_alias}: local pipeline #{inspect(from)}\n")
       end
     end
 
-    Pix.Report.info("\NBUILDKIT:\n")
+    Pix.Report.info("\nBUILDKIT:\n")
 
     builder =
       case System.get_env("PIX_DOCKER_BUILDKIT_VERSION") do
