@@ -2,6 +2,11 @@ defmodule Pix do
   @moduledoc false
 
   @spec main(OptionParser.argv()) :: :ok
+  def main(["__complete_" <> shell_type | sub_argv]) do
+    Pix.Report.disable()
+    Pix.Command.Help.complete(shell_type, sub_argv, Pix.Config.get())
+  end
+
   def main(argv) do
     Pix.Report.info("pix v#{Application.fetch_env!(:pix, :version)}\n\n")
 
