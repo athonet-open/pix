@@ -77,11 +77,13 @@ Important considerations:
 
 ### Shell completion
 
-Shell completion scripts for the `fish` shell is available under the repo `shell_completions` directory.
+Shell completion scripts are available for the following shells:
 
-```bash
-cp shell_completions/pix.fish ~/.config/fish/completions/
-```
+- fish shell
+  ```bash
+  # install completion with
+  pix completion_script fish > ~/.config/fish/completions/pix.fish
+  ```
 
 ## Quick start
 

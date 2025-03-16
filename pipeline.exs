@@ -64,6 +64,7 @@ defmodule Pix2Pix.Pipeline do
     |> stage("pix.compile_#{mix_env}", from: "pix.deps_#{mix_env}", private: true)
     |> copy("config", "./config")
     |> copy("lib", "./lib")
+    |> copy("shell_completions", "./shell_completions")
     |> run("mix compile --warnings-as-errors")
   end
 
