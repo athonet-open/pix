@@ -14,6 +14,7 @@ COPY mix.exs ./
 COPY mix.lock ./
 COPY config ./config
 COPY lib ./lib
+COPY shell_completions ./shell_completions
 RUN mix deps.get
 RUN mix compile --warnings-as-errors
 RUN mix escript.build

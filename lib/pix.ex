@@ -4,7 +4,12 @@ defmodule Pix do
   @spec main(OptionParser.argv()) :: :ok
   def main(["__complete_" <> shell_type | sub_argv]) do
     Pix.Report.disable()
-    Pix.Command.Help.complete(shell_type, sub_argv, Pix.Config.get())
+    Pix.Command.Completion.complete(shell_type, sub_argv, Pix.Config.get())
+  end
+
+  def main(["completion_script" | sub_argv]) do
+    Pix.Report.disable()
+    Pix.Command.Completion.script(sub_argv)
   end
 
   def main(argv) do

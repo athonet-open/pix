@@ -55,6 +55,7 @@ complete -c pix -n "__fish_use_subcommand" -a "run" -d "Run PIPELINE"
 complete -c pix -n "__fish_use_subcommand" -a "shell" -d "Shell into the specified target of the PIPELINE"
 complete -c pix -n "__fish_use_subcommand" -a "upgrade" -d "Upgrade pix to the latest version"
 complete -c pix -n "__fish_use_subcommand" -a "cache" -d "Cache management"
+complete -c pix -n "__fish_use_subcommand" -a "completion_script" -d "Completion script"
 complete -c pix -n "__fish_use_subcommand" -a "help" -d "Help"
 
 # ls command options
@@ -89,3 +90,6 @@ complete -c pix -n "__fish_seen_subcommand_from upgrade" -l "dry-run" -d "Only c
 
 # cache command options
 complete -c pix -n "__fish_seen_subcommand_from cache" -a "info\t'Show info about the cache' update\t'Update the cache of remote git pipelines' clear\t'Clear the cache of remote git pipelines'"
+
+# completion_script command options
+complete -c pix -n "__fish_seen_subcommand_from completion_script" -a "fish" -d "Fish completion script"

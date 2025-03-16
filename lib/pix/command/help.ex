@@ -6,44 +6,15 @@ defmodule Pix.Command.Help do
   defp _var(s), do: IO.ANSI.format([:blue, s])
   defp _section(s), do: IO.ANSI.format([:bright, s])
 
-  @spec complete(shell_type :: String.t(), OptionParser.argv(), Pix.Config.t()) :: :ok
-  def complete("fish", argv, config) do
-    case argv do
-      ["pipeline"] ->
-        config.pipelines
-        |> Enum.map_join("\n", fn {pipeline_alias, %{pipeline_mod: mod}} ->
-          [description | _] = mod.pipeline().description |> String.split("\n")
-          "#{pipeline_alias}\t#{description}"
-        end)
-        |> IO.puts()
-
-      ["target", pipeline] ->
-        pipeline_mod = config.pipelines[pipeline].pipeline_mod
-
-        pipeline_mod.pipeline().stages
-        |> Enum.reject(& &1.private)
-        |> Enum.map_join("\n", &"#{&1.stage}\t#{&1.description}")
-        |> IO.puts()
-
-      ["arg", pipeline, target] ->
-        pipeline_mod = config.pipelines[pipeline].pipeline_mod
-
-        pipeline_mod.pipeline().stages
-        |> Enum.reject(& &1.private)
-        |> Enum.find(&(&1.stage == target))
-        |> then(& &1.args_)
-        |> Map.keys()
-        |> Enum.join("\n")
-        |> IO.puts()
-
-      _ ->
-        :ok
-    end
-  end
-
   @spec cmd(OptionParser.argv()) :: :ok
   def cmd(argv) do
-    argv = if argv == [], do: ["ls", "graph", "run", "shell", "upgrade", "cache", "help"], else: argv
+    argv =
+      if argv == [] do
+        ["ls", "graph", "run", "shell", "upgrade", "cache", "completion_script", "help"]
+      else
+        argv
+      end
+
     commands = Enum.map_join(argv, "\n", &help_cmd/1)
 
     Pix.Report.info("""
@@ -166,6 +137,17 @@ defmodule Pix.Command.Help do
           #{_opt("info")}                Show info about the cache
           #{_opt("update")}              Update the cache of remote git pipelines
           #{_opt("clear")}               Clear the cache of remote git pipelines
+    """
+  end
+
+  defp help_cmd("completion_script") do
+    """
+    #{_cmd("pix completion_script")} #{_opt("fish")}
+
+      Display completion script.
+      
+      ARGS:
+          SHELL_TYPE          The shell type - (supported: "fish")
     """
   end
 
