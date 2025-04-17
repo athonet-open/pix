@@ -252,12 +252,12 @@ defmodule Pix.Pipeline do
 
   @spec shell_run_options(String.t(), Pix.Config.from(), shell_cli_opts()) :: Pix.Docker.opts()
   defp shell_run_options(shell_target, from, cli_opts) do
-    base_opts = [:rm, :interactive, network: "host"]
+    base_opts = [:rm, :interactive]
     tty_opts = if Pix.Env.ci?(), do: [], else: [:tty]
 
     host_opts =
       if cli_opts[:host] do
-        [volume: "#{File.cwd!()}:#{File.cwd!()}", workdir: File.cwd!()]
+        [network: "host", volume: "#{File.cwd!()}:#{File.cwd!()}", workdir: File.cwd!()]
       else
         []
       end
