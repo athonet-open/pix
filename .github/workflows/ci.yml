@@ -87,7 +87,7 @@ jobs:
           CACHE="type=gha,scope=pix,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
           
           export PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
-          export PIX_DOCKER_BUILDKIT_VERSION="v0.20.0" \
+          export PIX_DOCKER_BUILDKIT_VERSION="v0.21.0" \
           export VERSION="${{ needs.bootstrap.outputs.version }}" \
           
           pix run --output pix
