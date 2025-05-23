@@ -19,6 +19,8 @@ defmodule Pix.Pipeline do
           | {:target, String.t()}
         ]
 
+  def output_dir, do: ".pipeline/output"
+
   @spec run(Pix.Config.pipeline(), run_cli_opts()) :: :ok
   def run(pipeline_config, cli_opts) do
     %{
@@ -167,8 +169,8 @@ defmodule Pix.Pipeline do
   @spec add_run_output_option(Pix.Docker.opts(), run_cli_opts()) :: Pix.Docker.opts()
   defp add_run_output_option(opts, cli_opts) do
     if cli_opts[:output] do
-      File.rm_rf!(".pipeline/output")
-      opts ++ [output: "type=local,dest=./.pipeline/output"]
+      File.rm_rf!(output_dir())
+      opts ++ [output: "type=local,dest=#{output_dir()}"]
     else
       opts
     end
@@ -192,8 +194,8 @@ defmodule Pix.Pipeline do
     Pix.Docker.build(cli_opts[:ssh], build_opts, ".") |> halt_on_error()
 
     if cli_opts[:output] do
-      Pix.Report.info("\nExported pipeline outputs to .pipeline/output:\n")
-      for f <- File.ls!(".pipeline/output"), do: Pix.Report.info("- #{f}\n")
+      Pix.Report.info("\nExported pipeline outputs to #{output_dir()}:\n")
+      for f <- File.ls!(output_dir()), do: Pix.Report.info("- #{Path.join(output_dir(), f)}\n")
     end
 
     :ok

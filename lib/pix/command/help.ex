@@ -84,7 +84,7 @@ defmodule Pix.Command.Help do
 
       FLAGS:
           #{_opt("--no-cache")}          Do not use cache when building the image
-          #{_opt("--output")}            Output the target artifacts under .pipeline/output directory
+          #{_opt("--output")}            Output the target artifacts under #{Pix.Pipeline.output_dir()} directory
 
       OPTIONS:
           #{_opt("--arg")}*              Set one or more pipeline ARG (format KEY=value)
