@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.37.3">
+    <meta name="generator" content="ExDoc v0.38.1">
     <meta name="project" content="pix v0.0.0">
 
 
     <title>PIX — pix v0.0.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-6X3L5KMG.css" />
+    <link rel="stylesheet" href="dist/html-elixir-J3PIVQVA.css" />
 
-    <script defer src="dist/sidebar_items-28446C19.js"></script>
+    <script defer src="dist/sidebar_items-E7057FDB.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-ALU6OERS.js"></script>
+    <script defer src="dist/html-DPJLHKSM.js"></script>
 
   </head>
   <body>
@@ -79,65 +79,12 @@ pix
 
   </div>
 
-<p><a href="https://github.com/athonet-open/pix/actions/workflows/ci.yml"><img src="https://github.com/athonet-open/pix/actions/workflows/ci.yml/badge.svg" alt=".github/workflows/ci.yml"/></a> <a href="https://athonet-open.github.io/pix"><img src="https://img.shields.io/badge/docs-latest-green.svg" alt="Docs"/></a></p><p>BuildKit pipelines.</p><p>Documentation <a href="https://athonet-open.github.io/pix">website</a>.</p><h2 id="introduction" class="section-heading">
-  <a href="#introduction" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Introduction</span>
-</h2>
-<p>Pix is a portable pipeline executor - a CI framework that enables you to define and execute pipelines that can run on any host with Docker support. Pipelines are defined as code and executed efficiently via Docker <a href="https://github.com/moby/buildkit">BuildKit</a>.</p><h2 id="basic-concepts" class="section-heading">
-  <a href="#basic-concepts" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Basic concepts</span>
-</h2>
-<h3 id="the-pipeline" class="section-heading">
-  <a href="#the-pipeline" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">The pipeline</span>
-</h3>
-<p>The building blocks of a pipeline are:</p><ul><li><strong>stage</strong>: The core execution unit where work is performed (e.g., running tests, building applications, deploying services). Each stage can be customized via <strong>arguments</strong>.</li><li><strong>output</strong>: Stages can produce tangible outputs (e.g., test coverage reports, documentation, build artifacts).</li><li><strong>dependency</strong>: Stages are interconnected via <strong>dependencies</strong> to create a structured execution graph.</li></ul><p>Under the hood, a pipeline is an intelligent Docker multistage build, programmatically defined using Elixir code through the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>.</p><h3 id="the-pipeline-executor" class="section-heading">
-  <a href="#the-pipeline-executor" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">The pipeline executor</span>
-</h3>
-<p>Pix generates optimized multistage Docker build definitions and executes them via <code class="inline">docker buildx build</code>.
-The execution follows Docker build semantics for parallelism, caching, and resource management.</p><h3 id="the-project" class="section-heading">
-  <a href="#the-project" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">The Project</span>
-</h3>
-<p>Your project's root directory can contain a <code class="inline">.pix.exs</code> file that declares available pipelines.
+
+<p><a href="https://github.com/athonet-open/pix/actions/workflows/ci.yml"><img src="https://github.com/athonet-open/pix/actions/workflows/ci.yml/badge.svg" alt=".github/workflows/ci.yml"/></a> <a href="https://athonet-open.github.io/pix"><img src="https://img.shields.io/badge/docs-latest-green.svg" alt="Docs"/></a></p><p>BuildKit pipelines.</p><p>Documentation <a href="https://athonet-open.github.io/pix">website</a>.</p><h2 id="introduction" class="section-heading"><a href="#introduction" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Introduction</span></h2><p>Pix is a portable pipeline executor - a CI framework that enables you to define and execute pipelines that can run on any host with Docker support. Pipelines are defined as code and executed efficiently via Docker <a href="https://github.com/moby/buildkit">BuildKit</a>.</p><h2 id="basic-concepts" class="section-heading"><a href="#basic-concepts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Basic concepts</span></h2><h3 id="the-pipeline" class="section-heading"><a href="#the-pipeline" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">The pipeline</span></h3><p>The building blocks of a pipeline are:</p><ul><li><strong>stage</strong>: The core execution unit where work is performed (e.g., running tests, building applications, deploying services). Each stage can be customized via <strong>arguments</strong>.</li><li><strong>output</strong>: Stages can produce tangible outputs (e.g., test coverage reports, documentation, build artifacts).</li><li><strong>dependency</strong>: Stages are interconnected via <strong>dependencies</strong> to create a structured execution graph.</li></ul><p>Under the hood, a pipeline is an intelligent Docker multistage build, programmatically defined using Elixir code through the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>.</p><h3 id="the-pipeline-executor" class="section-heading"><a href="#the-pipeline-executor" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">The pipeline executor</span></h3><p>Pix generates optimized multistage Docker build definitions and executes them via <code class="inline">docker buildx build</code>.
+The execution follows Docker build semantics for parallelism, caching, and resource management.</p><h3 id="the-project" class="section-heading"><a href="#the-project" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">The Project</span></h3><p>Your project's root directory can contain a <code class="inline">.pix.exs</code> file that declares available pipelines.
 This configuration file specifies pipelines with their default arguments and targets.
-Pipeline definitions can be imported either from a local <code class="inline">path</code> or a remote <code class="inline">git</code> repository.</p><p>More details in the <a href="Pix.Project.html"><code class="inline">Pix.Project</code></a> module documentation.</p><h3 id="the-pipeline-definition" class="section-heading">
-  <a href="#the-pipeline-definition" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">The Pipeline definition</span>
-</h3>
-<p>A pipeline is a programmatic definition of a Docker multistage build.
-It consists of targets (named Docker build stages) defined in <code class="inline">pipeline.exs</code> using the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>.</p><p>More details in the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a> module documentation.</p><h2 id="installation" class="section-heading">
-  <a href="#installation" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Installation</span>
-</h2>
-<h3 id="prerequisites" class="section-heading">
-  <a href="#prerequisites" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Prerequisites</span>
-</h3>
-<p>Pix requires a <code class="inline">docker</code> engine installed and running on your host system.</p><h3 id="installation-options" class="section-heading">
-  <a href="#installation-options" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Installation options</span>
-</h3>
-<h4>Option 1: Native Installation (Requires Erlang/Elixir)</h4><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">mix escript.install github athonet-open/pix ref vX.Y.Z
+Pipeline definitions can be imported either from a local <code class="inline">path</code> or a remote <code class="inline">git</code> repository.</p><p>More details in the <a href="Pix.Project.html"><code class="inline">Pix.Project</code></a> module documentation.</p><h3 id="the-pipeline-definition" class="section-heading"><a href="#the-pipeline-definition" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">The Pipeline definition</span></h3><p>A pipeline is a programmatic definition of a Docker multistage build.
+It consists of targets (named Docker build stages) defined in <code class="inline">pipeline.exs</code> using the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a>.</p><p>More details in the <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a> module documentation.</p><h2 id="installation" class="section-heading"><a href="#installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation</span></h2><h3 id="prerequisites" class="section-heading"><a href="#prerequisites" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Prerequisites</span></h3><p>Pix requires a <code class="inline">docker</code> engine installed and running on your host system.</p><h3 id="installation-options" class="section-heading"><a href="#installation-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation options</span></h3><h4>Option 1: Native Installation (Requires Erlang/Elixir)</h4><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">mix escript.install github athonet-open/pix ref vX.Y.Z
 </span></code></pre><h4>Option 2: Docker Installation</h4><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">docker run --rm -it \
 </span><span class="">  --volume $PWD:/$PWD --workdir /$PWD \
 </span><span class="">  --volume /var/run/docker.sock:/var/run/docker.sock \
@@ -146,57 +93,19 @@ It consists of targets (named Docker build stages) defined in <code class="inlin
 </span><span class="">  ghcr.io/athonet-open/pix:X.Y.Z &quot;$@&quot;
 </span></code></pre><p>Important considerations:</p><ul><li>Docker engine access is required via either Docker Socket Mounting (DooD) or Docker-in-Docker (dind)</li><li>For SSH access, forward the SSH agent socket to the Pix container</li><li>For macOS users with Docker Desktop:<pre><code class="makeup bash" translate="no"><span class="">--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
 </span><span class="">--env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
-</span></code></pre></li></ul><h3 id="shell-completion" class="section-heading">
-  <a href="#shell-completion" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Shell completion</span>
-</h3>
-<p>Shell completion scripts are available for the following shells:</p><ul><li>fish shell<pre><code class="makeup bash" translate="no"><span class=""># install completion with
+</span></code></pre></li></ul><h3 id="shell-completion" class="section-heading"><a href="#shell-completion" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Shell completion</span></h3><p>Shell completion scripts are available for the following shells:</p><ul><li>fish shell<pre><code class="makeup bash" translate="no"><span class=""># install completion with
 </span><span class="">pix completion_script fish &gt; ~/.config/fish/completions/pix.fish
-</span></code></pre></li></ul><h2 id="quick-start" class="section-heading">
-  <a href="#quick-start" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Quick start</span>
-</h2>
-<p>Let's explore Pix using its own project as an example:</p><ol><li>The project configuration is in <a href="https://github.com/athonet-open/pix/blob/main/.pix.exs">.pix.exs</a>, defining the <code class="inline">pix</code> pipeline with default settings.</li><li>The <a href="https://github.com/athonet-open/pix/blob/main/pipeline.exs">pipeline.exs</a> contains the actual pipeline definition.</li></ol><p>Key commands:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">pix run pix                   # Run the complete pipeline
+</span></code></pre></li></ul><h2 id="quick-start" class="section-heading"><a href="#quick-start" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Quick start</span></h2><p>Let's explore Pix using its own project as an example:</p><ol><li>The project configuration is in <a href="https://github.com/athonet-open/pix/blob/main/.pix.exs">.pix.exs</a>, defining the <code class="inline">pix</code> pipeline with default settings.</li><li>The <a href="https://github.com/athonet-open/pix/blob/main/pipeline.exs">pipeline.exs</a> contains the actual pipeline definition.</li></ol><p>Key commands:</p><pre><code class="makeup bash" translate="no"><span class="gp unselectable">$ </span><span class="">pix run pix                   # Run the complete pipeline
 </span><span class="gp unselectable">$ </span><span class="">pix ls --verbose pix          # List pipeline configuration
 </span><span class="gp unselectable">$ </span><span class="">pix graph pix                 # Generate pipeline visualization
 </span><span class="gp unselectable">$ </span><span class="">pix run --output pix          # Run pipeline and output artifacts
-</span></code></pre><p>Access documentation at <code class="inline">.pipeline/output/doc/index.html</code> after running with output.</p><p>For detailed command information, use <code class="inline">pix help</code>.</p><h2 id="user-settings" class="section-heading">
-  <a href="#user-settings" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">User settings</span>
-</h2>
-<p>Customize Pix behavior through <code class="inline">~/.config/pix/settings.exs</code>.
-See <a href="Pix.UserSettings.html"><code class="inline">Pix.UserSettings</code></a> documentation for configuration options.</p><h2 id="security" class="section-heading">
-  <a href="#security" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Security</span>
-</h2>
-<ul><li>Only import remote pipelines from verified, trusted sources</li></ul><h2 id="current-limitations" class="section-heading">
-  <a href="#current-limitations" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Current limitations</span>
-</h2>
-<ul><li>Service containers are not currently supported (e.g., sidecar containers for integration testing)</li></ul><p>Workaround: Use Docker Compose to define and manage test environments.</p>
+</span></code></pre><p>Access documentation at <code class="inline">.pipeline/output/doc/index.html</code> after running with output.</p><p>For detailed command information, use <code class="inline">pix help</code>.</p><h2 id="user-settings" class="section-heading"><a href="#user-settings" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">User settings</span></h2><p>Customize Pix behavior through <code class="inline">~/.config/pix/settings.exs</code>.
+See <a href="Pix.UserSettings.html"><code class="inline">Pix.UserSettings</code></a> documentation for configuration options.</p><h2 id="security" class="section-heading"><a href="#security" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Security</span></h2><ul><li>Only import remote pipelines from verified, trusted sources</li></ul><h2 id="current-limitations" class="section-heading"><a href="#current-limitations" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Current limitations</span></h2><ul><li>Service containers are not currently supported (e.g., sidecar containers for integration testing)</li></ul><p>Workaround: Use Docker Compose to define and manage test environments.</p>
+
 </div>
 
 <div class="bottom-actions" id="bottom-actions">
   <div class="bottom-actions-item">
-
-      <a href="api-reference.html" class="bottom-actions-button" rel="prev">
-        <span class="subheader">
-          ← Previous Page
-        </span>
-        <span class="title">
-API Reference
-        </span>
-      </a>
 
   </div>
   <div class="bottom-actions-item">
@@ -216,7 +125,7 @@ API Reference
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.3) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.1) for the
 
           <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
