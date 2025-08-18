@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.2">
+    <meta name="generator" content="ExDoc v0.38.3">
     <meta name="project" content="pix v0.0.0">
 
 
     <title>Pix.Project — pix v0.0.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-KV3YOVJ3.css" />
+    <link rel="stylesheet" href="dist/html-elixir-BHUPNQFZ.css" />
 
     <script defer src="dist/sidebar_items-E7057FDB.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-DPJLHKSM.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
 
   </head>
   <body>
@@ -84,59 +84,59 @@ pix
 
 
     <section id="moduledoc">
-<p>Defines Pix projects.</p><p>A Pix project is defined by calling <code class="inline">use Pix.Project</code> in a module placed in <code class="inline">.pix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Pix.Project</span><span class="w"> </span><span class="k" data-group-id="4748463524-1">do</span><span class="w">
+<p>Defines Pix projects.</p><p>A Pix project is defined by calling <code class="inline">use Pix.Project</code> in a module placed in <code class="inline">.pix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyApp.Pix.Project</span><span class="w"> </span><span class="k" data-group-id="0537225402-1">do</span><span class="w">
   </span><span class="kn">use</span><span class="w"> </span><span class="nc">Pix.Project</span><span class="w">
 
   </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
-  </span><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="4748463524-2">do</span><span class="w">
-    </span><span class="p" data-group-id="4748463524-3">%{</span><span class="w">
-      </span><span class="ss">pipelines</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4748463524-4">%{</span><span class="w">
-        </span><span class="s">&quot;elixir&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="4748463524-5">%{</span><span class="w">
-          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4748463524-6">%{</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">project</span><span class="w"> </span><span class="k" data-group-id="0537225402-2">do</span><span class="w">
+    </span><span class="p" data-group-id="0537225402-3">%{</span><span class="w">
+      </span><span class="ss">pipelines</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0537225402-4">%{</span><span class="w">
+        </span><span class="s">&quot;elixir&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="0537225402-5">%{</span><span class="w">
+          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0537225402-6">%{</span><span class="w">
             </span><span class="ss">git</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git@github.com:user/group/repo.git&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1.0&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipeline/elixir&quot;</span><span class="w">
-          </span><span class="p" data-group-id="4748463524-6">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4748463524-7">%{</span><span class="w">
+          </span><span class="p" data-group-id="0537225402-6">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0537225402-7">%{</span><span class="w">
             </span><span class="s">&quot;ELIXIR_APP_NAME&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;myapp&quot;</span><span class="w">
-          </span><span class="p" data-group-id="4748463524-7">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4748463524-8">[</span><span class="w">
+          </span><span class="p" data-group-id="0537225402-7">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0537225402-8">[</span><span class="w">
             </span><span class="s">&quot;elixir.format&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.credo&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.dialyzer&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;elixir.test&quot;</span><span class="w">
-          </span><span class="p" data-group-id="4748463524-8">]</span><span class="w">
-        </span><span class="p" data-group-id="4748463524-5">}</span><span class="p">,</span><span class="w">
-        </span><span class="s">&quot;deploy_aws&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="4748463524-9">%{</span><span class="w">
-          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4748463524-10">%{</span><span class="w">
+          </span><span class="p" data-group-id="0537225402-8">]</span><span class="w">
+        </span><span class="p" data-group-id="0537225402-5">}</span><span class="p">,</span><span class="w">
+        </span><span class="s">&quot;deploy_aws&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="0537225402-9">%{</span><span class="w">
+          </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0537225402-10">%{</span><span class="w">
             </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipelines/deploy&quot;</span><span class="p">,</span><span class="w">
             </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;aws&quot;</span><span class="w">
-          </span><span class="p" data-group-id="4748463524-10">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4748463524-11">%{</span><span class="w">
+          </span><span class="p" data-group-id="0537225402-10">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0537225402-11">%{</span><span class="w">
             </span><span class="s">&quot;AWS_REGION&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;eu-west-1&quot;</span><span class="w">
-          </span><span class="p" data-group-id="4748463524-11">}</span><span class="p">,</span><span class="w">
-          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4748463524-12">[</span><span class="w">
+          </span><span class="p" data-group-id="0537225402-11">}</span><span class="p">,</span><span class="w">
+          </span><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0537225402-12">[</span><span class="w">
             </span><span class="s">&quot;deploy.plan&quot;</span><span class="p">,</span><span class="w">
             </span><span class="s">&quot;deploy.apply&quot;</span><span class="w">
-          </span><span class="p" data-group-id="4748463524-12">]</span><span class="w">
-        </span><span class="p" data-group-id="4748463524-9">}</span><span class="w">
-      </span><span class="p" data-group-id="4748463524-4">}</span><span class="w">
-    </span><span class="p" data-group-id="4748463524-3">}</span><span class="w">
-  </span><span class="k" data-group-id="4748463524-2">end</span><span class="w">
-</span><span class="k" data-group-id="4748463524-1">end</span></code></pre><h2 id="module-project-configuration" class="section-heading"><a href="#module-project-configuration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Project Configuration</span></h2><p>The project configuration returned by <a href="#c:project/0"><code class="inline">project/0</code></a> must conform to a <a href="Pix.Config.html#t:pix_exs/0"><code class="inline">Pix.Config.pix_exs/0</code></a> map.</p><h3 id="module-pipeline-sources" class="section-heading"><a href="#module-pipeline-sources" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pipeline Sources</span></h3><p>Pipeline sources can be defined in two ways:</p><ol><li>From a Git repository:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4299562070-1">%{</span><span class="w">
+          </span><span class="p" data-group-id="0537225402-12">]</span><span class="w">
+        </span><span class="p" data-group-id="0537225402-9">}</span><span class="w">
+      </span><span class="p" data-group-id="0537225402-4">}</span><span class="w">
+    </span><span class="p" data-group-id="0537225402-3">}</span><span class="w">
+  </span><span class="k" data-group-id="0537225402-2">end</span><span class="w">
+</span><span class="k" data-group-id="0537225402-1">end</span></code></pre><h2 id="module-project-configuration" class="section-heading"><a href="#module-project-configuration" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Project Configuration</span></h2><p>The project configuration returned by <a href="#c:project/0"><code class="inline">project/0</code></a> must conform to a <a href="Pix.Config.html#t:pix_exs/0"><code class="inline">Pix.Config.pix_exs/0</code></a> map.</p><h3 id="module-pipeline-sources" class="section-heading"><a href="#module-pipeline-sources" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pipeline Sources</span></h3><p>Pipeline sources can be defined in two ways:</p><ol><li>From a Git repository:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7116039091-1">%{</span><span class="w">
   </span><span class="ss">git</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;git@github.com:user/group/repo.git&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1.0&quot;</span><span class="p">,</span><span class="w">                    </span><span class="c1"># Git reference (branch, tag, commit)</span><span class="w">
   </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipeline/elixir&quot;</span><span class="w">      </span><span class="c1"># Optional subdirectory containing pipeline.exs</span><span class="w">
-</span><span class="p" data-group-id="4299562070-1">}</span></code></pre><ol start="2"><li>From a local path:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3331569788-1">%{</span><span class="w">
+</span><span class="p" data-group-id="7116039091-1">}</span></code></pre><ol start="2"><li>From a local path:</li></ol><pre><code class="makeup elixir" translate="no"><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7002448732-1">%{</span><span class="w">
   </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pipelines/deploy&quot;</span><span class="p">,</span><span class="w">       </span><span class="c1"># Local directory path</span><span class="w">
   </span><span class="ss">sub_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;aws&quot;</span><span class="w">                  </span><span class="c1"># Optional subdirectory containing pipeline.exs</span><span class="w">
-</span><span class="p" data-group-id="3331569788-1">}</span></code></pre><h3 id="module-pipeline-arguments" class="section-heading"><a href="#module-pipeline-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pipeline Arguments</span></h3><p>Default arguments for pipelines can be specified:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9758599916-1">%{</span><span class="w">
+</span><span class="p" data-group-id="7002448732-1">}</span></code></pre><h3 id="module-pipeline-arguments" class="section-heading"><a href="#module-pipeline-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pipeline Arguments</span></h3><p>Default arguments for pipelines can be specified:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_args</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3332374764-1">%{</span><span class="w">
   </span><span class="s">&quot;AWS_REGION&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;eu-west-1&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;ANOTHER_ARG&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="w">
-</span><span class="p" data-group-id="9758599916-1">}</span></code></pre><h3 id="module-built-in-variables" class="section-heading"><a href="#module-built-in-variables" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Built-in Variables</span></h3><p>The following built-in variables are automatically available in all pipelines both as environment variables and as build ARGS in the pipeline:</p><ul><li><code class="inline">PIX_PROJECT_NAME</code>: Name of the current Git project</li><li><code class="inline">PIX_COMMIT_SHA</code>: Current Git commit SHA</li><li><code class="inline">PIX_PIPELINE_TARGET</code>: Name of the current pipeline target being executed</li><li><code class="inline">PIX_HOST_OS</code>: host OS Name (<code class="inline">uname -s</code>, ie. Darwin, Linux, ...)</li><li><code class="inline">PIX_HOST_USERID</code>: host user ID (<code class="inline">id -u</code>)</li><li><code class="inline">PIX_HOST_GROUPID</code>: host group ID (<code class="inline">id -g</code>)</li></ul><p>If the pipeline is defined from a local path, the following variables are also available:</p><ul><li><code class="inline">PIX_PIPELINE_FROM_PATH</code></li><li><code class="inline">PIX_PIPELINE_FROM_SUB_DIR</code></li></ul><p>If the pipeline is defined from a Git repository, the following variables are also available:</p><ul><li><code class="inline">PIX_PIPELINE_FROM_GIT_REPO</code></li><li><code class="inline">PIX_PIPELINE_FROM_GIT_REF</code></li><li><code class="inline">PIX_PIPELINE_FROM_GIT_SUB_DIR</code></li></ul><h3 id="module-pipeline-targets" class="section-heading"><a href="#module-pipeline-targets" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pipeline Targets</span></h3><p>Default targets define which pipeline stages should be executed by default when runninng <code class="inline">pix run PIPELINE_NAME</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9667150044-1">[</span><span class="w">
+</span><span class="p" data-group-id="3332374764-1">}</span></code></pre><h3 id="module-built-in-variables" class="section-heading"><a href="#module-built-in-variables" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Built-in Variables</span></h3><p>The following built-in variables are automatically available in all pipelines both as environment variables and as build ARGS in the pipeline:</p><ul><li><code class="inline">PIX_PROJECT_NAME</code>: Name of the current Git project</li><li><code class="inline">PIX_COMMIT_SHA</code>: Current Git commit SHA</li><li><code class="inline">PIX_PIPELINE_TARGET</code>: Name of the current pipeline target being executed</li><li><code class="inline">PIX_HOST_OS</code>: host OS Name (<code class="inline">uname -s</code>, ie. Darwin, Linux, ...)</li><li><code class="inline">PIX_HOST_USERID</code>: host user ID (<code class="inline">id -u</code>)</li><li><code class="inline">PIX_HOST_GROUPID</code>: host group ID (<code class="inline">id -g</code>)</li></ul><p>If the pipeline is defined from a local path, the following variables are also available:</p><ul><li><code class="inline">PIX_PIPELINE_FROM_PATH</code></li><li><code class="inline">PIX_PIPELINE_FROM_SUB_DIR</code></li></ul><p>If the pipeline is defined from a Git repository, the following variables are also available:</p><ul><li><code class="inline">PIX_PIPELINE_FROM_GIT_REPO</code></li><li><code class="inline">PIX_PIPELINE_FROM_GIT_REF</code></li><li><code class="inline">PIX_PIPELINE_FROM_GIT_SUB_DIR</code></li></ul><h3 id="module-pipeline-targets" class="section-heading"><a href="#module-pipeline-targets" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pipeline Targets</span></h3><p>Default targets define which pipeline stages should be executed by default when runninng <code class="inline">pix run PIPELINE_NAME</code>:</p><pre><code class="makeup elixir" translate="no"><span class="ss">default_targets</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2798117834-1">[</span><span class="w">
   </span><span class="s">&quot;target1&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;target2&quot;</span><span class="w">
-</span><span class="p" data-group-id="9667150044-1">]</span></code></pre>
+</span><span class="p" data-group-id="2798117834-1">]</span></code></pre>
     </section>
 
 </div>
@@ -173,6 +173,7 @@ pix
       </a>
       <span class="text">Callbacks</span>
     </h1>
+
     <div class="callbacks-list">
 <section class="detail" id="c:project/0">
 
@@ -215,7 +216,7 @@ pix
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.2) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.3) for the
 
           <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

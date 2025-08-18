@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.2">
+    <meta name="generator" content="ExDoc v0.38.3">
     <meta name="project" content="pix v0.0.0">
 
 
     <title>Pix.Pipeline.SDK — pix v0.0.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-KV3YOVJ3.css" />
+    <link rel="stylesheet" href="dist/html-elixir-BHUPNQFZ.css" />
 
     <script defer src="dist/sidebar_items-E7057FDB.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-DPJLHKSM.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
 
   </head>
   <body>
@@ -89,17 +89,17 @@ Some of the functions have additional options to extend the functionality of the
 and some functions are extension to the commands (eg. <a href="#output/2"><code class="inline">output/2</code></a>).</p><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Pix.Pipeline.SDK</span><span class="w">
 
 </span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span><span class="w">
-  </span><span class="n">pipeline</span><span class="p" data-group-id="3851449498-1">(</span><span class="s">&quot;gohello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My pipeline description&quot;</span><span class="p" data-group-id="3851449498-1">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="3851449498-2">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">private</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3851449498-2">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="3851449498-3">(</span><span class="s">&quot;hello.go&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="3851449498-3">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="3851449498-4">(</span><span class="s">&quot;go build -o hello hello.go&quot;</span><span class="p" data-group-id="3851449498-4">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="3851449498-5">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scratch&quot;</span><span class="p" data-group-id="3851449498-5">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="3851449498-6">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;build&quot;</span><span class="p" data-group-id="3851449498-6">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">cmd</span><span class="p" data-group-id="3851449498-7">(</span><span class="p" data-group-id="3851449498-8">[</span><span class="s">&quot;/hello&quot;</span><span class="p" data-group-id="3851449498-8">]</span><span class="p" data-group-id="3851449498-7">)</span><span class="w">
+  </span><span class="n">pipeline</span><span class="p" data-group-id="8999596740-1">(</span><span class="s">&quot;gohello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My pipeline description&quot;</span><span class="p" data-group-id="8999596740-1">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="8999596740-2">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">private</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="8999596740-2">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="8999596740-3">(</span><span class="s">&quot;hello.go&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="8999596740-3">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="8999596740-4">(</span><span class="s">&quot;go build -o hello hello.go&quot;</span><span class="p" data-group-id="8999596740-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="8999596740-5">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scratch&quot;</span><span class="p" data-group-id="8999596740-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="8999596740-6">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;build&quot;</span><span class="p" data-group-id="8999596740-6">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">cmd</span><span class="p" data-group-id="8999596740-7">(</span><span class="p" data-group-id="8999596740-8">[</span><span class="s">&quot;/hello&quot;</span><span class="p" data-group-id="8999596740-8">]</span><span class="p" data-group-id="8999596740-7">)</span><span class="w">
 
 </span><span class="n">pipeline</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">dump</span><span class="p" data-group-id="3851449498-9">(</span><span class="p" data-group-id="3851449498-9">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="3851449498-10">(</span><span class="p" data-group-id="3851449498-10">)</span></code></pre><h2 id="module-output" class="section-heading"><a href="#module-output" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Output</span></h2><pre><code class="Dockerfile">FROM golang:1.23 AS build
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">dump</span><span class="p" data-group-id="8999596740-9">(</span><span class="p" data-group-id="8999596740-9">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="8999596740-10">(</span><span class="p" data-group-id="8999596740-10">)</span></code></pre><h2 id="module-output" class="section-heading"><a href="#module-output" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Output</span></h2><pre><code class="Dockerfile">FROM golang:1.23 AS build
 COPY hello.go .
 RUN go build -o hello hello.go
 
@@ -408,6 +408,7 @@ CMD [&quot;/hello&quot;]</code></pre>
       </a>
       <span class="text">Types</span>
     </h1>
+
     <div class="types-list">
 <section class="detail" id="t:args/0">
 
@@ -572,6 +573,7 @@ CMD [&quot;/hello&quot;]</code></pre>
       </a>
       <span class="text">Functions</span>
     </h1>
+
     <div class="functions-list">
 <section class="detail" id="add/4">
 
@@ -1012,13 +1014,13 @@ It's used to declare the output of the stage.</p>
 
       </div>
 
-<p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p><p>It expands to:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2467742497-1">&lt;&lt;</span><span class="nc">EOT</span><span class="w">
+<p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p><p>It expands to:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3125219865-1">&lt;&lt;</span><span class="nc">EOT</span><span class="w">
 </span><span class="n">...</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">here</span><span class="w"> </span><span class="n">...</span><span class="w">
-</span><span class="nc">EOT</span></code></pre><p>Example:</p><pre><code class="makeup elixir" translate="no"><span class="n">run</span><span class="p" data-group-id="0347426226-1">(</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="sx">~h&quot;&quot;&quot;
+</span><span class="nc">EOT</span></code></pre><p>Example:</p><pre><code class="makeup elixir" translate="no"><span class="n">run</span><span class="p" data-group-id="0117358076-1">(</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="sx">~h&quot;&quot;&quot;
   if [ &quot;$X&quot; == &quot;x&quot; ]; then
     echo &quot;x!&quot;
   fi
-&quot;&quot;&quot;</span><span class="p" data-group-id="0347426226-1">)</span></code></pre><p>For more heredoc advance feature simply encode the heredoc yourself.</p>
+&quot;&quot;&quot;</span><span class="p" data-group-id="0117358076-1">)</span></code></pre><p>For more heredoc advance feature simply encode the heredoc yourself.</p>
   </section>
 </section>
 <section class="detail" id="stage/3">
@@ -1049,7 +1051,7 @@ It's used to declare the output of the stage.</p>
 
       </div>
 
-<p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p><pre><code class="makeup elixir" translate="no"><span class="n">stage</span><span class="p" data-group-id="2026525538-1">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p" data-group-id="2026525538-1">)</span></code></pre><p>the optional <code class="inline">private</code> and <code class="inline">cache</code> options can be used to control the behavior of the stage:</p><ul><li><code class="inline">private: true</code> - the stage will not be accessible as a build target, only from other stages.</li><li><code class="inline">cache: false</code> - the stage will not be cached, the stage will be built from scratch every time.</li></ul>
+<p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p><pre><code class="makeup elixir" translate="no"><span class="n">stage</span><span class="p" data-group-id="7783708406-1">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p" data-group-id="7783708406-1">)</span></code></pre><p>the optional <code class="inline">private</code> and <code class="inline">cache</code> options can be used to control the behavior of the stage:</p><ul><li><code class="inline">private: true</code> - the stage will not be accessible as a build target, only from other stages.</li><li><code class="inline">cache: false</code> - the stage will not be cached, the stage will be built from scratch every time.</li></ul>
   </section>
 </section>
 <section class="detail" id="stopsignal/2">
@@ -1165,7 +1167,7 @@ It's used to declare the output of the stage.</p>
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.2) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.3) for the
 
           <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
