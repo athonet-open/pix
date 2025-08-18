@@ -22,6 +22,10 @@ defmodule Pix.Command.Shell do
         Pix.Report.error("Unknown pipeline #{inspect(unknown_pipeline_alias)}\n")
         Pix.Report.error("Available pipelines #{inspect(Map.keys(config_pipelines))})\n")
         System.halt(1)
+
+      _ ->
+        Pix.Report.error("'shell' command accept exactly one pipeline but got #{inspect(args)}\n")
+        System.halt(1)
     end
 
     :ok
