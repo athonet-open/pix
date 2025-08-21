@@ -36,7 +36,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          version: v0.21.0
+          version: v0.27.0
 
       - name: Version
         id: version
@@ -84,7 +84,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          version: v0.21.0
+          version: v0.27.0
 
       - name: Expose GitHub Runtime
         uses: crazy-max/ghaction-github-runtime@v3
@@ -94,7 +94,7 @@ jobs:
           CACHE="type=gha,scope=pix,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
           
           export PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\"" \
-          export PIX_DOCKER_BUILDKIT_VERSION="v0.21.0" \
+          export PIX_DOCKER_BUILDKIT_VERSION="v0.23.2" \
           export VERSION="${{ needs.bootstrap.outputs.version }}" \
           
           pix run --output pix
