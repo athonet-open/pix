@@ -21,7 +21,7 @@ RUN mix escript.build
 
 
 FROM docker.io/hexpm/elixir:${ELIXIR_VERSION} AS pix
-RUN apk add --no-cache bash ca-certificates coreutils docker-cli docker-cli-buildx git
+RUN apk add --no-cache bash ca-certificates coreutils docker-cli docker-cli-buildx git tar
 RUN git config --global --add safe.directory "*"
 COPY --from=bootstrap /code/pix /usr/local/bin/pix
 ENTRYPOINT ["/usr/local/bin/pix"]
