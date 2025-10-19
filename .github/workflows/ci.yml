@@ -89,7 +89,6 @@ jobs:
         run: |
           CACHE="type=gha,scope=pix,url=$ACTIONS_CACHE_URL,token=$ACTIONS_RUNTIME_TOKEN"
           export PIX_DOCKER_BUILD_OPTS="--cache-from=\"$CACHE\" --cache-to=\"mode=max,$CACHE\""
-          env | sort
 
           export VERSION="${{ needs.bootstrap.outputs.version }}"
           
