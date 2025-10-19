@@ -94,7 +94,7 @@ jobs:
 
       - name: Pix run Pix
         run: |
-          export PIX_DOCKER_BUILD_OPTS="--builder=\"${{ steps.buildx.outputs.name }}\" --cache-from=type=local,src=/tmp/.buildx-cache --cache-to=type=local,dest=/tmp/.buildx-cache,mode=max" \
+          export PIX_DOCKER_BUILD_OPTS="--builder=\"${{ steps.buildx.outputs.name }}\" --cache-from=type=local,src=/tmp/.buildx-cache --cache-to=type=local,dest=/tmp/.buildx-cache,mode=max"
           export VERSION="${{ needs.bootstrap.outputs.version }}"
 
           pix run --output pix
