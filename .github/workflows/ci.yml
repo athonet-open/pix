@@ -100,7 +100,7 @@ jobs:
           pix run --output pix
 
       - name: Upload docs artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: docs
           path: .pipeline/output/doc
@@ -118,7 +118,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Download docs artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: docs
           path: .pipeline/output/doc
