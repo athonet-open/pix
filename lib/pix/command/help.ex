@@ -112,6 +112,7 @@ defmodule Pix.Command.Help do
 
       OPTIONS:
           #{_opt("--arg")}*              Set one or more pipeline ARG (format KEY=value)
+          #{_opt("--secret")}*           Forward one or more secrets to `buildx build`
           #{_opt("--ssh")}               Forward SSH agent to shell container
           #{_opt("--target")}            The shell target
     """

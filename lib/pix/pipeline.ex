@@ -248,6 +248,7 @@ defmodule Pix.Pipeline do
           Pix.Docker.opts()
   defp shell_build_options(cli_opts, shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path) do
     cli_args = for {:arg, arg} <- cli_opts, do: arg
+    secret_opts = for {:secret, secret} <- cli_opts, do: {:secret, secret}
 
     [
       :load,
@@ -256,7 +257,9 @@ defmodule Pix.Pipeline do
       build_context: "#{Pix.Pipeline.SDK.pipeline_ctx()}=#{ctx_dir}",
       platform: "linux/#{Pix.Env.arch()}",
       tag: shell_docker_image
-    ] ++ pipeline_build_args(shell_target, from, default_args, cli_args)
+    ]
+    |> add_run_secret_options(secret_opts)
+    |> Kernel.++(pipeline_build_args(shell_target, from, default_args, cli_args))
   end
 
   @spec shell_run_options(String.t(), Pix.Config.from(), shell_cli_opts()) :: Pix.Docker.opts()

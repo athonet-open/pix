@@ -4,6 +4,7 @@ defmodule Pix.Command.Shell do
   @cli_args [
     arg: [:string, :keep],
     host: :boolean,
+    secret: [:string, :keep],
     ssh: :boolean,
     target: :string
   ]
