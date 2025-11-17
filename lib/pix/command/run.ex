@@ -7,6 +7,7 @@ defmodule Pix.Command.Run do
     no_cache_filter: [:string, :keep],
     output: :boolean,
     progress: :string,
+    secret: [:string, :keep],
     ssh: :boolean,
     tag: :string,
     target: :string
