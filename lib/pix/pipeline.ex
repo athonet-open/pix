@@ -190,7 +190,7 @@ defmodule Pix.Pipeline do
     if cli_opts[:no_cache], do: opts ++ [:no_cache], else: opts ++ no_cache_filter_opts
   end
 
-  @spec add_run_secret_options(Pix.Docker.opts(), Pix.Docker.opts()) :: Pix.Docker.opts()
+  @spec add_run_secret_options(Pix.Docker.opts(), run_cli_opts()) :: Pix.Docker.opts()
   defp add_run_secret_options(opts, secret_opts), do: opts ++ secret_opts
 
   @spec execute_run_build(Pix.Docker.opts(), Path.t(), run_cli_opts(), [String.t()]) :: :ok
