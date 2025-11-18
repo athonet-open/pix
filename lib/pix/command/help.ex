@@ -90,6 +90,7 @@ defmodule Pix.Command.Help do
           #{_opt("--arg")}*              Set one or more pipeline ARG (format KEY=value)
           #{_opt("--no-cache-filter")}*  Do not cache specified targets
           #{_opt("--progress")}          Set type of progress output - "auto", "plain", "tty", "rawjson" (default "auto")
+          #{_opt("--secret")}*           Forward one or more secrets to `buildx build`
           #{_opt("--ssh")}               Forward SSH agent to `buildx build`
           #{_opt("--tag")}               Tag the TARGET's docker image (default: no tag)
           #{_opt("--target")}            Run PIPELINE for a specific TARGET (default: all the PIPELINE targets)
@@ -111,6 +112,7 @@ defmodule Pix.Command.Help do
 
       OPTIONS:
           #{_opt("--arg")}*              Set one or more pipeline ARG (format KEY=value)
+          #{_opt("--secret")}*           Forward one or more secrets to `buildx build`
           #{_opt("--ssh")}               Forward SSH agent to shell container
           #{_opt("--target")}            The shell target
     """
@@ -145,7 +147,7 @@ defmodule Pix.Command.Help do
     #{_cmd("pix completion_script")} #{_opt("fish")}
 
       Display completion script.
-      
+
       ARGS:
           SHELL_TYPE          The shell type - (supported: "fish")
     """

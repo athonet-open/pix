@@ -7,6 +7,7 @@ defmodule Pix.Pipeline do
           | {:no_cache, boolean()}
           | {:output, boolean()}
           | {:progress, String.t()}
+          | {:secret, String.t()}
           | {:ssh, boolean()}
           | {:tag, String.t()}
           | {:target, String.t()}
@@ -151,6 +152,8 @@ defmodule Pix.Pipeline do
       for(%{cache: false, stage: stage} <- pipeline.stages, do: {:no_cache_filter, stage}) ++
         for {:no_cache_filter, filter} <- cli_opts, do: {:no_cache_filter, filter}
 
+    secret_opts = for {:secret, secret} <- cli_opts, do: {:secret, secret}
+
     base_opts = [
       target: pipeline_target,
       progress: Keyword.get(cli_opts, :progress, "auto"),
@@ -163,6 +166,7 @@ defmodule Pix.Pipeline do
     base_opts
     |> add_run_output_option(cli_opts)
     |> add_run_cache_options(cli_opts, no_cache_filter_opts)
+    |> add_run_secret_options(secret_opts)
     |> Kernel.++(pipeline_build_args(pipeline_target, from, default_args, cli_args))
   end
 
@@ -185,6 +189,9 @@ defmodule Pix.Pipeline do
   defp add_run_cache_options(opts, cli_opts, no_cache_filter_opts) do
     if cli_opts[:no_cache], do: opts ++ [:no_cache], else: opts ++ no_cache_filter_opts
   end
+
+  @spec add_run_secret_options(Pix.Docker.opts(), run_cli_opts()) :: Pix.Docker.opts()
+  defp add_run_secret_options(opts, secret_opts), do: opts ++ secret_opts
 
   @spec execute_run_build(Pix.Docker.opts(), Path.t(), run_cli_opts(), [String.t()]) :: :ok
   defp execute_run_build(build_opts, dockerfile_path, cli_opts, targets) do
@@ -241,6 +248,7 @@ defmodule Pix.Pipeline do
           Pix.Docker.opts()
   defp shell_build_options(cli_opts, shell_target, shell_docker_image, from, ctx_dir, default_args, dockerfile_path) do
     cli_args = for {:arg, arg} <- cli_opts, do: arg
+    secret_opts = for {:secret, secret} <- cli_opts, do: {:secret, secret}
 
     [
       :load,
@@ -249,7 +257,9 @@ defmodule Pix.Pipeline do
       build_context: "#{Pix.Pipeline.SDK.pipeline_ctx()}=#{ctx_dir}",
       platform: "linux/#{Pix.Env.arch()}",
       tag: shell_docker_image
-    ] ++ pipeline_build_args(shell_target, from, default_args, cli_args)
+    ]
+    |> add_run_secret_options(secret_opts)
+    |> Kernel.++(pipeline_build_args(shell_target, from, default_args, cli_args))
   end
 
   @spec shell_run_options(String.t(), Pix.Config.from(), shell_cli_opts()) :: Pix.Docker.opts()

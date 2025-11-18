@@ -73,6 +73,7 @@ complete -c pix -n "__fish_seen_subcommand_from run" -l "output" -d "Output the 
 complete -c pix -n "__fish_seen_subcommand_from run" -l "ssh" -d "Forward SSH agent to buildx build"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "arg" -d "Set one or more pipeline ARG (format KEY=value)" -a "(__pix_get_run_target_args)"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "progress" -d "Set type of progress output" -a "auto plain tty rawjson"
+complete -c pix -n "__fish_seen_subcommand_from run" -l "secret" -d "Forward one or more secrets to `buildx build`"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "target" -d "Run PIPELINE for a specific TARGET" -a "(__pix_get_run_targets)"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "tag" -d "Tag the TARGET's docker image (requires --target)"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "no-cache" -d "Do not use cache when building the image"
@@ -82,6 +83,7 @@ complete -c pix -n "__fish_seen_subcommand_from run" -l "no-cache-filter" -d "Do
 complete -c pix -n "__fish_seen_subcommand_from shell" -a "(__pix_get_pipelines)" -d "Pipeline"
 complete -c pix -n "__fish_seen_subcommand_from shell" -l "ssh" -d "Forward SSH agent to shell container"
 complete -c pix -n "__fish_seen_subcommand_from shell" -l "arg" -d "Set one or more pipeline ARG (format KEY=value)"
+complete -c pix -n "__fish_seen_subcommand_from shell" -l "secret" -d "Forward one or more secrets to `buildx build`"
 complete -c pix -n "__fish_seen_subcommand_from shell" -l "target" -d "The shell target"
 complete -c pix -n "__fish_seen_subcommand_from shell" -l "host" -d "Bind mount the current working dir"
 
