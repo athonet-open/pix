@@ -10,7 +10,10 @@ defmodule Pix.Helper do
   def compile_file(path) do
     res =
       try do
-        Code.compile_file(path)
+        Code.compiler_options(ignore_module_conflict: true)
+        res = Code.compile_file(path)
+        Code.compiler_options(ignore_module_conflict: false)
+        res
       rescue
         e ->
           Exception.message(e) |> IO.puts()
@@ -29,7 +32,10 @@ defmodule Pix.Helper do
 
   @spec eval_file(Path.t()) :: term()
   def eval_file(path) do
-    Code.eval_file(path)
+    Code.compiler_options(ignore_module_conflict: true)
+    res = Code.eval_file(path)
+    Code.compiler_options(ignore_module_conflict: false)
+    res
   rescue
     e ->
       Exception.message(e) |> IO.puts()
