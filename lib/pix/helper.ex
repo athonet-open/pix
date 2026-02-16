@@ -41,4 +41,18 @@ defmodule Pix.Helper do
       Exception.message(e) |> IO.puts()
       System.halt(1)
   end
+
+  @spec option_parser_parse!(OptionParser.argv(), OptionParser.options()) ::
+          {OptionParser.parsed(), args :: [String.t()]}
+  def option_parser_parse!(argv, opts) do
+    case OptionParser.parse(argv, opts) do
+      {cli_opts, args, []} ->
+        {cli_opts, args}
+
+      {_, _, invalid} ->
+        msgs = Enum.map_join(invalid, "\n", fn {opt, _} -> "  invalid option: #{opt}" end)
+        Pix.Report.error("#{msgs}\n")
+        System.halt(1)
+    end
+  end
 end
