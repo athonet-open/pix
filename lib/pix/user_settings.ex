@@ -16,12 +16,12 @@ defmodule Pix.UserSettings do
     command: %{
       run: %{
         cli_opts: [
-          ssh: true
+          ssh: "default"
         ]
       },
       shell: %{
         cli_opts: [
-          ssh: true
+          ssh: "default"
         ]
       }
     }
