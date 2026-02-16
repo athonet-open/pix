@@ -113,17 +113,37 @@ defmodule Pix.Docker do
   @spec run_opts_ssh_key_mounts([String.t()]) :: {opts(), key_paths :: [String.t()]}
   defp run_opts_ssh_key_mounts(ssh_specs) do
     Enum.reduce(ssh_specs, {[], []}, fn spec, {vol_acc, key_path_acc} ->
-      case String.split(spec, "=", parts: 2) do
-        [_id, path] when path != "" ->
+      case parse_ssh_key_path(spec) do
+        {:ok, _id, path} ->
           path = Path.expand(path)
           container_path = "/root/.ssh/#{Path.basename(path)}"
           Pix.Report.internal(">>> mounting SSH key #{inspect(path)} as #{container_path} into shell container\n")
           {[{:volume, "#{path}:#{container_path}:ro"} | vol_acc], [container_path | key_path_acc]}
 
-        _ ->
+        :ignore ->
           {vol_acc, key_path_acc}
       end
     end)
+  end
+
+  @spec parse_ssh_key_path(String.t()) :: {:ok, String.t() | nil, String.t()} | :ignore
+  defp parse_ssh_key_path("default"), do: :ignore
+
+  defp parse_ssh_key_path(spec) do
+    case String.split(spec, "=", parts: 2) do
+      [id, path] when path != "" -> {:ok, id, path}
+      [path] when path != "" -> {:ok, nil, path}
+      _ -> :ignore
+    end
+  end
+
+  @spec expand_ssh_spec(String.t()) :: String.t()
+  defp expand_ssh_spec(spec) do
+    case parse_ssh_key_path(spec) do
+      {:ok, id, path} when id != nil -> "#{id}=#{Path.expand(path)}"
+      {:ok, nil, path} -> Path.expand(path)
+      :ignore -> spec
+    end
   end
 
   @spec run_opts_git_ssh_command([String.t()]) :: opts()
@@ -143,7 +163,7 @@ defmodule Pix.Docker do
 
   @spec build(ssh_specs :: [String.t()], opts(), String.t()) :: exit_status :: non_neg_integer()
   def build(ssh_specs, opts, ctx) do
-    ssh_opts = Enum.map(ssh_specs, fn spec -> {:ssh, spec} end)
+    ssh_opts = Enum.map(ssh_specs, fn spec -> {:ssh, expand_ssh_spec(spec)} end)
 
     builder_opts =
       case buildx_builder() do
