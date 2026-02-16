@@ -8,7 +8,7 @@ defmodule Pix.Command.Run do
     output: :boolean,
     progress: :string,
     secret: [:string, :keep],
-    ssh: :boolean,
+    ssh: [:string, :keep],
     tag: :string,
     target: :string
   ]

@@ -70,7 +70,7 @@ complete -c pix -n "__fish_seen_subcommand_from graph" -l "format" -d "Output fo
 # run command options
 complete -c pix -n "__fish_seen_subcommand_from run" -a "(__pix_get_pipelines)" -d "Pipeline"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "output" -d "Output the target artifacts under .pipeline/output directory"
-complete -c pix -n "__fish_seen_subcommand_from run" -l "ssh" -d "Forward SSH agent to buildx build"
+complete -c pix -n "__fish_seen_subcommand_from run" -l "ssh" -d "Forward SSH agent/keys to buildx build (default, or id=path)" -rf
 complete -c pix -n "__fish_seen_subcommand_from run" -l "arg" -d "Set one or more pipeline ARG (format KEY=value)" -a "(__pix_get_run_target_args)"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "progress" -d "Set type of progress output" -a "auto plain tty rawjson"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "secret" -d "Forward one or more secrets to `buildx build`"
@@ -81,7 +81,7 @@ complete -c pix -n "__fish_seen_subcommand_from run" -l "no-cache-filter" -d "Do
 
 # shell command options
 complete -c pix -n "__fish_seen_subcommand_from shell" -a "(__pix_get_pipelines)" -d "Pipeline"
-complete -c pix -n "__fish_seen_subcommand_from shell" -l "ssh" -d "Forward SSH agent to shell container"
+complete -c pix -n "__fish_seen_subcommand_from shell" -l "ssh" -d "Forward SSH agent/keys to shell container (default, or id=path)" -rf
 complete -c pix -n "__fish_seen_subcommand_from shell" -l "arg" -d "Set one or more pipeline ARG (format KEY=value)"
 complete -c pix -n "__fish_seen_subcommand_from shell" -l "secret" -d "Forward one or more secrets to `buildx build`"
 complete -c pix -n "__fish_seen_subcommand_from shell" -l "target" -d "The shell target"

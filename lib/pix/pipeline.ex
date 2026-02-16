@@ -8,7 +8,7 @@ defmodule Pix.Pipeline do
           | {:output, boolean()}
           | {:progress, String.t()}
           | {:secret, String.t()}
-          | {:ssh, boolean()}
+          | {:ssh, String.t()}
           | {:tag, String.t()}
           | {:target, String.t()}
         ]
@@ -16,7 +16,8 @@ defmodule Pix.Pipeline do
   @type shell_cli_opts :: [
           {:arg, String.t()}
           | {:host, boolean()}
-          | {:ssh, boolean()}
+          | {:secret, String.t()}
+          | {:ssh, String.t()}
           | {:target, String.t()}
         ]
 
@@ -198,7 +199,9 @@ defmodule Pix.Pipeline do
     Pix.Report.info("\nRunning pipeline (targets: #{inspect(targets)})\n\n")
 
     build_opts = build_opts ++ [file: dockerfile_path]
-    Pix.Docker.build(cli_opts[:ssh], build_opts, ".") |> halt_on_error()
+    ssh_opts = Keyword.get_values(cli_opts, :ssh)
+
+    Pix.Docker.build(ssh_opts, build_opts, ".") |> halt_on_error()
 
     if cli_opts[:output] do
       Pix.Report.info("\nExported pipeline outputs to #{output_dir()}:\n")
@@ -216,7 +219,9 @@ defmodule Pix.Pipeline do
     build_opts = build_opts ++ [target: cli_opts[:target], file: dockerfile_path]
     build_opts = add_run_tag_option(build_opts, cli_opts)
 
-    Pix.Docker.build(cli_opts[:ssh], build_opts, ".") |> halt_on_error()
+    ssh_opts = Keyword.get_values(cli_opts, :ssh)
+
+    Pix.Docker.build(ssh_opts, build_opts, ".") |> halt_on_error()
 
     :ok
   end
@@ -281,7 +286,9 @@ defmodule Pix.Pipeline do
   defp execute_shell_build(build_opts, shell_target, cli_opts) do
     Pix.Report.info("\nBuilding pipeline (target=#{shell_target})\n\n")
 
-    Pix.Docker.build(cli_opts[:ssh], build_opts, ".")
+    ssh_opts = Keyword.get_values(cli_opts, :ssh)
+
+    Pix.Docker.build(ssh_opts, build_opts, ".")
     |> halt_on_error()
 
     :ok
@@ -292,9 +299,10 @@ defmodule Pix.Pipeline do
     Pix.Report.info("\nEntering shell\n")
 
     opts = shell_run_options(shell_target, from, cli_opts)
+    ssh_opts = Keyword.get_values(cli_opts, :ssh)
 
     shell_docker_image
-    |> Pix.Docker.run(cli_opts[:ssh], opts, cmd_args)
+    |> Pix.Docker.run(ssh_opts, opts, cmd_args)
     |> halt_on_error()
 
     :ok

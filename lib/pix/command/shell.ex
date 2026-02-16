@@ -5,7 +5,7 @@ defmodule Pix.Command.Shell do
     arg: [:string, :keep],
     host: :boolean,
     secret: [:string, :keep],
-    ssh: :boolean,
+    ssh: [:string, :keep],
     target: :string
   ]
 

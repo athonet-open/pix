@@ -40,9 +40,10 @@ defmodule Pix.Docker do
     end
   end
 
-  @spec run(image :: String.t(), ssh_fwd? :: boolean(), opts(), cmd_args :: [String.t()]) :: status :: non_neg_integer()
-  def run(image, ssh_fwd?, opts, cmd_args) do
-    ssh_opts = if ssh_fwd?, do: run_opts_ssh_forward(), else: []
+  @spec run(image :: String.t(), ssh_specs :: [String.t()], opts(), cmd_args :: [String.t()]) ::
+          status :: non_neg_integer()
+  def run(image, ssh_specs, opts, cmd_args) do
+    ssh_opts = if ssh_specs != [], do: run_opts_ssh_forward(ssh_specs), else: []
     opts = opts ++ ssh_opts ++ run_opts_docker_outside_of_docker()
     args = ["run"] ++ opts_encode(opts) ++ Pix.Env.pix_docker_run_opts() ++ [image] ++ cmd_args
 
@@ -73,8 +74,16 @@ defmodule Pix.Docker do
     :ok
   end
 
-  @spec run_opts_ssh_forward :: opts()
-  defp run_opts_ssh_forward do
+  @spec run_opts_ssh_forward([String.t()]) :: opts()
+  defp run_opts_ssh_forward(ssh_specs) do
+    agent_opts = if "default" in ssh_specs, do: run_opts_ssh_agent_forward(), else: []
+    {volume_opts, key_paths} = run_opts_ssh_key_mounts(ssh_specs)
+    git_ssh_opts = run_opts_git_ssh_command(key_paths)
+    agent_opts ++ volume_opts ++ git_ssh_opts
+  end
+
+  @spec run_opts_ssh_agent_forward :: opts()
+  defp run_opts_ssh_agent_forward do
     ssh_sock =
       cond do
         :os.type() == {:unix, :darwin} ->
@@ -101,6 +110,30 @@ defmodule Pix.Docker do
     end
   end
 
+  @spec run_opts_ssh_key_mounts([String.t()]) :: {opts(), key_paths :: [String.t()]}
+  defp run_opts_ssh_key_mounts(ssh_specs) do
+    Enum.reduce(ssh_specs, {[], []}, fn spec, {vol_acc, key_path_acc} ->
+      case String.split(spec, "=", parts: 2) do
+        [_id, path] when path != "" ->
+          path = Path.expand(path)
+          container_path = "/root/.ssh/#{Path.basename(path)}"
+          Pix.Report.internal(">>> mounting SSH key #{inspect(path)} as #{container_path} into shell container\n")
+          {[{:volume, "#{path}:#{container_path}:ro"} | vol_acc], [container_path | key_path_acc]}
+
+        _ ->
+          {vol_acc, key_path_acc}
+      end
+    end)
+  end
+
+  @spec run_opts_git_ssh_command([String.t()]) :: opts()
+  defp run_opts_git_ssh_command([]), do: []
+
+  defp run_opts_git_ssh_command(key_paths) do
+    identity_flags = Enum.map_join(key_paths, " ", &"-i #{&1}")
+    [env: "GIT_SSH_COMMAND=ssh #{identity_flags} -o StrictHostKeyChecking=no"]
+  end
+
   @spec run_opts_docker_outside_of_docker :: opts()
   defp run_opts_docker_outside_of_docker do
     docker_socket = "/var/run/docker.sock"
@@ -108,9 +141,9 @@ defmodule Pix.Docker do
     [volume: "#{docker_socket}:#{docker_socket}"]
   end
 
-  @spec build(ssh_fwd? :: boolean(), opts(), String.t()) :: exit_status :: non_neg_integer()
-  def build(ssh_fwd?, opts, ctx) do
-    ssh_opts = if ssh_fwd?, do: [ssh: "default"], else: []
+  @spec build(ssh_specs :: [String.t()], opts(), String.t()) :: exit_status :: non_neg_integer()
+  def build(ssh_specs, opts, ctx) do
+    ssh_opts = Enum.map(ssh_specs, fn spec -> {:ssh, spec} end)
 
     builder_opts =
       case buildx_builder() do
