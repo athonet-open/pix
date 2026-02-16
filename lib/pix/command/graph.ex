@@ -5,7 +5,7 @@ defmodule Pix.Command.Graph do
 
   @spec cmd(Pix.UserSettings.t(), Pix.Config.t(), OptionParser.argv()) :: :ok
   def cmd(user_settings, config, argv) do
-    {cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args)
+    {cli_opts, args} = Pix.Helper.option_parser_parse!(argv, strict: @cli_args)
     cli_opts = Keyword.merge(cli_opts, user_settings.command.graph.cli_opts)
     config_pipelines = config.pipelines
 

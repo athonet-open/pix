@@ -5,7 +5,7 @@ defmodule Pix.Command.Cache do
 
   @spec cmd(Pix.Config.t(), OptionParser.argv()) :: :ok
   def cmd(config, argv) do
-    {_cli_opts, args} = OptionParser.parse!(argv, strict: @cli_args)
+    {_cli_opts, args} = Pix.Helper.option_parser_parse!(argv, strict: @cli_args)
 
     case args do
       ["info"] ->
