@@ -75,7 +75,7 @@ defmodule Pix.Command.Help do
 
   defp help_cmd("run") do
     """
-    #{_cmd("pix run")} [#{_opt("--output")}] [#{_opt("--ssh [SPEC]")} ...] [#{_opt("--arg ARG")} ...] [#{_opt("--progress PROGRESS")}] [#{_opt("--target TARGET")} [#{_opt("--tag TAG")}]] [#{_opt("--no-cache")}] [#{_opt("--no-cache-filter TARGET")} ...] PIPELINE
+    #{_cmd("pix run")} [#{_opt("--output")}] [#{_opt("--ssh SPEC")} ...] [#{_opt("--arg ARG")} ...] [#{_opt("--progress PROGRESS")}] [#{_opt("--target TARGET")} [#{_opt("--tag TAG")}]] [#{_opt("--no-cache")}] [#{_opt("--no-cache-filter TARGET")} ...] PIPELINE
 
       Run PIPELINE.
 
@@ -91,7 +91,7 @@ defmodule Pix.Command.Help do
           #{_opt("--no-cache-filter")}*  Do not cache specified targets
           #{_opt("--progress")}          Set type of progress output - "auto", "plain", "tty", "rawjson" (default "auto")
           #{_opt("--secret")}*           Forward one or more secrets to `buildx build`
-          #{_opt("--ssh")}*              Forward SSH agent/keys to `buildx build` (format: default[=<socket>] | <id>=<path>).
+          #{_opt("--ssh")}*              Forward SSH agent/keys to `buildx build` (format: default|<id>[=<socket>|<key>[,<key>]]).
                               Can be specified multiple times.
           #{_opt("--tag")}               Tag the TARGET's docker image (default: no tag)
           #{_opt("--target")}            Run PIPELINE for a specific TARGET (default: all the PIPELINE targets)
@@ -100,7 +100,7 @@ defmodule Pix.Command.Help do
 
   defp help_cmd("shell") do
     """
-    #{_cmd("pix shell")} [#{_opt("--ssh [SPEC]")} ...] [#{_opt("--arg ARG")} ...] [#{_opt("--target TARGET")}] [#{_opt("--host")}] PIPELINE [COMMAND]
+    #{_cmd("pix shell")} [#{_opt("--ssh SPEC")} ...] [#{_opt("--arg ARG")} ...] [#{_opt("--target TARGET")}] [#{_opt("--host")}] PIPELINE [COMMAND]
 
       Shell into the specified target of the PIPELINE.
 
@@ -114,7 +114,7 @@ defmodule Pix.Command.Help do
       OPTIONS:
           #{_opt("--arg")}*              Set one or more pipeline ARG (format KEY=value)
           #{_opt("--secret")}*           Forward one or more secrets to `buildx build`
-          #{_opt("--ssh")}*              Forward SSH agent/keys to the build and shell container (format: default[=<socket>] | <id>=<path>).
+          #{_opt("--ssh")}*              Forward SSH agent/keys to the build and shell container (format: default|<id>[=<socket>|<key>[,<key>]]).
                               Custom key files are mounted read-only into the shell container.
                               Can be specified multiple times.
           #{_opt("--target")}            The shell target

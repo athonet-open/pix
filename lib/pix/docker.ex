@@ -76,7 +76,8 @@ defmodule Pix.Docker do
 
   @spec run_opts_ssh_forward([String.t()]) :: opts()
   defp run_opts_ssh_forward(ssh_specs) do
-    agent_opts = if "default" in ssh_specs, do: run_opts_ssh_agent_forward(), else: []
+    has_default = Enum.any?(ssh_specs, &String.starts_with?(&1, "default"))
+    agent_opts = if has_default, do: run_opts_ssh_agent_forward(), else: []
     {volume_opts, key_paths} = run_opts_ssh_key_mounts(ssh_specs)
     git_ssh_opts = run_opts_git_ssh_command(key_paths)
     agent_opts ++ volume_opts ++ git_ssh_opts
@@ -112,37 +113,41 @@ defmodule Pix.Docker do
 
   @spec run_opts_ssh_key_mounts([String.t()]) :: {opts(), key_paths :: [String.t()]}
   defp run_opts_ssh_key_mounts(ssh_specs) do
-    Enum.reduce(ssh_specs, {[], []}, fn spec, {vol_acc, key_path_acc} ->
-      case parse_ssh_key_path(spec) do
-        {:ok, _id, path} ->
-          path = Path.expand(path)
-          container_path = "/root/.ssh/#{Path.basename(path)}"
-          Pix.Report.internal(">>> mounting SSH key #{inspect(path)} as #{container_path} into shell container\n")
-          {[{:volume, "#{path}:#{container_path}:ro"} | vol_acc], [container_path | key_path_acc]}
-
-        :ignore ->
-          {vol_acc, key_path_acc}
-      end
+    ssh_specs
+    |> Enum.flat_map(&parse_ssh_key_paths/1)
+    |> Enum.reduce({[], []}, fn path, {vol_acc, key_path_acc} ->
+      path = Path.expand(path)
+      container_path = "/root/.ssh/#{Path.basename(path)}"
+      Pix.Report.internal(">>> mounting SSH key #{inspect(path)} as #{container_path} into shell container\n")
+      {[{:volume, "#{path}:#{container_path}:ro"} | vol_acc], [container_path | key_path_acc]}
     end)
   end
 
-  @spec parse_ssh_key_path(String.t()) :: {:ok, String.t() | nil, String.t()} | :ignore
-  defp parse_ssh_key_path("default"), do: :ignore
+  # Parses an --ssh spec and returns the list of key file paths (if any).
+  # Handles: "default", "default=key1,key2", "id=key", "/bare/path".
+  @spec parse_ssh_key_paths(String.t()) :: [String.t()]
+  defp parse_ssh_key_paths("default"), do: []
 
-  defp parse_ssh_key_path(spec) do
+  defp parse_ssh_key_paths(spec) do
     case String.split(spec, "=", parts: 2) do
-      [id, path] when path != "" -> {:ok, id, path}
-      [path] when path != "" -> {:ok, nil, path}
-      _ -> :ignore
+      [_id, paths] when paths != "" -> String.split(paths, ",")
+      [path] when path != "" -> [path]
+      _ -> []
     end
   end
 
   @spec expand_ssh_spec(String.t()) :: String.t()
   defp expand_ssh_spec(spec) do
-    case parse_ssh_key_path(spec) do
-      {:ok, id, path} when id != nil -> "#{id}=#{Path.expand(path)}"
-      {:ok, nil, path} -> Path.expand(path)
-      :ignore -> spec
+    case String.split(spec, "=", parts: 2) do
+      [id, paths] when paths != "" ->
+        expanded = paths |> String.split(",") |> Enum.map_join(",", &Path.expand/1)
+        "#{id}=#{expanded}"
+
+      [path] when path != "" ->
+        Path.expand(path)
+
+      _ ->
+        spec
     end
   end
 
