@@ -315,7 +315,7 @@ defmodule Pix.Pipeline.SDK do
   """
   @spec shell(t(), command :: [String.t(), ...]) :: t()
   def shell(%__MODULE__{} = pipeline, command) do
-    append_instruction(pipeline, "SHELL", [], command)
+    append_instruction(pipeline, "SHELL", [], shell_or_exec_form(command))
   end
 
   @doc """
