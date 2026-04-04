@@ -97,6 +97,7 @@ defmodule Pix.Command.Help do
           #{_opt("--ssh")}*              Forward SSH agent/keys to `buildx build` (format: default|<id>[=<socket>|<key>[,<key>]]).
                               Can be specified multiple times.
           #{_opt("--tag")}               Tag the TARGET's docker image (default: no tag)
+                              Requires --target.
           #{_opt("--target")}            Run PIPELINE for a specific TARGET (default: all the PIPELINE targets)
     """
   end
