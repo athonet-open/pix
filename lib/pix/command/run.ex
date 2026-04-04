@@ -7,6 +7,7 @@ defmodule Pix.Command.Run do
     no_cache_filter: [:string, :keep],
     output: :boolean,
     progress: :string,
+    save: :string,
     secret: [:string, :keep],
     ssh: [:string, :keep],
     tag: :string,
@@ -42,6 +43,12 @@ defmodule Pix.Command.Run do
   defp validate_run_cli_opts!(cli_opts) do
     if Keyword.has_key?(cli_opts, :tag) and not Keyword.has_key?(cli_opts, :target) do
       Pix.Report.error("--tag option requires a --target\n")
+      System.halt(1)
+    end
+
+    if Keyword.has_key?(cli_opts, :save) and
+         (not Keyword.has_key?(cli_opts, :target) or not Keyword.has_key?(cli_opts, :tag)) do
+      Pix.Report.error("--save option requires both --target and --tag\n")
       System.halt(1)
     end
 

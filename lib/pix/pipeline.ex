@@ -7,6 +7,7 @@ defmodule Pix.Pipeline do
           | {:no_cache, boolean()}
           | {:output, boolean()}
           | {:progress, String.t()}
+          | {:save, String.t()}
           | {:secret, String.t()}
           | {:ssh, String.t()}
           | {:tag, String.t()}
@@ -49,8 +50,15 @@ defmodule Pix.Pipeline do
     build_opts = run_build_options(cli_opts, pipeline, pipeline_target, from, ctx_dir, default_args)
     execute_run_build(build_opts, dockerfile_path, cli_opts, targets)
 
-    if Keyword.has_key?(cli_opts, :target) and Keyword.has_key?(cli_opts, :tag) do
-      execute_tag(build_opts, dockerfile_path, cli_opts)
+    cond do
+      Keyword.has_key?(cli_opts, :save) ->
+        execute_save(build_opts, dockerfile_path, cli_opts)
+
+      Keyword.has_key?(cli_opts, :target) and Keyword.has_key?(cli_opts, :tag) ->
+        execute_tag(build_opts, dockerfile_path, cli_opts)
+
+      true ->
+        :ok
     end
 
     :ok
@@ -222,6 +230,46 @@ defmodule Pix.Pipeline do
     ssh_opts = Keyword.get_values(cli_opts, :ssh)
 
     Pix.Docker.build(ssh_opts, build_opts, ".") |> halt_on_error()
+
+    :ok
+  end
+
+  @spec execute_save(Pix.Docker.opts(), Path.t(), run_cli_opts()) :: :ok
+  defp execute_save(build_opts, dockerfile_path, cli_opts) do
+    save_path = Path.expand(cli_opts[:save])
+
+    {dest_path, compress?} =
+      if String.ends_with?(save_path, ".gz") do
+        {Path.rootname(save_path), true}
+      else
+        {save_path, false}
+      end
+
+    Pix.Report.info(
+      "\nSaving pipeline target #{inspect(cli_opts[:target])} as #{inspect(cli_opts[:tag])} to #{save_path}\n\n"
+    )
+
+    build_opts = Enum.reject(build_opts, &(match?(:no_cache, &1) or match?({:no_cache_filter, _}, &1)))
+
+    build_opts =
+      build_opts ++
+        [
+          target: cli_opts[:target],
+          file: dockerfile_path,
+          tag: cli_opts[:tag],
+          output: "type=docker,dest=#{dest_path}"
+        ]
+
+    ssh_opts = Keyword.get_values(cli_opts, :ssh)
+
+    Pix.Docker.build(ssh_opts, build_opts, ".") |> halt_on_error()
+
+    if compress? do
+      Pix.Report.info("\nCompressing #{dest_path} ...\n")
+      {_, 0} = System.cmd("gzip", ["-f", dest_path])
+    end
+
+    Pix.Report.info("\nSaved image to #{save_path}\n")
 
     :ok
   end

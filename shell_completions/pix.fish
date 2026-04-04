@@ -76,6 +76,7 @@ complete -c pix -n "__fish_seen_subcommand_from run" -l "progress" -d "Set type 
 complete -c pix -n "__fish_seen_subcommand_from run" -l "secret" -d "Forward one or more secrets to `buildx build`"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "target" -d "Run PIPELINE for a specific TARGET" -a "(__pix_get_run_targets)"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "tag" -d "Tag the TARGET's docker image (requires --target)"
+complete -c pix -n "__fish_seen_subcommand_from run" -l "save" -d "Save the TARGET's docker image to a file (requires --target and --tag)" -rF
 complete -c pix -n "__fish_seen_subcommand_from run" -l "no-cache" -d "Do not use cache when building the image"
 complete -c pix -n "__fish_seen_subcommand_from run" -l "no-cache-filter" -d "Do not cache specified targets" -a "(__pix_get_run_targets)"
 
