@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="generator" content="ExDoc v0.40.1">
     <meta name="project" content="pix v0.0.0">
 
 
     <title>Pix.Pipeline.SDK — pix v0.0.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
 
     <script defer src="dist/sidebar_items-E7057FDB.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-YU4BZFVS.js"></script>
 
   </head>
   <body>
@@ -41,7 +41,7 @@ pix
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -54,16 +54,34 @@ pix
         <form class="search-bar" action="search.html">
           <label class="search-label">
             <span class="sr-only">Search documentation of pix</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -75,10 +93,13 @@ pix
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Pix.Pipeline.SDK</span> 
+      <span translate="no">Pix.<wbr>Pipeline.<wbr>SDK</span> 
       <small class="app-vsn" translate="no">(pix v0.0.0)</small>
 
     </h1>
+
+
+
 
   </div>
 
@@ -89,17 +110,17 @@ Some of the functions have additional options to extend the functionality of the
 and some functions are extension to the commands (eg. <a href="#output/2"><code class="inline">output/2</code></a>).</p><p>For example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">Pix.Pipeline.SDK</span><span class="w">
 
 </span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span><span class="w">
-  </span><span class="n">pipeline</span><span class="p" data-group-id="5237514553-1">(</span><span class="s">&quot;gohello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My pipeline description&quot;</span><span class="p" data-group-id="5237514553-1">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="5237514553-2">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">private</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5237514553-2">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="5237514553-3">(</span><span class="s">&quot;hello.go&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="5237514553-3">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="5237514553-4">(</span><span class="s">&quot;go build -o hello hello.go&quot;</span><span class="p" data-group-id="5237514553-4">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="5237514553-5">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scratch&quot;</span><span class="p" data-group-id="5237514553-5">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="5237514553-6">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;build&quot;</span><span class="p" data-group-id="5237514553-6">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">cmd</span><span class="p" data-group-id="5237514553-7">(</span><span class="p" data-group-id="5237514553-8">[</span><span class="s">&quot;/hello&quot;</span><span class="p" data-group-id="5237514553-8">]</span><span class="p" data-group-id="5237514553-7">)</span><span class="w">
+  </span><span class="n">pipeline</span><span class="p" data-group-id="2874958187-1">(</span><span class="s">&quot;gohello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My pipeline description&quot;</span><span class="p" data-group-id="2874958187-1">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="2874958187-2">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">private</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2874958187-2">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="2874958187-3">(</span><span class="s">&quot;hello.go&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p" data-group-id="2874958187-3">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">run</span><span class="p" data-group-id="2874958187-4">(</span><span class="s">&quot;go build -o hello hello.go&quot;</span><span class="p" data-group-id="2874958187-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stage</span><span class="p" data-group-id="2874958187-5">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scratch&quot;</span><span class="p" data-group-id="2874958187-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">copy</span><span class="p" data-group-id="2874958187-6">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;build&quot;</span><span class="p" data-group-id="2874958187-6">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">cmd</span><span class="p" data-group-id="2874958187-7">(</span><span class="p" data-group-id="2874958187-8">[</span><span class="s">&quot;/hello&quot;</span><span class="p" data-group-id="2874958187-8">]</span><span class="p" data-group-id="2874958187-7">)</span><span class="w">
 
 </span><span class="n">pipeline</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">dump</span><span class="p" data-group-id="5237514553-9">(</span><span class="p" data-group-id="5237514553-9">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="5237514553-10">(</span><span class="p" data-group-id="5237514553-10">)</span></code></pre><h2 id="module-output" class="section-heading"><a href="#module-output" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Output</span></h2><pre><code class="Dockerfile">FROM golang:1.23 AS build
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="n">dump</span><span class="p" data-group-id="2874958187-9">(</span><span class="p" data-group-id="2874958187-9">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="2874958187-10">(</span><span class="p" data-group-id="2874958187-10">)</span></code></pre><h2 id="module-output" class="section-heading"><a href="#module-output" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Output</span></h2><pre><code class="Dockerfile">FROM golang:1.23 AS build
 COPY hello.go .
 RUN go build -o hello hello.go
 
@@ -111,16 +132,16 @@ CMD [&quot;/hello&quot;]</code></pre>
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-types summary">
-  <h2>
+  <h3>
     <a href="#types">Types</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -172,9 +193,9 @@ CMD [&quot;/hello&quot;]</code></pre>
 
 </div>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -182,7 +203,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">ADD</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#add"><code class="inline">ADD</code></a> instruction.</p></div>
 
     </div>
 
@@ -192,7 +213,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">ARG</code></a> instruction in a stage scope.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#arg"><code class="inline">ARG</code></a> instruction in a stage scope.</p></div>
 
     </div>
 
@@ -202,7 +223,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">CMD</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#cmd"><code class="inline">CMD</code></a> instruction.</p></div>
 
     </div>
 
@@ -212,7 +233,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">COPY</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#copy"><code class="inline">COPY</code></a> instruction.</p></div>
 
     </div>
 
@@ -232,7 +253,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">ENTRYPOINT</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#entrypoint"><code class="inline">ENTRYPOINT</code></a> instruction.</p></div>
 
     </div>
 
@@ -242,7 +263,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">ENV</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#env"><code class="inline">ENV</code></a> instruction.</p></div>
 
     </div>
 
@@ -252,7 +273,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">EXPOSE</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#expose"><code class="inline">EXPOSE</code></a> instruction.</p></div>
 
     </div>
 
@@ -262,7 +283,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">ARG</code></a> instruction in the global scope.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#arg"><code class="inline">ARG</code></a> instruction in the global scope.</p></div>
 
     </div>
 
@@ -272,7 +293,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">HEALTHCHECK</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#healthcheck"><code class="inline">HEALTHCHECK</code></a> instruction.</p></div>
 
     </div>
 
@@ -282,7 +303,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">LABEL</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#label"><code class="inline">LABEL</code></a> instruction.</p></div>
 
     </div>
 
@@ -322,7 +343,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">RUN</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#run"><code class="inline">RUN</code></a> instruction.</p></div>
 
     </div>
 
@@ -332,7 +353,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">SHELL</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#shell"><code class="inline">SHELL</code></a> instruction.</p></div>
 
     </div>
 
@@ -342,7 +363,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>A basic <a>Here-documents</a> string sigil.</p></div>
+        <div class="summary-synopsis"><p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p></div>
 
     </div>
 
@@ -352,7 +373,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Starts a new stage <a><code class="inline">FROM</code></a> the given base image.</p></div>
+        <div class="summary-synopsis"><p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p></div>
 
     </div>
 
@@ -362,7 +383,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">STOPSIGNAL</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#stopsignal"><code class="inline">STOPSIGNAL</code></a> instruction.</p></div>
 
     </div>
 
@@ -372,7 +393,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">USER</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#user"><code class="inline">USER</code></a> instruction.</p></div>
 
     </div>
 
@@ -382,7 +403,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">VOLUME</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#volume"><code class="inline">VOLUME</code></a> instruction.</p></div>
 
     </div>
 
@@ -392,7 +413,7 @@ CMD [&quot;/hello&quot;]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds a <a><code class="inline">WORKDIR</code></a> instruction.</p></div>
+        <div class="summary-synopsis"><p>Adds a <a href="https://docs.docker.com/reference/dockerfile/#workdir"><code class="inline">WORKDIR</code></a> instruction.</p></div>
 
     </div>
 
@@ -402,12 +423,12 @@ CMD [&quot;/hello&quot;]</code></pre>
 
 
   <section id="types" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#types">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Types</span>
-    </h1>
+    </h2>
 
     <div class="types-list">
 <section class="detail" id="t:args/0">
@@ -567,12 +588,12 @@ CMD [&quot;/hello&quot;]</code></pre>
   </section>
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="add/4">
@@ -1014,13 +1035,13 @@ It's used to declare the output of the stage.</p>
 
       </div>
 
-<p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p><p>It expands to:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="8748410654-1">&lt;&lt;</span><span class="nc">EOT</span><span class="w">
+<p>A basic <a href="https://docs.docker.com/reference/dockerfile/#here-documents">Here-documents</a> string sigil.</p><p>It expands to:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="0299065886-1">&lt;&lt;</span><span class="nc">EOT</span><span class="w">
 </span><span class="n">...</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">here</span><span class="w"> </span><span class="n">...</span><span class="w">
-</span><span class="nc">EOT</span></code></pre><p>Example:</p><pre><code class="makeup elixir" translate="no"><span class="n">run</span><span class="p" data-group-id="3541528466-1">(</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="sx">~h&quot;&quot;&quot;
+</span><span class="nc">EOT</span></code></pre><p>Example:</p><pre><code class="makeup elixir" translate="no"><span class="n">run</span><span class="p" data-group-id="7107501178-1">(</span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="sx">~h&quot;&quot;&quot;
   if [ &quot;$X&quot; == &quot;x&quot; ]; then
     echo &quot;x!&quot;
   fi
-&quot;&quot;&quot;</span><span class="p" data-group-id="3541528466-1">)</span></code></pre><p>For more heredoc advance feature simply encode the heredoc yourself.</p>
+&quot;&quot;&quot;</span><span class="p" data-group-id="7107501178-1">)</span></code></pre><p>For more heredoc advance feature simply encode the heredoc yourself.</p>
   </section>
 </section>
 <section class="detail" id="stage/3">
@@ -1051,7 +1072,7 @@ It's used to declare the output of the stage.</p>
 
       </div>
 
-<p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p><pre><code class="makeup elixir" translate="no"><span class="n">stage</span><span class="p" data-group-id="7751705756-1">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p" data-group-id="7751705756-1">)</span></code></pre><p>the optional <code class="inline">private</code> and <code class="inline">cache</code> options can be used to control the behavior of the stage:</p><ul><li><code class="inline">private: true</code> - the stage will not be accessible as a build target, only from other stages.</li><li><code class="inline">cache: false</code> - the stage will not be cached, the stage will be built from scratch every time.</li></ul>
+<p>Starts a new stage <a href="https://docs.docker.com/reference/dockerfile/#from"><code class="inline">FROM</code></a> the given base image.</p><pre><code class="makeup elixir" translate="no"><span class="n">stage</span><span class="p" data-group-id="2497647714-1">(</span><span class="s">&quot;build&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;golang:1.23&quot;</span><span class="p" data-group-id="2497647714-1">)</span></code></pre><p>the optional <code class="inline">private</code> and <code class="inline">cache</code> options can be used to control the behavior of the stage:</p><ul><li><code class="inline">private: true</code> - the stage will not be accessible as a build target, only from other stages.</li><li><code class="inline">cache: false</code> - the stage will not be cached, the stage will be built from scratch every time.</li></ul>
   </section>
 </section>
 <section class="detail" id="stopsignal/2">
@@ -1155,23 +1176,26 @@ It's used to declare the output of the stage.</p>
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-        </span>
-      </p>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          </span>
+        </p>
 
-      </p>
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.1) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>
