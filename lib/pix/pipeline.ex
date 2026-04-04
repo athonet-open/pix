@@ -50,15 +50,12 @@ defmodule Pix.Pipeline do
     build_opts = run_build_options(cli_opts, pipeline, pipeline_target, from, ctx_dir, default_args)
     execute_run_build(build_opts, dockerfile_path, cli_opts, targets)
 
-    cond do
-      Keyword.has_key?(cli_opts, :save) ->
-        execute_save(build_opts, dockerfile_path, cli_opts)
+    if Keyword.has_key?(cli_opts, :save) do
+      execute_save(build_opts, dockerfile_path, cli_opts)
+    end
 
-      Keyword.has_key?(cli_opts, :target) and Keyword.has_key?(cli_opts, :tag) ->
-        execute_tag(build_opts, dockerfile_path, cli_opts)
-
-      true ->
-        :ok
+    if Keyword.has_key?(cli_opts, :tag) do
+      execute_tag(build_opts, dockerfile_path, cli_opts)
     end
 
     :ok
