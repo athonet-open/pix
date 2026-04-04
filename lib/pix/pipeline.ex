@@ -266,7 +266,13 @@ defmodule Pix.Pipeline do
 
     if compress? do
       Pix.Report.info("\nCompressing #{dest_path} ...\n")
-      {_, 0} = System.cmd("gzip", ["-f", dest_path])
+
+      _compressed =
+        dest_path
+        |> File.stream!(65_536)
+        |> Enum.into(File.stream!(save_path, [:compressed]))
+
+      File.rm!(dest_path)
     end
 
     Pix.Report.info("\nSaved image to #{save_path}\n")
