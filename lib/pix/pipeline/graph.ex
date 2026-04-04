@@ -19,6 +19,7 @@ defmodule Pix.Pipeline.Graph do
           {"COPY", copy_opts, _copy_args} ->
             pipeline_ctx = Pix.Pipeline.SDK.pipeline_ctx()
 
+            # credo:disable-for-next-line Credo.Check.Refactor.Nesting
             case copy_opts[:from] do
               nil -> nil
               ^pipeline_ctx -> nil

@@ -34,6 +34,7 @@ defmodule Pix.Command.Cache do
         %{from: %{git: repo, ref: ref}} ->
           checkout_dir = Pix.Config.pipeline_checkout_dir(repo, ref)
 
+          # credo:disable-for-next-line Credo.Check.Refactor.Nesting
           if File.dir?(checkout_dir) do
             Pix.Report.info("  - #{pipeline_alias}: git pipeline #{repo}@#{ref}\n    CACHED #{checkout_dir}\n")
           else
@@ -71,6 +72,7 @@ defmodule Pix.Command.Cache do
         %{from: %{git: repo, ref: ref}} ->
           checkout_dir = Pix.Config.pipeline_checkout_dir(repo, ref)
 
+          # credo:disable-for-next-line Credo.Check.Refactor.Nesting
           if File.dir?(checkout_dir) do
             cmd_opts = [stderr_to_stdout: true, cd: checkout_dir]
             {_, 0} = System.cmd("git", ["fetch", "origin", ref], cmd_opts)
