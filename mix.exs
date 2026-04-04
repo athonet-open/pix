@@ -11,6 +11,7 @@ defmodule Pix.MixProject do
         main_module: Pix,
         emu_args: "-noinput +B"
       ],
+      dialyzer: [flags: [:no_opaque]],
       docs: docs()
     ]
   end
