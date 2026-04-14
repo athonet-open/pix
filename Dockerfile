@@ -1,4 +1,4 @@
-ARG ELIXIR_VERSION=1.19.4-erlang-28.3-alpine-3.23.3
+ARG ELIXIR_VERSION=1.19.5-erlang-28.4.2-alpine-3.23.3
 
 
 FROM docker.io/hexpm/elixir:${ELIXIR_VERSION} AS bootstrap
