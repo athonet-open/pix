@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
 
-    <script defer src="dist/sidebar_items-E7057FDB.js"></script>
+    <script defer src="dist/sidebar_items-B654EF09.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-YU4BZFVS.js"></script>
 
@@ -105,7 +105,11 @@ pix
 
 
     <section id="moduledoc">
-<p>Pipeline stage.</p>
+<p>Represents a single stage in a <a href="Pix.Pipeline.SDK.html"><code class="inline">Pix.Pipeline.SDK</code></a> pipeline.</p><p>Each stage corresponds to a <code class="inline">FROM … AS &lt;name&gt;</code> block in the generated Dockerfile.
+Stages carry their own instructions, build arguments, and declared output artifacts.</p><p>Key properties:</p><ul><li><code class="inline">:private</code> — when <code class="inline">true</code> the stage is an internal build dependency and won't
+appear as a selectable target in <code class="inline">pix run</code> or <code class="inline">pix ls</code>.</li><li><code class="inline">:cache</code> — when <code class="inline">false</code> the stage is rebuilt from scratch on every run
+(equivalent to <code class="inline">--no-cache-filter</code>).</li><li><code class="inline">:outputs</code> — file paths declared via <a href="Pix.Pipeline.SDK.html#output/2"><code class="inline">Pix.Pipeline.SDK.output/2</code></a> that are
+exported when running with <code class="inline">--output</code>.</li></ul>
     </section>
 
 </div>
@@ -127,6 +131,8 @@ pix
         <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>A pipeline stage with its instructions, arguments, outputs, and metadata.</p></div>
 
     </div>
 
@@ -173,7 +179,7 @@ pix
 
       </div>
 
-
+<p>A pipeline stage with its instructions, arguments, outputs, and metadata.</p>
   </section>
 </section>
 

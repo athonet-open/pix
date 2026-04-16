@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-YJO4MOOW.css" />
 
-    <script defer src="dist/sidebar_items-E7057FDB.js"></script>
+    <script defer src="dist/sidebar_items-B654EF09.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-YU4BZFVS.js"></script>
 
@@ -105,7 +105,8 @@ pix
 
 
     <section id="moduledoc">
-<p>Configuration module.</p>
+<p>Types used across Pix project and pipeline configuration.</p><p>The main user-facing type is <a href="#t:pix_exs/0"><code class="inline">pix_exs/0</code></a> — the shape returned by
+<a href="Pix.Project.html#c:project/0"><code class="inline">Pix.Project.project/0</code></a> in your <code class="inline">.pix.exs</code> file.</p>
     </section>
 
 </div>
@@ -128,6 +129,8 @@ pix
 
       </div>
 
+        <div class="summary-synopsis"><p>Target CPU architecture or <code class="inline">:noarch</code>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -135,6 +138,8 @@ pix
         <a href="#t:args/0" data-no-tooltip="" translate="no">args()</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>Pipeline build arguments as key-value pairs.</p></div>
 
     </div>
 
@@ -144,6 +149,8 @@ pix
 
       </div>
 
+        <div class="summary-synopsis"><p>Pipeline source — either a local path or a git repository.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -151,6 +158,8 @@ pix
         <a href="#t:from_git/0" data-no-tooltip="" translate="no">from_git()</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>Git-hosted pipeline source. <code class="inline">:ref</code> selects a branch/tag/commit, <code class="inline">:sub_dir</code> narrows to a subdirectory.</p></div>
 
     </div>
 
@@ -160,13 +169,7 @@ pix
 
       </div>
 
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#t:pipeline/0" data-no-tooltip="" translate="no">pipeline()</a>
-
-      </div>
+        <div class="summary-synopsis"><p>Local filesystem pipeline source. <code class="inline">:sub_dir</code> narrows to a subdirectory containing <code class="inline">pipeline.exs</code>.</p></div>
 
     </div>
 
@@ -176,6 +179,8 @@ pix
 
       </div>
 
+        <div class="summary-synopsis"><p>User-chosen name that identifies a pipeline within a project.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -183,6 +188,8 @@ pix
         <a href="#t:pix_exs/0" data-no-tooltip="" translate="no">pix_exs()</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>Raw project configuration as declared in <code class="inline">.pix.exs</code>.</p></div>
 
     </div>
 
@@ -192,6 +199,8 @@ pix
 
       </div>
 
+        <div class="summary-synopsis"><p>Raw pipeline entry as declared in <code class="inline">.pix.exs</code> before resolution.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -200,35 +209,7 @@ pix
 
       </div>
 
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
-
-      </div>
-
-    </div>
-
-</div>
-<div class="summary-functions summary">
-  <h3>
-    <a href="#functions">Functions</a>
-  </h3>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#get/0" data-no-tooltip="" translate="no">get()</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#pipeline_checkout_dir/2" data-no-tooltip="" translate="no">pipeline_checkout_dir(repo, ref)</a>
-
-      </div>
+        <div class="summary-synopsis"><p>CPU architectures supported by Pix.</p></div>
 
     </div>
 
@@ -267,7 +248,7 @@ pix
 
       </div>
 
-
+<p>Target CPU architecture or <code class="inline">:noarch</code>.</p>
   </section>
 </section>
 <section class="detail" id="t:args/0">
@@ -291,7 +272,7 @@ pix
 
       </div>
 
-
+<p>Pipeline build arguments as key-value pairs.</p>
   </section>
 </section>
 <section class="detail" id="t:from/0">
@@ -315,7 +296,7 @@ pix
 
       </div>
 
-
+<p>Pipeline source — either a local path or a git repository.</p>
   </section>
 </section>
 <section class="detail" id="t:from_git/0">
@@ -343,7 +324,7 @@ pix
 
       </div>
 
-
+<p>Git-hosted pipeline source. <code class="inline">:ref</code> selects a branch/tag/commit, <code class="inline">:sub_dir</code> narrows to a subdirectory.</p>
   </section>
 </section>
 <section class="detail" id="t:from_path/0">
@@ -367,37 +348,7 @@ pix
 
       </div>
 
-
-  </section>
-</section>
-<section class="detail" id="t:pipeline/0">
-
-  <div class="detail-header">
-    <a href="#t:pipeline/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <div class="heading-with-actions">
-      <h1 class="signature" translate="no">pipeline()</h1>
-
-
-    </div>
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@type</span> pipeline() :: %{
-  from: <a href="#t:from/0">from</a>(),
-  default_args: <a href="#t:args/0">args</a>(),
-  default_targets: [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()],
-  ctx_dir: <a href="https://hexdocs.pm/elixir/Path.html#t:t/0">Path.t</a>(),
-  pipeline_mod: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>()
-}</pre>
-
-      </div>
-
-
+<p>Local filesystem pipeline source. <code class="inline">:sub_dir</code> narrows to a subdirectory containing <code class="inline">pipeline.exs</code>.</p>
   </section>
 </section>
 <section class="detail" id="t:pipeline_alias/0">
@@ -421,7 +372,7 @@ pix
 
       </div>
 
-
+<p>User-chosen name that identifies a pipeline within a project.</p>
   </section>
 </section>
 <section class="detail" id="t:pix_exs/0">
@@ -445,7 +396,7 @@ pix
 
       </div>
 
-
+<p>Raw project configuration as declared in <code class="inline">.pix.exs</code>.</p>
   </section>
 </section>
 <section class="detail" id="t:pix_exs_pipeline/0">
@@ -473,7 +424,7 @@ pix
 
       </div>
 
-
+<p>Raw pipeline entry as declared in <code class="inline">.pix.exs</code> before resolution.</p>
   </section>
 </section>
 <section class="detail" id="t:supported_arch/0">
@@ -497,92 +448,7 @@ pix
 
       </div>
 
-
-  </section>
-</section>
-<section class="detail" id="t:t/0">
-
-  <div class="detail-header">
-    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <div class="heading-with-actions">
-      <h1 class="signature" translate="no">t()</h1>
-
-
-    </div>
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@type</span> t() :: %{pipelines: %{required(<a href="#t:pipeline_alias/0">pipeline_alias</a>()) =&gt; <a href="#t:pipeline/0">pipeline</a>()}}</pre>
-
-      </div>
-
-
-  </section>
-</section>
-
-    </div>
-  </section>
-
-  <section id="functions" class="details-list">
-    <h2 class="section-heading">
-      <a class="hover-link" href="#functions">
-        <i class="ri-link-m" aria-hidden="true"></i>
-      </a>
-      <span class="text">Functions</span>
-    </h2>
-
-    <div class="functions-list">
-<section class="detail" id="get/0">
-
-  <div class="detail-header">
-    <a href="#get/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <div class="heading-with-actions">
-      <h1 class="signature" translate="no">get()</h1>
-
-
-    </div>
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@spec</span> get() :: <a href="#t:t/0">t</a>()</pre>
-
-      </div>
-
-
-  </section>
-</section>
-<section class="detail" id="pipeline_checkout_dir/2">
-
-  <div class="detail-header">
-    <a href="#pipeline_checkout_dir/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <div class="heading-with-actions">
-      <h1 class="signature" translate="no">pipeline_checkout_dir(repo, ref)</h1>
-
-
-    </div>
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@spec</span> pipeline_checkout_dir(repo :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), ref :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) :: <a href="https://hexdocs.pm/elixir/Path.html#t:t/0">Path.t</a>()</pre>
-
-      </div>
-
-
+<p>CPU architectures supported by Pix.</p>
   </section>
 </section>
 
