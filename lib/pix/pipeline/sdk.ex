@@ -38,15 +38,36 @@ defmodule Pix.Pipeline.SDK do
   ```
   """
 
+  @typedoc ~S'A Dockerfile command name (e.g. `"RUN"`, `"COPY"`).'
   @type command :: String.t()
+
+  @typedoc "Instruction-level options (e.g. `from:`, `chmod:`) passed to Dockerfile commands."
   @type options :: Keyword.t()
+
+  @typedoc "Instruction arguments — the positional parts after the command and options."
   @type iargs :: [String.t(), ...]
+
+  @typedoc "Build arguments as a map of name to default value (or `nil` if no default)."
   @type args() :: %{(name :: String.t()) => default_value :: nil | String.t()}
+
+  @typedoc "A single Dockerfile instruction: `{command, options, args}`."
   @type instruction :: {command(), options(), iargs()}
 
   defmodule Stage do
     @moduledoc """
-    Pipeline stage.
+    Represents a single stage in a `Pix.Pipeline.SDK` pipeline.
+
+    Each stage corresponds to a `FROM … AS <name>` block in the generated Dockerfile.
+    Stages carry their own instructions, build arguments, and declared output artifacts.
+
+    Key properties:
+
+      * `:private` — when `true` the stage is an internal build dependency and won't
+        appear as a selectable target in `pix run` or `pix ls`.
+      * `:cache` — when `false` the stage is rebuilt from scratch on every run
+        (equivalent to `--no-cache-filter`).
+      * `:outputs` — file paths declared via `Pix.Pipeline.SDK.output/2` that are
+        exported when running with `--output`.
     """
 
     @enforce_keys [
@@ -60,6 +81,7 @@ defmodule Pix.Pipeline.SDK do
     ]
     defstruct @enforce_keys
 
+    @typedoc "A pipeline stage with its instructions, arguments, outputs, and metadata."
     @type t :: %__MODULE__{
             stage: String.t(),
             instructions: [Pix.Pipeline.SDK.instruction()],
@@ -74,6 +96,7 @@ defmodule Pix.Pipeline.SDK do
   @enforce_keys [:name]
   defstruct @enforce_keys ++ [description: "", args: [], stages: [], args_: %{}, dockerignore: [], directives: []]
 
+  @typedoc "The pipeline definition — a named collection of stages, global args, and metadata."
   @type t :: %__MODULE__{
           name: String.t(),
           description: String.t(),
@@ -435,7 +458,10 @@ end
 
 defmodule Pix.Pipeline.SDK.Extra do
   @moduledoc """
-  Extra functions to be used in Pix.Pipeline.SDK.
+  Convenience helpers built on top of `Pix.Pipeline.SDK`.
+
+  These functions emit common Dockerfile patterns (e.g. argument validation)
+  so pipeline authors don't have to hand-write them.
   """
 
   import Pix.Pipeline.SDK

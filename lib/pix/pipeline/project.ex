@@ -91,6 +91,7 @@ defmodule Pix.Pipeline.Project do
   See `Pix.Pipeline.SDK` for the complete API reference.
   """
 
+  @typedoc "A module that implements the `Pix.Pipeline.Project` behaviour."
   @type t() :: module()
 
   defmacro __using__(_opts) do

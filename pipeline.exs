@@ -99,6 +99,7 @@ defmodule Pix2Pix.Pipeline do
     pipeline
     |> stage("pix.docs", from: "pix.compile_dev", description: "Generate ExDoc documentation")
     |> copy("README.md", ".")
+    |> copy("guides", "guides")
     |> run("mix docs")
     |> output("#{@workdir}/doc")
   end

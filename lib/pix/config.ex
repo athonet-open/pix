@@ -1,13 +1,19 @@
 defmodule Pix.Config do
   @moduledoc """
-  Configuration module.
+  Types used across Pix project and pipeline configuration.
+
+  The main user-facing type is `t:pix_exs/0` — the shape returned by
+  `c:Pix.Project.project/0` in your `.pix.exs` file.
   """
 
+  @typedoc false
   @type t() :: %{
           pipelines: %{
             pipeline_alias() => pipeline()
           }
         }
+
+  @typedoc false
   @type pipeline() :: %{
           from: from(),
           default_args: args(),
@@ -15,31 +21,50 @@ defmodule Pix.Config do
           ctx_dir: Path.t(),
           pipeline_mod: module()
         }
+
+  @typedoc "Raw project configuration as declared in `.pix.exs`."
   @type pix_exs() :: %{
           pipelines: %{
             pipeline_alias() => pix_exs_pipeline()
           }
         }
+
+  @typedoc "Raw pipeline entry as declared in `.pix.exs` before resolution."
   @type pix_exs_pipeline() :: %{
           from: from_path() | from_git(),
           default_args: args(),
           default_targets: [String.t()]
         }
+
+  @typedoc "User-chosen name that identifies a pipeline within a project."
   @type pipeline_alias :: String.t()
+
+  @typedoc "Target CPU architecture or `:noarch`."
   @type arch() :: :noarch | supported_arch()
+
+  @typedoc "CPU architectures supported by Pix."
   @type supported_arch() :: :amd64 | :arm64
+
+  @typedoc "Pipeline source — either a local path or a git repository."
   @type from() :: from_path() | from_git()
+
+  @typedoc "Local filesystem pipeline source. `:sub_dir` narrows to a subdirectory containing `pipeline.exs`."
   @type from_path() :: %{
           :path => Path.t(),
           optional(:sub_dir) => Path.t()
         }
+
+  @typedoc "Git-hosted pipeline source. `:ref` selects a branch/tag/commit, `:sub_dir` narrows to a subdirectory."
   @type from_git() :: %{
           :git => String.t(),
           optional(:ref) => String.t(),
           optional(:sub_dir) => Path.t()
         }
+
+  @typedoc "Pipeline build arguments as key-value pairs."
   @type args() :: %{String.t() => String.t()}
 
+  @doc false
   @spec get :: t()
   def get do
     pix_exs_path = ".pix.exs"
@@ -57,6 +82,7 @@ defmodule Pix.Config do
     end
   end
 
+  @doc false
   @spec pipeline_checkout_dir(repo :: String.t(), ref :: String.t()) :: Path.t()
   def pipeline_checkout_dir(repo, ref) do
     Path.join([".pipeline", "checkout", repo, ref])

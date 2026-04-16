@@ -19,7 +19,7 @@ The building blocks of a pipeline are:
 - **output**: Stages can produce tangible outputs (e.g., test coverage reports, documentation, build artifacts).
 - **dependency**: Stages are interconnected via **dependencies** to create a structured execution graph.
 
-Under the hood, a pipeline is an intelligent Docker multistage build, programmatically defined using Elixir code through the `Pix.Pipeline.SDK`.
+Under the hood, a pipeline is an intelligent Docker multistage build, programmatically defined using Elixir code through the `Pix.Pipeline.SDK` module.
 
 ### The pipeline executor
 
@@ -37,9 +37,9 @@ More details in the `Pix.Project` module documentation.
 ### The Pipeline definition
 
 A pipeline is a programmatic definition of a Docker multistage build.
-It consists of targets (named Docker build stages) defined in `pipeline.exs` using the `Pix.Pipeline.SDK`.
+It consists of targets (named Docker build stages) defined in `pipeline.exs` using the `Pix.Pipeline.SDK` module.
 
-More details in the `Pix.Pipeline.SDK` module documentation.
+More details in the `Pix.Pipeline.SDK` module documentation and the [Pipeline Authoring Guide](guides/pipeline-authoring.md).
 
 ## Installation
 
@@ -108,7 +108,7 @@ For detailed command information, use `pix help`.
 ## User settings
 
 Customize Pix behavior through `~/.config/pix/settings.exs`.
-See `Pix.UserSettings` documentation for configuration options.
+See the `Pix.UserSettings` module documentation for configuration options.
 
 ## Security
 

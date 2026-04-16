@@ -3,8 +3,11 @@ defmodule Pix.UserSettings do
   Pix user settings.
 
   You can set some global settings in your `~/.config/pix/settings.exs` file.
-
   The file should evaluate to a map conform to `t:t/0`.
+
+  See the pix help command for a list of environment variables that can be set in the `env`
+  section of the user settings, and the documentation of each command for the available `cli_opts`
+  that can be set for each command.
 
   For example:
 
@@ -32,6 +35,7 @@ defmodule Pix.UserSettings do
   @enforce_keys [:env, :command]
   defstruct @enforce_keys
 
+  @typedoc "User settings loaded from `~/.config/pix/settings.exs`."
   @type t() :: %__MODULE__{
           env: %{String.t() => String.t()},
           command: %{
@@ -43,6 +47,7 @@ defmodule Pix.UserSettings do
           }
         }
 
+  @doc false
   @spec get :: t()
   def get do
     user_settings_path = Path.join(System.user_home!(), ".config/pix/settings.exs")

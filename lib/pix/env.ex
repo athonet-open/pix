@@ -1,6 +1,10 @@
 defmodule Pix.Env do
   @moduledoc """
-  Environment information.
+  Host and git environment information.
+
+  Surfaces details about the current machine, git repository, and Docker context.
+  These values feed the built-in pipeline variables documented in `Pix.Project`
+  (e.g. `PIX_COMMIT_SHA`, `PIX_HOST_OS`).
   """
 
   @doc """

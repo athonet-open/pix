@@ -2,6 +2,8 @@ defmodule Pix.Docker do
   @moduledoc false
 
   @docker_desktop_socket "/run/host-services/ssh-auth.sock"
+
+  @typedoc "Docker CLI option list — atoms for flags, `{key, value}` tuples for options."
   @type opts() :: [Keyword.key() | {Keyword.key(), Keyword.value()}]
 
   @spec buildx_builder :: String.t() | nil

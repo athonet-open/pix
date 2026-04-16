@@ -34,8 +34,30 @@ defmodule Pix.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md"],
-      formatters: ["html"]
+      extras: ["README.md", "guides/pipeline-authoring.md"],
+      formatters: ["html"],
+      groups_for_extras: [
+        Guides: ["guides/pipeline-authoring.md"]
+      ],
+      groups_for_modules: [
+        "Pipeline Authoring": [
+          Pix.Pipeline.SDK,
+          Pix.Pipeline.SDK.Stage,
+          Pix.Pipeline.SDK.Extra,
+          Pix.Pipeline.Project
+        ],
+        "Project Configuration": [
+          Pix.Project,
+          Pix.Config,
+          Pix.UserSettings
+        ],
+        Environment: [
+          Pix.Env
+        ]
+      ],
+      nest_modules_by_prefix: [
+        Pix.Pipeline
+      ]
     ]
   end
 end
