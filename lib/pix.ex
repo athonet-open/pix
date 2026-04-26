@@ -12,12 +12,19 @@ defmodule Pix do
     Pix.Command.Completion.script(sub_argv)
   end
 
+  # credo:disable-for-next-line Credo.Check.Refactor.CyclomaticComplexity
   def main(argv) do
     Pix.Report.info("pix v#{Application.fetch_env!(:pix, :version)}\n\n")
 
     Pix.System.setup()
 
     user_settings = load_user_setting()
+
+    upgrade_check =
+      case argv do
+        ["upgrade" | _] -> nil
+        _ -> Pix.UpgradeCheck.start()
+      end
 
     case argv do
       ["cache" | sub_argv] ->
@@ -47,6 +54,8 @@ defmodule Pix do
         Pix.Report.error("Unknown command #{inspect(cmd)}\n")
         System.halt(1)
     end
+
+    Pix.UpgradeCheck.maybe_notify(upgrade_check)
 
     :ok
   end
