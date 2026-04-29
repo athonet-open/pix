@@ -112,8 +112,13 @@ defmodule Pix.Command.Ls do
   end
 
   defp display_args(args, indent) do
-    for {k, v} <- args, not String.starts_with?(k, "PIX_") do
-      IO.puts([indent, IO.ANSI.format([:faint, :blue, k, :reset, :faint, ": #{inspect(v)}"])])
+    for {arg_name, %{default: default, description: description}} <- args, not String.starts_with?(arg_name, "PIX_") do
+      desc_suffix = if description, do: " — #{description}", else: ""
+
+      IO.puts([
+        indent,
+        IO.ANSI.format([:faint, :blue, arg_name, :reset, :faint, ": #{inspect(default)}#{desc_suffix}"])
+      ])
     end
   end
 end

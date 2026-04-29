@@ -47,8 +47,10 @@ defmodule Pix.Pipeline.SDK do
   @typedoc "Instruction arguments — the positional parts after the command and options."
   @type iargs :: [String.t(), ...]
 
-  @typedoc "Build arguments as a map of name to default value (or `nil` if no default)."
-  @type args() :: %{(name :: String.t()) => default_value :: nil | String.t()}
+  @typedoc "Build arguments as a map of name to metadata (default value and optional description)."
+  @type args() :: %{
+          (name :: String.t()) => %{default: nil | String.t(), description: nil | String.t()}
+        }
 
   @typedoc "A single Dockerfile instruction: `{command, options, args}`."
   @type instruction :: {command(), options(), iargs()}
@@ -120,9 +122,9 @@ defmodule Pix.Pipeline.SDK do
 
   ## Options
 
-  - `description` - pipeline description
-  - `dockerignore` - list of files and directories to ignore in the context
-  - `directives` - list of [parser directives](https://docs.docker.com/reference/dockerfile/#parser-directives), ie `syntax=docker/dockerfile:1.4`
+  - `description` - optional pipeline description
+  - `dockerignore` - optional list of files and directories to ignore in the context
+  - `directives` - optional list of [parser directives](https://docs.docker.com/reference/dockerfile/#parser-directives), ie `syntax=docker/dockerfile:1.4`
   """
   @spec pipeline(
           name :: String.t(),
@@ -148,8 +150,9 @@ defmodule Pix.Pipeline.SDK do
 
   the optional `private` and `cache` options can be used to control the behavior of the stage:
 
-  - `private: true` - the stage will not be accessible as a build target, only from other stages.
-  - `cache: false` - the stage will not be cached, the stage will be built from scratch every time.
+  - `description` - optional stage description
+  - `private` - optional (default `false`), the stage will not be accessible as a build target, only from other stages.
+  - `cache` - optional (default `true`), the stage will be cached, the stage will be built from scratch every time if set to `false`.
   """
   @spec stage(t(), stage_name :: String.t(), [
           {:from, String.t()} | {:description, String.t()} | {:private, boolean()} | {:cache, boolean()}
@@ -285,9 +288,16 @@ defmodule Pix.Pipeline.SDK do
 
   @doc """
   Adds a [`ARG`](https://docs.docker.com/reference/dockerfile/#arg) instruction in the global scope.
+
+  ## Options
+
+  - `description` - optional description of the argument
   """
-  @spec global_arg(t(), name :: String.t() | atom(), default_value :: nil | String.t()) :: t()
-  def global_arg(%__MODULE__{} = pipeline, name, default_value \\ nil) do
+  @spec global_arg(t(), name :: String.t() | atom(), default_value :: nil | String.t(), [{:description, String.t()}]) ::
+          t()
+  def global_arg(%__MODULE__{} = pipeline, name, default_value \\ nil, opts \\ []) do
+    opts = Keyword.validate!(opts, description: nil)
+
     iargs =
       if default_value == nil do
         [to_string(name)]
@@ -296,16 +306,22 @@ defmodule Pix.Pipeline.SDK do
       end
 
     args = [{"ARG", [], iargs} | pipeline.args]
-    args_ = Map.put(pipeline.args_, name, default_value)
+    args_ = Map.put(pipeline.args_, name, %{default: default_value, description: opts[:description]})
 
     %__MODULE__{pipeline | args: args, args_: args_}
   end
 
   @doc """
   Adds a [`ARG`](https://docs.docker.com/reference/dockerfile/#arg) instruction in a stage scope.
+
+  ## Options
+
+  - `description` - optional description of the argument
   """
-  @spec arg(t(), name :: String.t() | atom(), default_value :: nil | String.t()) :: t()
-  def arg(%__MODULE__{} = pipeline, name, default_value \\ nil) do
+  @spec arg(t(), name :: String.t() | atom(), default_value :: nil | String.t(), [{:description, String.t()}]) :: t()
+  def arg(%__MODULE__{} = pipeline, name, default_value \\ nil, opts \\ []) do
+    opts = Keyword.validate!(opts, description: nil)
+
     iargs =
       if default_value == nil do
         [to_string(name)]
@@ -319,7 +335,7 @@ defmodule Pix.Pipeline.SDK do
       get_and_update_in(
         pipeline,
         [Access.key!(:stages), Access.at!(0), Access.key!(:args_)],
-        &{&1, Map.put(&1, name, default_value)}
+        &{&1, Map.put(&1, name, %{default: default_value, description: opts[:description]})}
       )
 
     pipeline
