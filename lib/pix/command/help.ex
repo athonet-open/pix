@@ -38,6 +38,8 @@ defmodule Pix.Command.Help do
       #{_var("PIX_DOCKER_BUILDX_DEBUG")}:      Set to "true" to enable `docker buildx debug`.
                                     If enabled and an error occurs in a `RUN` command, an interactive shell is presented
                                     which can be used for investigating the error interactively.
+      #{_var("PIX_HOST_OS")}:                  Override the detected host OS (e.g. "Darwin", "Linux").
+                                    Useful when running pix inside a container via the wrapper script.
     """)
 
     :ok

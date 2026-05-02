@@ -87,12 +87,22 @@ defmodule Pix.Env do
   end
 
   @doc """
-  Returns the operating system name by executing `uname -s`.
+  Returns the operating system name.
+  Can be overridden by setting `PIX_HOST_OS` environment variable,
+  which is useful when pix runs inside a container (e.g. via the wrapper script)
+  but needs to report the actual host OS.
+  Falls back to `uname -s`.
   """
   @spec os :: String.t()
   def os do
-    {res, 0} = System.cmd("uname", ~w[-s])
-    String.trim(res)
+    case System.get_env("PIX_HOST_OS") do
+      nil ->
+        {res, 0} = System.cmd("uname", ~w[-s])
+        String.trim(res)
+
+      os ->
+        os
+    end
   end
 
   @doc """
