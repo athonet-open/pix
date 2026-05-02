@@ -55,25 +55,28 @@ Pix requires a `docker` engine installed and running on your host system.
 $ mix escript.install github athonet-open/pix ref vX.Y.Z
 ```
 
-#### Option 2: Docker Installation
+Requires Erlang/Elixir to be installed on the host.
+
+#### Option 2: Wrapper Script
+
+A self-managing shell script that automatically resolves the latest version, builds the Docker image from source, and keeps itself up to date.
 
 ```bash
-$ docker run --rm -it \
-  --volume $PWD:/$PWD --workdir /$PWD \
-  --volume /var/run/docker.sock:/var/run/docker.sock \
-  --volume $SSH_AUTH_SOCK:$SSH_AUTH_SOCK \
-  --env SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
-  ghcr.io/athonet-open/pix:X.Y.Z "$@"
+$ curl -fsSL https://raw.githubusercontent.com/athonet-open/pix/main/bin/pix -o /usr/local/bin/pix && chmod +x /usr/local/bin/pix
 ```
 
-Important considerations:
-- Docker engine access is required via either Docker Socket Mounting (DooD) or Docker-in-Docker (dind)
-- For SSH access, forward the SSH agent socket to the Pix container
-- For macOS users with Docker Desktop:
-```bash
---volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
---env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
-```
+Requirements: `bash`, `docker`, `git`, `curl`.
+
+On first run, the script will:
+1. Detect the latest release tag from GitHub
+2. Build the Pix Docker image locally from source
+3. Run the requested command
+
+On subsequent runs, the cached image is reused. When a new version is released, the script
+automatically updates itself and rebuilds the image.
+
+The script handles Docker socket mounting, SSH agent forwarding (with macOS Docker Desktop support),
+and mounts `~/.ssh`, `~/.gitconfig*`, and `~/.config/pix/settings.exs` if present.
 
 ### Shell completion
 
