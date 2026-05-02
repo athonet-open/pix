@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+# pix - wrapper script for running Pix via Docker
+#
+# Automatically resolves the latest version from GitHub tags,
+# self-updates the script and builds the image from source when a new version is detected.
+#
+# Install: curl -fsSL https://raw.githubusercontent.com/athonet-open/pix/main/bin/pix -o /usr/local/bin/pix && chmod +x /usr/local/bin/pix
+set -euo pipefail
+
+readonly PIX_REPO="https://github.com/athonet-open/pix.git"
+
+preflight_checks() {
+  local -a required=(docker git)
+  for cmd in "${required[@]}"; do
+    command -v "$cmd" >/dev/null 2>&1 || { echo "error: $cmd is not installed or not in PATH" >&2; exit 1; }
+  done
+  docker info >/dev/null 2>&1 || { echo "error: docker daemon is not running" >&2; exit 1; }
+}
+
+resolve_version() {
+  local latest_tag
+  latest_tag=$(git ls-remote --tags --sort=-v:refname "$PIX_REPO" 'v*' 2>/dev/null \
+    | head -1 | sed 's|.*refs/tags/||')
+  [[ -z "$latest_tag" ]] && { echo "error: could not determine latest pix version from $PIX_REPO" >&2; exit 1; }
+
+  local -n _tag=$1 _ver=$2 _img=$3
+  _tag="$latest_tag"
+  _ver="${latest_tag#v}"
+  _img="athonet-open/pix:${_ver}"
+}
+
+ensure_image() {
+  local tag="$1" version="$2" image="$3"
+  shift 3
+
+  docker image inspect "$image" >/dev/null 2>&1 && return
+
+  echo "pix: new version detected ($version), updating..." >&2
+
+  local script_url="https://raw.githubusercontent.com/athonet-open/pix/${tag}/bin/pix"
+  curl -fsSL "$script_url" -o "$0"
+  chmod +x "$0"
+  echo "pix: script updated to $version" >&2
+
+  echo "pix: building $image from source..." >&2
+  local build_dir
+  build_dir=$(mktemp -d)
+  trap "rm -rf '$build_dir'" EXIT
+  git clone --depth 1 --branch "$tag" "$PIX_REPO" "$build_dir"
+  docker build --build-arg "VERSION=${version}" -t "$image" "$build_dir"
+  echo "pix: image $image built successfully" >&2
+
+  exec "$0" "$@"
+}
+
+docker_run_opts() {
+  local -n _opts=$1
+  local docker_sock="/var/run/docker.sock"
+
+  [[ -S "$docker_sock" ]] || { echo "error: docker socket not found at $docker_sock" >&2; exit 1; }
+  _opts=(--volume "$docker_sock:$docker_sock")
+
+  # SSH agent forwarding
+  case "$(uname -s)" in
+    Darwin)
+      _opts+=(--volume /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock)
+      _opts+=(--env SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock)
+      ;;
+    *)
+      if [[ -n "${SSH_AUTH_SOCK:-}" ]]; then
+        if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
+          echo "warning: SSH_AUTH_SOCK is set but $SSH_AUTH_SOCK is not a valid socket, skipping SSH forwarding" >&2
+        else
+          _opts+=(--volume "$SSH_AUTH_SOCK:$SSH_AUTH_SOCK" --env "SSH_AUTH_SOCK=$SSH_AUTH_SOCK")
+        fi
+      fi
+      ;;
+  esac
+
+  # User settings
+  local pix_settings="$HOME/.config/pix/settings.exs"
+  [[ -f "$pix_settings" ]] && _opts+=(--volume "$pix_settings:$pix_settings:ro")
+
+  # SSH keys
+  [[ -d "$HOME/.ssh" ]] && _opts+=(--volume "$HOME/.ssh:$HOME/.ssh:ro")
+
+  # Git config
+  local f
+  for f in "$HOME"/.gitconfig*; do
+    [[ -f "$f" ]] && _opts+=(--volume "$f:$f:ro")
+  done
+
+  # TTY
+  [[ -t 0 ]] && _opts+=(-it)
+
+  # Extra user options
+  if [[ -n "${PIX_DOCKER_RUN_OPTS:-}" ]]; then
+    local -a extra
+    read -ra extra <<< "$PIX_DOCKER_RUN_OPTS"
+    _opts+=("${extra[@]}")
+  fi
+}
+
+main() {
+  preflight_checks
+
+  local tag version image
+  resolve_version tag version image
+
+  ensure_image "$tag" "$version" "$image" "$@"
+
+  local -a opts
+  docker_run_opts opts
+
+  exec docker run --rm \
+    --env HOME="$HOME" \
+    --env PIX_HOST_OS="$(uname -s)" \
+    --volume "$PWD:/$PWD" --workdir "/$PWD" \
+    "${opts[@]}" \
+    "$image" "$@"
+}
+
+main "$@"
