@@ -145,9 +145,6 @@ defmodule Pix.Docker do
         expanded = paths |> String.split(",") |> Enum.map_join(",", &Path.expand/1)
         "#{id}=#{expanded}"
 
-      [path] when path != "" ->
-        Path.expand(path)
-
       _ ->
         spec
     end
