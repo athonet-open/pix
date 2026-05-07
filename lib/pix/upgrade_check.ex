@@ -62,7 +62,7 @@ defmodule Pix.UpgradeCheck do
     version_line = pad_right("  v#{current_version} → v#{latest_version}", box_width)
     upgrade_line = pad_right("  Run 'pix upgrade' to update", box_width)
     empty_line = pad_right("", box_width)
-    header_rule = pad_right("─ Upgrade available ", "─", box_width)
+    header_rule = pad_right("─ Pix upgrade available ", "─", box_width)
     rule = pad_right("", "─", box_width)
 
     IO.write(

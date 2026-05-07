@@ -83,9 +83,13 @@ defmodule Pix.Config do
   end
 
   @doc false
+  @spec checkout_base_dir() :: Path.t()
+  def checkout_base_dir, do: Path.join(".pipeline", "checkout")
+
+  @doc false
   @spec pipeline_checkout_dir(repo :: String.t(), ref :: String.t()) :: Path.t()
   def pipeline_checkout_dir(repo, ref) do
-    Path.join([".pipeline", "checkout", repo, ref])
+    Path.join([checkout_base_dir(), repo, ref])
   end
 
   @spec validate_pix_exs(map()) :: pix_exs()

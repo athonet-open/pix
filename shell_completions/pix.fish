@@ -101,7 +101,7 @@ complete -c pix -n "__fish_seen_subcommand_from shell" -l "host" -d "Bind mount 
 complete -c pix -n "__fish_seen_subcommand_from upgrade" -l "dry-run" -d "Only check if an upgrade is available"
 
 # cache command options
-complete -c pix -n "__fish_seen_subcommand_from cache" -a "info\t'Show info about the cache' update\t'Update the cache of remote git pipelines' clear\t'Clear the cache of remote git pipelines'"
+complete -c pix -n "__fish_seen_subcommand_from cache" -a "info\t'Show info about the cache' update\t'Update the cache of remote git pipelines' outdated\t'Check if cached pipelines are outdated' clear\t'Clear the cache of remote git pipelines'"
 
 # help command options
 complete -c pix -n "__fish_seen_subcommand_from help" -a "ls graph run shell upgrade cache completion_script" -d "Command"

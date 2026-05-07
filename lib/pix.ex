@@ -26,6 +26,12 @@ defmodule Pix do
         _ -> Pix.UpgradeCheck.start()
       end
 
+    cache_check =
+      case argv do
+        ["cache" | _] -> nil
+        _ -> Pix.CacheCheck.start()
+      end
+
     case argv do
       ["cache" | sub_argv] ->
         Pix.Command.Cache.cmd(Pix.Config.get(), sub_argv)
@@ -56,6 +62,7 @@ defmodule Pix do
     end
 
     Pix.UpgradeCheck.maybe_notify(upgrade_check)
+    Pix.CacheCheck.maybe_notify(cache_check)
 
     :ok
   end

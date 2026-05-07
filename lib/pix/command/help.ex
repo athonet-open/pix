@@ -140,13 +140,14 @@ defmodule Pix.Command.Help do
 
   defp help_cmd("cache") do
     """
-    #{_cmd("pix cache")} #{_opt("info")}|#{_opt("update")}|#{_opt("clear")}
+    #{_cmd("pix cache")} #{_opt("info")}|#{_opt("update")}|#{_opt("outdated")}|#{_opt("clear")}
 
       Cache management.
 
       ARGS:
           #{_opt("info")}                Show info about the cache
           #{_opt("update")}              Update the cache of remote git pipelines
+          #{_opt("outdated")}            Check if cached pipelines are outdated
           #{_opt("clear")}               Clear the cache of remote git pipelines
     """
   end
