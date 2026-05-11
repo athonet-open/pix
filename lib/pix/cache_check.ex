@@ -1,10 +1,10 @@
 defmodule Pix.CacheCheck do
   @moduledoc false
 
-  @spec start() :: Task.t() | nil
-  def start do
+  @spec start(Pix.Config.t()) :: Task.t() | nil
+  def start(config) do
     if enabled?() do
-      Task.async(&Pix.Command.Cache.outdated_pipelines/0)
+      Task.async(fn -> Pix.Command.Cache.outdated_pipelines(config) end)
     end
   end
 

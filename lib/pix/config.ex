@@ -65,7 +65,7 @@ defmodule Pix.Config do
   @type args() :: %{String.t() => String.t()}
 
   @doc false
-  @spec get :: t()
+  @spec get :: t() | nil
   def get do
     pix_exs_path = ".pix.exs"
 
@@ -76,9 +76,19 @@ defmodule Pix.Config do
       Pix.Report.internal("Loaded project manifest\n")
 
       require_pipelines(pix_exs)
-    else
-      Pix.Report.error("Cannot find a #{pix_exs_path} file in the current working directory\n")
-      System.halt(1)
+    end
+  end
+
+  @doc false
+  @spec get! :: t()
+  def get! do
+    case get() do
+      nil ->
+        Pix.Report.error("Cannot find a .pix.exs file in the current working directory\n")
+        System.halt(1)
+
+      config ->
+        config
     end
   end
 

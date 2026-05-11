@@ -28,27 +28,31 @@ defmodule Pix do
 
     cache_check =
       case argv do
-        ["cache" | _] -> nil
-        _ -> Pix.CacheCheck.start()
+        ["cache" | _] ->
+          nil
+
+        _ ->
+          config = Pix.Config.get()
+          if config != nil, do: Pix.CacheCheck.start(config)
       end
 
     case argv do
       ["cache" | sub_argv] ->
-        Pix.Command.Cache.cmd(Pix.Config.get(), sub_argv)
+        Pix.Command.Cache.cmd(Pix.Config.get!(), sub_argv)
 
       ["ls" | sub_argv] ->
-        Pix.Command.Ls.cmd(user_settings, Pix.Config.get(), sub_argv)
+        Pix.Command.Ls.cmd(user_settings, Pix.Config.get!(), sub_argv)
 
       ["graph" | sub_argv] ->
-        Pix.Command.Graph.cmd(user_settings, Pix.Config.get(), sub_argv)
+        Pix.Command.Graph.cmd(user_settings, Pix.Config.get!(), sub_argv)
 
       ["run" | sub_argv] ->
         Pix.Docker.setup_buildx()
-        Pix.Command.Run.cmd(user_settings, Pix.Config.get(), sub_argv)
+        Pix.Command.Run.cmd(user_settings, Pix.Config.get!(), sub_argv)
 
       ["shell" | sub_argv] ->
         Pix.Docker.setup_buildx()
-        Pix.Command.Shell.cmd(user_settings, Pix.Config.get(), sub_argv)
+        Pix.Command.Shell.cmd(user_settings, Pix.Config.get!(), sub_argv)
 
       ["upgrade" | sub_argv] ->
         Pix.Command.Upgrade.cmd(user_settings, sub_argv)

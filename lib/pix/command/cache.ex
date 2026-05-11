@@ -15,7 +15,7 @@ defmodule Pix.Command.Cache do
         update(config)
 
       ["outdated"] ->
-        outdated()
+        outdated(config)
 
       ["clear"] ->
         clear(config)
@@ -94,9 +94,9 @@ defmodule Pix.Command.Cache do
     :ok
   end
 
-  @spec outdated() :: :ok
-  defp outdated do
-    case outdated_pipelines() do
+  @spec outdated(Pix.Config.t()) :: :ok
+  defp outdated(config) do
+    case outdated_pipelines(config) do
       [] ->
         Pix.Report.info("\nAll cached pipelines are up-to-date.\n")
 
@@ -120,28 +120,20 @@ defmodule Pix.Command.Cache do
 
   @ls_remote_timeout 3_000
 
-  @spec outdated_pipelines() :: [%{path: String.t(), ref: String.t(), local_sha: String.t(), remote_sha: String.t()}]
-  def outdated_pipelines do
-    checkout_base_dir = Pix.Config.checkout_base_dir()
+  @spec outdated_pipelines(Pix.Config.t()) ::
+          [%{path: String.t(), ref: String.t(), local_sha: String.t(), remote_sha: String.t()}]
+  def outdated_pipelines(config) do
+    checkout_dirs =
+      for {_alias, %{from: %{git: repo, ref: ref}}} <- config.pipelines do
+        Pix.Config.pipeline_checkout_dir(repo, ref)
+      end
 
-    if File.dir?(checkout_base_dir) do
-      checkout_base_dir
-      |> find_git_repos()
-      |> Task.async_stream(&check_repo_staleness/1, timeout: @ls_remote_timeout, on_timeout: :kill_task)
-      |> Enum.flat_map(fn
-        {:ok, {:stale, entry}} -> [entry]
-        _ -> []
-      end)
-    else
-      []
-    end
-  end
-
-  defp find_git_repos(base_dir) do
-    base_dir
-    |> Path.join("**/.git")
-    |> Path.wildcard(match_dot: true)
-    |> Enum.map(&Path.dirname/1)
+    checkout_dirs
+    |> Task.async_stream(&check_repo_staleness/1, timeout: @ls_remote_timeout, on_timeout: :kill_task)
+    |> Enum.flat_map(fn
+      {:ok, {:stale, entry}} -> [entry]
+      _ -> []
+    end)
   end
 
   defp check_repo_staleness(checkout_dir) do
