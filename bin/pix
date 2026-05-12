@@ -79,15 +79,15 @@ docker_run_opts() {
 
   # User settings
   local pix_settings="$HOME/.config/pix/settings.exs"
-  [[ -f "$pix_settings" ]] && _opts+=(--volume "$pix_settings:$pix_settings:ro")
+  [[ -f "$pix_settings" ]] && _opts+=(--volume "$pix_settings:/root/.config/pix/settings.exs:ro")
 
   # SSH keys
-  [[ -d "$HOME/.ssh" ]] && _opts+=(--volume "$HOME/.ssh:$HOME/.ssh:ro")
+  [[ -d "$HOME/.ssh" ]] && _opts+=(--volume "$HOME/.ssh:/root/.ssh:ro")
 
   # Git config
   local f
   for f in "$HOME"/.gitconfig*; do
-    [[ -f "$f" ]] && _opts+=(--volume "$f:$f:ro")
+    [[ -f "$f" ]] && _opts+=(--volume "$f:/root/$(basename "$f"):ro")
   done
 
   # TTY
@@ -112,12 +112,19 @@ main() {
   local -a opts
   docker_run_opts opts
 
-  exec docker run --rm \
+  # Fix ownership of files created by the container (running as root)
+  # even if docker run is interrupted (Ctrl+C, errors, etc.)
+  trap '[[ "$(uname -s)" = "Linux" && -d "$PWD/.pipeline" ]] && sudo chown -R "$(id -u):$(id -g)" "$PWD/.pipeline" 2>/dev/null || true' EXIT
+
+  local rc=0
+  docker run --rm \
     --env HOME="$HOME" \
     --env PIX_HOST_OS="$(uname -s)" \
     --volume "$PWD:/$PWD" --workdir "/$PWD" \
     "${opts[@]}" \
-    "$image" "$@"
+    "$image" "$@" || rc=$?
+
+  exit "$rc"
 }
 
 main "$@"
