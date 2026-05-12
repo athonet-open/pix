@@ -46,7 +46,7 @@ ensure_image() {
   local build_dir
   build_dir=$(mktemp -d)
   trap "rm -rf '$build_dir'" EXIT
-  git clone --depth 1 --branch "$tag" "$PIX_REPO" "$build_dir"
+  git clone -q --depth 1 -c advice.detachedHead=false --branch "$tag" "$PIX_REPO" "$build_dir"
   docker build --build-arg "VERSION=${version}" -t "$image" "$build_dir"
   echo "pix: image $image built successfully" >&2
 
