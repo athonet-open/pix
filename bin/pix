@@ -99,6 +99,11 @@ docker_run_opts() {
     read -ra extra <<< "$PIX_DOCKER_RUN_OPTS"
     _opts+=("${extra[@]}")
   fi
+
+  # Git safe.directory (workdir is owned by host user, container runs as root)
+  _opts+=(--env GIT_CONFIG_COUNT=1)
+  _opts+=(--env GIT_CONFIG_KEY_0=safe.directory)
+  _opts+=(--env "GIT_CONFIG_VALUE_0=*")
 }
 
 main() {
@@ -118,7 +123,6 @@ main() {
 
   local rc=0
   docker run --rm \
-    --env HOME="$HOME" \
     --env PIX_HOST_OS="$(uname -s)" \
     --volume "$PWD:/$PWD" --workdir "/$PWD" \
     "${opts[@]}" \
