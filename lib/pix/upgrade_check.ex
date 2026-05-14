@@ -48,7 +48,8 @@ defmodule Pix.UpgradeCheck do
         end
 
       {:error, reason} ->
-        {:error, "Failed to fetch latest version from GitHub: #{inspect(reason)}"}
+        Pix.Report.internal("Upgrade check failed: #{inspect(reason)}")
+        nil
     end
   end
 
