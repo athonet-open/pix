@@ -174,6 +174,9 @@ defmodule Pix.Command.Help do
 
       ARGS:
           SHELL_TYPE          The shell type - (supported: "fish")
+
+      INSTALL:
+          #{_cmd("pix completion_script fish")} > ~/.config/fish/completions/pix.fish
     """
   end
 
