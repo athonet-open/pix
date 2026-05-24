@@ -48,9 +48,13 @@ defmodule Pix.UserSettings do
         }
 
   @doc false
+  @spec settings_path :: Path.t()
+  def settings_path, do: Path.join(System.user_home!(), ".config/pix/settings.exs")
+
+  @doc false
   @spec get :: t()
   def get do
-    user_settings_path = Path.join(System.user_home!(), ".config/pix/settings.exs")
+    user_settings_path = settings_path()
 
     user_settings =
       if File.regular?(user_settings_path) do

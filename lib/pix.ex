@@ -18,7 +18,7 @@ defmodule Pix do
 
     Pix.System.setup()
 
-    user_settings = load_user_setting()
+    user_settings = load_user_setting(argv)
 
     upgrade_check =
       case argv do
@@ -57,6 +57,9 @@ defmodule Pix do
       ["upgrade" | sub_argv] ->
         Pix.Command.Upgrade.cmd(user_settings, sub_argv)
 
+      ["setup" | sub_argv] ->
+        Pix.Command.Setup.cmd(sub_argv)
+
       ["help" | sub_argv] ->
         Pix.Command.Help.cmd(sub_argv)
 
@@ -71,8 +74,10 @@ defmodule Pix do
     :ok
   end
 
-  @spec load_user_setting :: Pix.UserSettings.t()
-  defp load_user_setting do
+  @spec load_user_setting(OptionParser.argv()) :: Pix.UserSettings.t()
+  defp load_user_setting(argv) do
+    maybe_run_setup_wizard(argv)
+
     user_settings = Pix.UserSettings.get()
 
     for {var_name, var_value} <- user_settings.env do
@@ -80,5 +85,30 @@ defmodule Pix do
     end
 
     user_settings
+  end
+
+  defp maybe_run_setup_wizard(argv) do
+    command = List.first(argv, "")
+    skip_commands = ~w(help setup upgrade completion_script)
+
+    skip? =
+      command in skip_commands or
+        String.starts_with?(command, "__complete_") or
+        Pix.Env.ci?() or
+        not Pix.IO.tty?() or
+        File.regular?(Pix.UserSettings.settings_path())
+
+    unless skip? do
+      Pix.Report.internal("No user settings found. Starting setup wizard...\n")
+
+      case Pix.SetupWizard.run() do
+        {:ok, settings} ->
+          Pix.SetupWizard.save(settings)
+
+        :abort ->
+          Pix.Report.info("Saving empty configuration to skip wizard on next run.\n")
+          Pix.SetupWizard.save(%{})
+      end
+    end
   end
 end

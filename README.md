@@ -111,6 +111,17 @@ For detailed command information, use `pix help`.
 ## User settings
 
 Customize Pix behavior through `~/.config/pix/settings.exs`.
+
+On first run, if no settings file is found, Pix launches an interactive setup wizard
+that guides you through configuring default options for the `run` and `shell` commands
+(SSH forwarding, output artifacts, progress display).
+
+You can re-run the wizard anytime with:
+
+```bash
+$ pix setup
+```
+
 See the `Pix.UserSettings` module documentation for configuration options.
 
 ## Security

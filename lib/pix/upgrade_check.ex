@@ -58,29 +58,10 @@ defmodule Pix.UpgradeCheck do
   end
 
   defp notify_upgrade(current_version, latest_version) do
-    box_width = 57
-
-    version_line = pad_right("  v#{current_version} → v#{latest_version}", box_width)
-    upgrade_line = pad_right("  Run 'pix upgrade' to update", box_width)
-    empty_line = pad_right("", box_width)
-    header_rule = pad_right("─ Pix upgrade available ", "─", box_width)
-    rule = pad_right("", "─", box_width)
-
-    IO.write(
-      IO.ANSI.format([
-        ["\n", :yellow],
-        ["╭", header_rule, "╮", "\n"],
-        ["│", empty_line, "│", "\n"],
-        ["│", version_line, "│", "\n"],
-        ["│", empty_line, "│", "\n"],
-        ["│", upgrade_line, "│", "\n"],
-        ["╰", rule, "╯", "\n"]
-      ])
-    )
-  end
-
-  defp pad_right(text, pad_char \\ " ", width) do
-    padding = max(width - String.length(text), 0)
-    text <> String.duplicate(pad_char, padding)
+    Pix.IO.notify_box("Pix upgrade available", [
+      "  v#{current_version} → v#{latest_version}",
+      "",
+      "  Run 'pix upgrade' to update"
+    ])
   end
 end

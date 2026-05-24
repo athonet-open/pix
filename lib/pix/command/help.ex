@@ -10,7 +10,7 @@ defmodule Pix.Command.Help do
   def cmd(argv) do
     argv =
       if argv == [] do
-        ["ls", "graph", "run", "shell", "upgrade", "cache", "completion_script", "help"]
+        ["ls", "graph", "run", "shell", "setup", "upgrade", "cache", "completion_script", "help"]
       else
         argv
       end
@@ -124,6 +124,20 @@ defmodule Pix.Command.Help do
                               Custom key files are mounted read-only into the shell container.
                               Can be specified multiple times.
           #{_opt("--target")}            The shell target
+    """
+  end
+
+  defp help_cmd("setup") do
+    """
+    #{_cmd("pix setup")}
+
+      Run the interactive setup wizard to configure pix user settings.
+
+      Guides you through setting default options for the run and shell commands,
+      including SSH forwarding, output artifacts, and progress display preferences.
+
+      Settings are saved to ~/.config/pix/settings.exs.
+      The wizard runs automatically on first use if no settings file is found.
     """
   end
 

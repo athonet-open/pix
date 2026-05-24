@@ -28,50 +28,24 @@ defmodule Pix.CacheCheck do
   end
 
   defp notify_stale(stale_pipelines) do
-    box_width = 57
-
-    header_rule = pad_right("─ Outdated pipelines ", "─", box_width)
-    rule = pad_right("", "─", box_width)
-    empty_line = pad_right("", box_width)
-
     pipeline_lines =
       stale_pipelines
       |> Enum.take(3)
       |> Enum.map(fn entry ->
         repo_name = repo_display_name(entry.path)
-
-        [
-          "│",
-          pad_right(
-            "  • #{repo_name}@#{entry.ref} (#{short_sha(entry.local_sha)} → #{short_sha(entry.remote_sha)})",
-            box_width
-          ),
-          "│",
-          "\n"
-        ]
+        "  • #{repo_name}@#{entry.ref} (#{short_sha(entry.local_sha)} → #{short_sha(entry.remote_sha)})"
       end)
 
     more_line =
       if length(stale_pipelines) > 3 do
-        [["│", pad_right("  ... and #{length(stale_pipelines) - 3} more", box_width), "│", "\n"]]
+        ["  ... and #{length(stale_pipelines) - 3} more"]
       else
         []
       end
 
-    update_line = pad_right("  Run 'pix cache update' to update", box_width)
+    lines = pipeline_lines ++ more_line ++ ["", "  Run 'pix cache update' to update"]
 
-    IO.write(
-      IO.ANSI.format([
-        ["\n", :yellow],
-        ["╭", header_rule, "╮", "\n"],
-        ["│", empty_line, "│", "\n"],
-        pipeline_lines,
-        more_line,
-        ["│", empty_line, "│", "\n"],
-        ["│", update_line, "│", "\n"],
-        ["╰", rule, "╯", "\n"]
-      ])
-    )
+    Pix.IO.notify_box("Outdated pipelines", lines)
   end
 
   defp short_sha(sha), do: String.slice(sha, 0, 7)
@@ -81,10 +55,5 @@ defmodule Pix.CacheCheck do
     |> Path.dirname()
     |> Path.basename()
     |> String.trim_trailing(".git")
-  end
-
-  defp pad_right(text, pad_char \\ " ", width) do
-    padding = max(width - String.length(text), 0)
-    text <> String.duplicate(pad_char, padding)
   end
 end
