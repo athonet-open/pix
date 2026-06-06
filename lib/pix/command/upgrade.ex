@@ -9,7 +9,7 @@ defmodule Pix.Command.Upgrade do
   def cmd(user_settings, argv) do
     {cli_opts, _args} = Pix.Helper.option_parser_parse!(argv, strict: @cli_args)
 
-    cli_opts = Keyword.merge(cli_opts, user_settings.command.upgrade.cli_opts)
+    cli_opts = Keyword.merge(user_settings.command.upgrade.cli_opts, cli_opts)
     dry_run? = Keyword.get(cli_opts, :dry_run, false)
 
     current_version = Application.fetch_env!(:pix, :version)
