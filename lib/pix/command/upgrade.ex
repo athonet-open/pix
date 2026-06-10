@@ -20,6 +20,9 @@ defmodule Pix.Command.Upgrade do
 
       {:error, reason} ->
         Pix.Report.error("Upgrade failed: #{inspect(reason)}\n")
+
+      nil ->
+        Pix.Report.error("Upgrade failed: could not fetch latest version from GitHub\n")
     end
 
     :ok
