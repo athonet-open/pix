@@ -29,7 +29,7 @@ defmodule Pix.UpgradeCheck do
     :ok
   end
 
-  @spec get_latest_version_from_github() :: {:ok, String.t()} | {:error, term()}
+  @spec get_latest_version_from_github() :: {:ok, String.t()} | {:error, term()} | nil
   def get_latest_version_from_github do
     timeout = 3_000
     endpoint_uri = "https://api.github.com/repos/#{@github_user_repo}/tags?per_page=1"
@@ -46,6 +46,10 @@ defmodule Pix.UpgradeCheck do
           _ ->
             {:error, "Failed to parse latest version from GitHub"}
         end
+
+      {:ok, {{_, status, _}, _headers, _body}} ->
+        Pix.Report.internal("Upgrade check failed: HTTP #{status}")
+        nil
 
       {:error, reason} ->
         Pix.Report.internal("Upgrade check failed: #{inspect(reason)}")
