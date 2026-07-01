@@ -3,6 +3,15 @@ defmodule Pix.Docker do
 
   @docker_desktop_socket "/run/host-services/ssh-auth.sock"
 
+  # Container directory where user-provided SSH keys (`--ssh <id>=<key>`) are
+  # bind-mounted for `pix shell`. It must live outside `/root` so that pipelines
+  # dropping privileges to a non-root user (e.g. `pix shell --host`, which runs
+  # as a user matching the host UID) can still read the key: Docker creates the
+  # intermediate mount directories as world-traversable 0755, while the mounted
+  # key keeps its host ownership (matching the host UID under `--host`). Mounting
+  # under `/root/.ssh` (mode 0700) instead makes the key unreadable to that user.
+  @ssh_key_mount_dir "/pix/ssh"
+
   @typedoc "Docker CLI option list — atoms for flags, `{key, value}` tuples for options."
   @type opts() :: [Keyword.key() | {Keyword.key(), Keyword.value()}]
 
@@ -119,7 +128,7 @@ defmodule Pix.Docker do
     |> Enum.flat_map(&parse_ssh_key_paths/1)
     |> Enum.reduce({[], []}, fn path, {vol_acc, key_path_acc} ->
       path = Path.expand(path)
-      container_path = "/root/.ssh/#{Path.basename(path)}"
+      container_path = "#{@ssh_key_mount_dir}/#{Path.basename(path)}"
       Pix.Report.internal(">>> mounting SSH key #{inspect(path)} as #{container_path} into shell container\n")
       {[{:volume, "#{path}:#{container_path}:ro"} | vol_acc], [container_path | key_path_acc]}
     end)
