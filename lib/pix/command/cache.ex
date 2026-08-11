@@ -70,28 +70,39 @@ defmodule Pix.Command.Cache do
   defp update(config) do
     Pix.Report.info("\nUpdating remote git pipelines cache...\n")
 
-    for {pipeline_alias, pipeline} <- config.pipelines do
-      case pipeline do
-        %{from: %{git: repo, ref: ref}} ->
-          checkout_dir = Pix.Config.pipeline_checkout_dir(repo, ref)
-
-          # credo:disable-for-next-line Credo.Check.Refactor.Nesting
-          if File.dir?(checkout_dir) do
-            cmd_opts = [stderr_to_stdout: true, cd: checkout_dir]
-            {_, 0} = System.cmd("git", ["fetch", "origin", ref], cmd_opts)
-            {_, 0} = System.cmd("git", ["reset", "--hard", "FETCH_HEAD"], cmd_opts)
-
-            Pix.Report.info("  - #{pipeline_alias}: git pipeline #{repo}@#{ref}\n    UPDATED #{checkout_dir}\n")
-          else
-            Pix.Report.info("  - #{pipeline_alias}: git pipeline #{repo}@#{ref}\n    NOT CACHED\n")
-          end
-
-        _ ->
-          :ok
-      end
-    end
+    config
+    |> git_pipelines_by_repo()
+    |> Task.async_stream(&update_pipeline/1, timeout: :infinity, ordered: true)
+    |> Enum.each(fn {:ok, report} -> Pix.Report.info(report) end)
 
     :ok
+  end
+
+  @spec git_pipelines_by_repo(Pix.Config.t()) ::
+          %{{String.t(), String.t()} => [Pix.Config.pipeline_alias()]}
+  defp git_pipelines_by_repo(config) do
+    config.pipelines
+    |> Enum.flat_map(fn
+      {pipeline_alias, %{from: %{git: repo, ref: ref}}} -> [{{repo, ref}, pipeline_alias}]
+      _ -> []
+    end)
+    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+  end
+
+  @spec update_pipeline({{String.t(), String.t()}, [Pix.Config.pipeline_alias()]}) :: String.t()
+  defp update_pipeline({{repo, ref}, pipeline_aliases}) do
+    checkout_dir = Pix.Config.pipeline_checkout_dir(repo, ref)
+    aliases = Enum.join(pipeline_aliases, ", ")
+
+    if File.dir?(checkout_dir) do
+      cmd_opts = [stderr_to_stdout: true, cd: checkout_dir]
+      {_, 0} = System.cmd("git", ["fetch", "origin", ref], cmd_opts)
+      {_, 0} = System.cmd("git", ["reset", "--hard", "FETCH_HEAD"], cmd_opts)
+
+      "  - #{aliases}: git pipeline #{repo}@#{ref}\n    UPDATED #{checkout_dir}\n"
+    else
+      "  - #{aliases}: git pipeline #{repo}@#{ref}\n    NOT CACHED\n"
+    end
   end
 
   @spec outdated(Pix.Config.t()) :: :ok
@@ -124,7 +135,7 @@ defmodule Pix.Command.Cache do
           [%{path: String.t(), ref: String.t(), local_sha: String.t(), remote_sha: String.t()}]
   def outdated_pipelines(config) do
     checkout_dirs =
-      for {_alias, %{from: %{git: repo, ref: ref}}} <- config.pipelines do
+      for {_alias, %{from: %{git: repo, ref: ref}}} <- config.pipelines, uniq: true do
         Pix.Config.pipeline_checkout_dir(repo, ref)
       end
 
