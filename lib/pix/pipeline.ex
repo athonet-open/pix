@@ -318,10 +318,11 @@ defmodule Pix.Pipeline do
     |> Kernel.++(pipeline_build_args(shell_target, from, default_args, cli_args))
   end
 
-  @spec shell_run_options(String.t(), Pix.Config.from(), shell_cli_opts()) :: Pix.Docker.opts()
-  defp shell_run_options(shell_target, from, cli_opts) do
+  @spec shell_run_options(String.t(), Pix.Config.from(), shell_cli_opts(), [String.t()]) :: Pix.Docker.opts()
+  defp shell_run_options(shell_target, from, cli_opts, cmd_args) do
     base_opts = [:rm, :interactive]
-    tty_opts = if Pix.Env.ci?(), do: [], else: [:tty]
+    one_off? = cmd_args != []
+    tty_opts = if Pix.Env.ci?() or one_off?, do: [], else: [:tty]
 
     host_opts =
       if cli_opts[:host] do
@@ -349,7 +350,7 @@ defmodule Pix.Pipeline do
   defp enter_shell(shell_docker_image, shell_target, from, cli_opts, cmd_args) do
     Pix.Report.info("\nEntering shell\n")
 
-    opts = shell_run_options(shell_target, from, cli_opts)
+    opts = shell_run_options(shell_target, from, cli_opts, cmd_args)
     ssh_opts = Keyword.get_values(cli_opts, :ssh)
 
     shell_docker_image
