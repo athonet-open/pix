@@ -106,6 +106,15 @@ docker_run_opts() {
   _opts+=(--env "GIT_CONFIG_VALUE_0=*")
 }
 
+# Fix ownership of files created by the container (running as root).
+# Uses the pix image (root) instead of sudo, so no password prompt is needed.
+fix_pipeline_ownership() {
+  local image="$1" pipeline_dir="$PWD/.pipeline"
+  [[ "$(uname -s)" = "Linux" && -d "$pipeline_dir" ]] || return 0
+  docker run --rm --entrypoint chown --volume "$pipeline_dir:/pipeline" \
+    "$image" -R "$(id -u):$(id -g)" /pipeline >/dev/null 2>&1 || true
+}
+
 main() {
   preflight_checks
 
@@ -117,9 +126,8 @@ main() {
   local -a opts
   docker_run_opts opts
 
-  # Fix ownership of files created by the container (running as root)
-  # even if docker run is interrupted (Ctrl+C, errors, etc.)
-  trap '[[ "$(uname -s)" = "Linux" && -d "$PWD/.pipeline" ]] && sudo chown -R "$(id -u):$(id -g)" "$PWD/.pipeline" 2>/dev/null || true' EXIT
+  # Run even if docker run is interrupted (Ctrl+C, errors, etc.)
+  trap "fix_pipeline_ownership $(printf '%q' "$image")" EXIT
 
   local rc=0
   docker run --rm \
