@@ -77,17 +77,24 @@ docker_run_opts() {
       ;;
   esac
 
+  # Use the host home in the container, so that `~` (e.g. in the SSH key paths of
+  # settings.exs) expands to paths that the host docker daemon can bind-mount.
+  _opts+=(--env "HOME=$HOME")
+
   # User settings
   local pix_settings="$HOME/.config/pix/settings.exs"
-  [[ -f "$pix_settings" ]] && _opts+=(--volume "$pix_settings:/root/.config/pix/settings.exs:ro")
+  [[ -f "$pix_settings" ]] && _opts+=(--volume "$pix_settings:$pix_settings:ro")
 
-  # SSH keys
-  [[ -d "$HOME/.ssh" ]] && _opts+=(--volume "$HOME/.ssh:/root/.ssh:ro")
+  # SSH keys (ssh resolves `~/.ssh` from the passwd entry, i.e. /root, not from $HOME)
+  if [[ -d "$HOME/.ssh" ]]; then
+    _opts+=(--volume "$HOME/.ssh:$HOME/.ssh:ro")
+    _opts+=(--volume "$HOME/.ssh:/root/.ssh:ro")
+  fi
 
   # Git config
   local f
   for f in "$HOME"/.gitconfig*; do
-    [[ -f "$f" ]] && _opts+=(--volume "$f:/root/$(basename "$f"):ro")
+    [[ -f "$f" ]] && _opts+=(--volume "$f:$f:ro")
   done
 
   # TTY
