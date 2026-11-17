@@ -89,6 +89,12 @@ docker_run_opts() {
   if [[ -d "$HOME/.ssh" ]]; then
     _opts+=(--volume "$HOME/.ssh:$HOME/.ssh:ro")
     _opts+=(--volume "$HOME/.ssh:/root/.ssh:ro")
+    # The mounted config keeps the host user as owner, so root's ssh rejects it
+    # ("Bad owner or permissions"). Loading it explicitly with -F skips the
+    # ownership check that only applies to the default ~/.ssh/config path.
+    if [[ -f "$HOME/.ssh/config" ]]; then
+      _opts+=(--env "GIT_SSH_COMMAND=ssh -F /root/.ssh/config")
+    fi
   fi
 
   # Git config
