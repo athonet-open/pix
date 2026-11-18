@@ -103,20 +103,21 @@ docker_run_opts() {
     [[ -f "$f" ]] && _opts+=(--volume "$f:$f:ro")
   done
 
-  # TTY
-  [[ -t 0 ]] && _opts+=(-it)
-
-  # Extra user options
-  if [[ -n "${PIX_DOCKER_RUN_OPTS:-}" ]]; then
-    local -a extra
-    read -ra extra <<< "$PIX_DOCKER_RUN_OPTS"
-    _opts+=("${extra[@]}")
-  fi
-
   # Git safe.directory (workdir is owned by host user, container runs as root)
   _opts+=(--env GIT_CONFIG_COUNT=1)
   _opts+=(--env GIT_CONFIG_KEY_0=safe.directory)
   _opts+=(--env "GIT_CONFIG_VALUE_0=*")
+
+  # TTY
+  [[ -t 0 ]] && _opts+=(-it)
+
+  # Forward the PIX_* environment variables to pix in the container, as with the
+  # native installation (e.g. PIX_DOCKER_RUN_OPTS applies to the `pix shell`
+  # container, not to the container that runs pix).
+  local var
+  while IFS= read -r var; do
+    _opts+=(--env "$var")
+  done < <(compgen -e -X '!PIX_*')
 }
 
 # Fix ownership of files created by the container (running as root).
