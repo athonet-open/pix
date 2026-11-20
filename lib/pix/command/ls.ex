@@ -32,8 +32,9 @@ defmodule Pix.Command.Ls do
       display_pipeline_header(alias_)
 
       if verbose? do
-        display_pipeline_details(pipeline)
-        display_pipeline_targets(pipeline, hidden?)
+        built_pipeline = Pix.Pipeline.build(pipeline)
+        display_pipeline_details(pipeline, built_pipeline)
+        display_pipeline_targets(pipeline, built_pipeline, hidden?)
         IO.puts("")
       end
     end
@@ -45,9 +46,7 @@ defmodule Pix.Command.Ls do
     IO.puts("")
   end
 
-  defp display_pipeline_details(%{pipeline_mod: mod, default_args: args}) do
-    pipeline = mod.pipeline()
-
+  defp display_pipeline_details(%{pipeline_mod: mod, default_args: args}, pipeline) do
     if args != %{} do
       IO.puts("📝 Default Arguments:")
       display_args(args, "   ")
@@ -68,8 +67,7 @@ defmodule Pix.Command.Ls do
     IO.puts("")
   end
 
-  defp display_pipeline_targets(%{default_targets: defaults, pipeline_mod: mod}, hidden?) do
-    pipeline = mod.pipeline()
+  defp display_pipeline_targets(%{default_targets: defaults}, pipeline, hidden?) do
     IO.puts("🎯 Default Targets: #{IO.ANSI.format([:faint, :green, inspect(defaults)])}")
     IO.puts("")
     IO.puts("📋 Targets:")

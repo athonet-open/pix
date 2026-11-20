@@ -13,7 +13,7 @@ defmodule MyApp.Pipeline do
   import Pix.Pipeline.SDK
 
   @impl true
-  def pipeline do
+  def pipeline_spec(_input) do
     pipeline("myapp",
       description: "Build and test MyApp",
       dockerignore: [".git", "_build", "deps"]
@@ -85,6 +85,30 @@ import Pix.Pipeline.SDK.Extra
 
 |> arg("DEPLOY_TARGET")
 |> assert_required_arg("DEPLOY_TARGET")
+```
+
+### Pipeline generated from the arguments
+
+The `c:Pix.Pipeline.Project.pipeline_spec/1` callback receives a `Pix.Pipeline.Spec.Input` struct.
+Its `:args` field holds the arguments of the pipeline, so the Dockerfile can be built dynamically
+from them:
+
+- the `default_args` of the pipeline alias in `.pix.exs`,
+- the built-in variables (see below), except `PIX_PIPELINE_TARGET`, which depends on the
+  generated pipeline,
+- for `pix run` and `pix shell`, the `--arg` values of the command line, which take precedence.
+  `--arg NAME` with no value takes the environment variable `NAME`, as `docker build` does.
+
+`pix ls`, `pix graph` and the shell completion use the `default_args` and the built-in variables.
+
+```elixir
+@impl true
+def pipeline_spec(%{args: args}) do
+  paths = String.split(Map.get(args, "PATHS", ""))
+  pipeline = pipeline("myapp") |> stage("build", from: "elixir:1.18")
+
+  Enum.reduce(paths, pipeline, &copy(&2, &1, "/app/#{&1}"))
+end
 ```
 
 ### Pipeline context (`pipeline_ctx`)

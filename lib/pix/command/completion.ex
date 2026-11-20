@@ -24,24 +24,20 @@ defmodule Pix.Command.Completion do
     case argv do
       ["pipeline"] ->
         config.pipelines
-        |> Enum.map_join("\n", fn {pipeline_alias, %{pipeline_mod: mod}} ->
-          [description | _] = mod.pipeline().description |> String.split("\n")
+        |> Enum.map_join("\n", fn {pipeline_alias, pipeline_config} ->
+          [description | _] = Pix.Pipeline.build(pipeline_config).description |> String.split("\n")
           "#{pipeline_alias}\t#{description}"
         end)
         |> IO.puts()
 
       ["target", pipeline] ->
-        pipeline_mod = config.pipelines[pipeline].pipeline_mod
-
-        pipeline_mod.pipeline().stages
+        Pix.Pipeline.build(config.pipelines[pipeline]).stages
         |> Enum.reject(& &1.private)
         |> Enum.map_join("\n", &"#{&1.stage}\t#{&1.description}")
         |> IO.puts()
 
       ["arg", pipeline, target] ->
-        pipeline_mod = config.pipelines[pipeline].pipeline_mod
-
-        pipeline_mod.pipeline().stages
+        Pix.Pipeline.build(config.pipelines[pipeline]).stages
         |> Enum.reject(& &1.private)
         |> Enum.find(&(&1.stage == target))
         |> then(& &1.args_)

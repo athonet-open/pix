@@ -24,18 +24,50 @@ defmodule Pix.Pipeline do
 
   def output_dir, do: ".pipeline/output"
 
+  @spec build(Pix.Config.pipeline(), cli_args :: [String.t()]) :: Pix.Pipeline.SDK.t()
+  def build(pipeline_config, cli_args \\ []) do
+    input = %Pix.Pipeline.Spec.Input{args: args(pipeline_config, cli_args)}
+    pipeline_config.pipeline_mod.pipeline_spec(input)
+  end
+
+  @spec args(Pix.Config.pipeline(), cli_args :: [String.t()]) :: Pix.Config.args()
+  def args(%{default_args: default_args, from: from}, cli_args \\ []) do
+    builtins = Map.delete(pipeline_builtins_var("", from), "PIX_PIPELINE_TARGET")
+
+    default_args
+    |> Map.merge(builtins)
+    |> Map.merge(parse_cli_args(cli_args))
+  end
+
+  @spec parse_cli_args([String.t()]) :: Pix.Config.args()
+  defp parse_cli_args(cli_args) do
+    cli_args
+    |> Enum.map(&String.split(&1, "=", parts: 2))
+    |> Enum.flat_map(fn
+      [name, value] ->
+        [{name, value}]
+
+      [name] ->
+        case System.fetch_env(name) do
+          {:ok, value} -> [{name, value}]
+          :error -> []
+        end
+    end)
+    |> Map.new()
+  end
+
   @spec run(Pix.Config.pipeline(), run_cli_opts()) :: :ok
   def run(pipeline_config, cli_opts) do
     %{
       from: from,
       default_targets: default_targets,
       default_args: default_args,
-      ctx_dir: ctx_dir,
-      pipeline_mod: pipeline_mod
+      ctx_dir: ctx_dir
     } = pipeline_config
 
     # Compile the pipeline
-    pipeline = pipeline_mod.pipeline()
+    cli_args = for {:arg, arg} <- cli_opts, do: arg
+    pipeline = build(pipeline_config, cli_args)
 
     # Pipeline targets
     targets = resolve_run_targets(default_targets, cli_opts)
@@ -70,7 +102,8 @@ defmodule Pix.Pipeline do
       pipeline_mod: pipeline_mod
     } = pipeline_config
 
-    pipeline = pipeline_mod.pipeline()
+    cli_args = for {:arg, arg} <- cli_opts, do: arg
+    pipeline = build(pipeline_config, cli_args)
     validate_shell_capability!(pipeline_mod, pipeline.name)
 
     shell_from_target = Keyword.get(cli_opts, :target, :default)
@@ -393,14 +426,7 @@ defmodule Pix.Pipeline do
 
   @spec pipeline_builtins_var(target :: String.t(), Pix.Config.from()) :: Pix.Config.args()
   defp pipeline_builtins_var(target, from) do
-    base = %{
-      "PIX_PROJECT_NAME" => Pix.Env.git_project_name(),
-      "PIX_COMMIT_SHA" => Pix.Env.git_commit_sha(),
-      "PIX_PIPELINE_TARGET" => target,
-      "PIX_HOST_OS" => Pix.Env.os(),
-      "PIX_HOST_USERID" => Pix.Env.userid(),
-      "PIX_HOST_GROUPID" => Pix.Env.groupid()
-    }
+    base = Map.put(host_builtins_var(), "PIX_PIPELINE_TARGET", target)
 
     from_vars =
       case from do
@@ -419,6 +445,25 @@ defmodule Pix.Pipeline do
       end
 
     Map.merge(base, from_vars)
+  end
+
+  # The host values are the same for every pipeline that a pix command builds: they are computed once.
+  @spec host_builtins_var() :: Pix.Config.args()
+  defp host_builtins_var do
+    key = {__MODULE__, :host_builtins_var}
+
+    with nil <- :persistent_term.get(key, nil) do
+      vars = %{
+        "PIX_PROJECT_NAME" => Pix.Env.git_project_name(),
+        "PIX_COMMIT_SHA" => Pix.Env.git_commit_sha(),
+        "PIX_HOST_OS" => Pix.Env.os(),
+        "PIX_HOST_USERID" => Pix.Env.userid(),
+        "PIX_HOST_GROUPID" => Pix.Env.groupid()
+      }
+
+      :persistent_term.put(key, vars)
+      vars
+    end
   end
 
   @spec halt_on_error(non_neg_integer()) :: :ok

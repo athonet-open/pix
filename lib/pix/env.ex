@@ -42,7 +42,7 @@ defmodule Pix.Env do
   """
   @spec git_commit_sha(default :: String.t()) :: String.t()
   def git_commit_sha(default \\ "") do
-    case System.cmd("git", ~w[rev-parse HEAD]) do
+    case System.cmd("git", ~w[rev-parse HEAD], stderr_to_stdout: true) do
       {res, 0} -> String.trim(res)
       _ -> default
     end
@@ -56,7 +56,7 @@ defmodule Pix.Env do
   @spec git_project_name(default :: String.t()) :: String.t()
   def git_project_name(default \\ File.cwd!()) do
     res =
-      case System.cmd("git", ~w[rev-parse --show-toplevel]) do
+      case System.cmd("git", ~w[rev-parse --show-toplevel], stderr_to_stdout: true) do
         {res, 0} -> String.trim(res)
         _ -> default
       end

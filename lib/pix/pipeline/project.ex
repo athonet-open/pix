@@ -10,7 +10,7 @@ defmodule Pix.Pipeline.Project do
     import Pix.Pipeline.SDK
 
     @impl true
-    def pipeline() do
+    def pipeline_spec(_input) do
       pipeline("myapp",
         description: "MyApp pipeline",
         dockerignore: [".git", "_build", "deps"]
@@ -40,7 +40,8 @@ defmodule Pix.Pipeline.Project do
 
   ## Pipeline Definition
 
-  A pipeline project must implement the `c:pipeline/0` callback to define the pipeline stages and instructions.
+  A pipeline project defines the pipeline stages and instructions with the `c:pipeline_spec/1` callback.
+
   The pipeline is built using the `Pix.Pipeline.SDK` module which provides a fluent API for:
 
   - Creating pipeline stages
@@ -97,11 +98,17 @@ defmodule Pix.Pipeline.Project do
   defmacro __using__(_opts) do
     quote do
       @behaviour unquote(__MODULE__)
+
+      # [Backward compatibility] accepts pipelines that still define pipeline/0.
+      def pipeline_spec(_input), do: pipeline()
+      defoverridable pipeline_spec: 1
     end
   end
 
+  @callback pipeline_spec(Pix.Pipeline.Spec.Input.t()) :: Pix.Pipeline.SDK.t()
+  @doc false
   @callback pipeline() :: Pix.Pipeline.SDK.t()
   @callback shell(Pix.Pipeline.SDK.t(), shell_stage :: String.t(), from_target :: String.t() | :default) ::
               Pix.Pipeline.SDK.t()
-  @optional_callbacks shell: 3
+  @optional_callbacks pipeline: 0, shell: 3
 end
