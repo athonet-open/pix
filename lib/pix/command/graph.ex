@@ -11,7 +11,7 @@ defmodule Pix.Command.Graph do
 
     case args do
       [pipeline_alias] when is_map_key(config_pipelines, pipeline_alias) ->
-        pipeline = config_pipelines[pipeline_alias].pipeline_mod.pipeline()
+        pipeline = Pix.Pipeline.build(config_pipelines[pipeline_alias])
 
         case cli_opts[:format] do
           format when format in [nil, "pretty"] ->

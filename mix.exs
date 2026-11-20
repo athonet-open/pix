@@ -18,7 +18,9 @@ defmodule Pix.MixProject do
 
   def application do
     [
-      extra_applications: [:logger, :inets, :ssl]
+      # Embeds Mix in the escript: the Mix API (e.g. `Mix.Project.in_project/4`) is available to
+      # .pix.exs and pipeline.exs without depending on the Elixir installed on the host.
+      extra_applications: [:logger, :inets, :ssl, :mix]
     ]
   end
 
@@ -44,7 +46,8 @@ defmodule Pix.MixProject do
           Pix.Pipeline.SDK,
           Pix.Pipeline.SDK.Stage,
           Pix.Pipeline.SDK.Extra,
-          Pix.Pipeline.Project
+          Pix.Pipeline.Project,
+          Pix.Pipeline.Spec.Input
         ],
         "Project Configuration": [
           Pix.Project,
