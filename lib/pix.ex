@@ -26,33 +26,31 @@ defmodule Pix do
         _ -> Pix.UpgradeCheck.start()
       end
 
+    config = Pix.Config.get()
+
     cache_check =
       case argv do
-        ["cache" | _] ->
-          nil
-
-        _ ->
-          config = Pix.Config.get()
-          if config != nil, do: Pix.CacheCheck.start(config)
+        ["cache" | _] -> nil
+        _ -> if config != nil, do: Pix.CacheCheck.start(config)
       end
 
     case argv do
       ["cache" | sub_argv] ->
-        Pix.Command.Cache.cmd(Pix.Config.get!(), sub_argv)
+        Pix.Command.Cache.cmd(config!(config), sub_argv)
 
       ["ls" | sub_argv] ->
-        Pix.Command.Ls.cmd(user_settings, Pix.Config.get!(), sub_argv)
+        Pix.Command.Ls.cmd(user_settings, config!(config), sub_argv)
 
       ["graph" | sub_argv] ->
-        Pix.Command.Graph.cmd(user_settings, Pix.Config.get!(), sub_argv)
+        Pix.Command.Graph.cmd(user_settings, config!(config), sub_argv)
 
       ["run" | sub_argv] ->
         Pix.Docker.setup_buildx()
-        Pix.Command.Run.cmd(user_settings, Pix.Config.get!(), sub_argv)
+        Pix.Command.Run.cmd(user_settings, config!(config), sub_argv)
 
       ["shell" | sub_argv] ->
         Pix.Docker.setup_buildx()
-        Pix.Command.Shell.cmd(user_settings, Pix.Config.get!(), sub_argv)
+        Pix.Command.Shell.cmd(user_settings, config!(config), sub_argv)
 
       ["upgrade" | sub_argv] ->
         Pix.Command.Upgrade.cmd(user_settings, sub_argv)
@@ -73,6 +71,14 @@ defmodule Pix do
 
     :ok
   end
+
+  @spec config!(Pix.Config.t() | nil) :: Pix.Config.t()
+  defp config!(nil) do
+    Pix.Report.error("Cannot find a .pix.exs file in the current working directory\n")
+    System.halt(1)
+  end
+
+  defp config!(config), do: config
 
   @spec load_user_setting(OptionParser.argv()) :: Pix.UserSettings.t()
   defp load_user_setting(argv) do

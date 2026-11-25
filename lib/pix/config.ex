@@ -80,19 +80,6 @@ defmodule Pix.Config do
   end
 
   @doc false
-  @spec get! :: t()
-  def get! do
-    case get() do
-      nil ->
-        Pix.Report.error("Cannot find a .pix.exs file in the current working directory\n")
-        System.halt(1)
-
-      config ->
-        config
-    end
-  end
-
-  @doc false
   @spec checkout_base_dir() :: Path.t()
   def checkout_base_dir, do: Path.join(".pipeline", "checkout")
 
