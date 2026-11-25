@@ -21,7 +21,7 @@ defmodule Pix.Command.Shell do
 
       [unknown_pipeline_alias | _] ->
         Pix.Report.error("Unknown pipeline #{inspect(unknown_pipeline_alias)}\n")
-        Pix.Report.error("Available pipelines #{inspect(Map.keys(config_pipelines))})\n")
+        Pix.Report.error("Available pipelines #{inspect(config_pipelines |> Map.keys() |> Enum.sort())})\n")
         System.halt(1)
 
       _ ->

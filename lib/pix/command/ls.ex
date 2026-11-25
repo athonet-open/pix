@@ -28,6 +28,8 @@ defmodule Pix.Command.Ls do
   defp display_pipelines(pipelines, verbose?, hidden?) do
     IO.puts(IO.ANSI.format([:bright, "\nAvailable pipelines:\n"]))
 
+    pipelines = Enum.sort_by(pipelines, &elem(&1, 0))
+
     for {alias_, pipeline} <- pipelines do
       display_pipeline_header(alias_)
 
