@@ -12,6 +12,10 @@ defmodule Pix do
     Pix.Command.Completion.script(sub_argv)
   end
 
+  def main(["version" | _]) do
+    IO.puts(Application.fetch_env!(:pix, :version))
+  end
+
   # credo:disable-for-next-line Credo.Check.Refactor.CyclomaticComplexity
   def main(argv) do
     Pix.Report.info("pix v#{Application.fetch_env!(:pix, :version)}\n\n")

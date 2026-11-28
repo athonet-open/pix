@@ -10,7 +10,7 @@ defmodule Pix.Command.Help do
   def cmd(argv) do
     argv =
       if argv == [] do
-        ["ls", "graph", "run", "shell", "setup", "upgrade", "cache", "completion_script", "help"]
+        ["ls", "graph", "run", "shell", "setup", "upgrade", "cache", "completion_script", "version", "help"]
       else
         argv
       end
@@ -177,6 +177,14 @@ defmodule Pix.Command.Help do
 
       INSTALL:
           #{_cmd("pix completion_script fish")} > ~/.config/fish/completions/pix.fish
+    """
+  end
+
+  defp help_cmd("version") do
+    """
+    #{_cmd("pix version")}
+
+      Print the pix version.
     """
   end
 

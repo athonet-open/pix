@@ -66,6 +66,7 @@ complete -c pix -n "__fish_use_subcommand" -a "upgrade" -d "Upgrade pix to the l
 complete -c pix -n "__fish_use_subcommand" -a "setup" -d "Run the interactive setup wizard"
 complete -c pix -n "__fish_use_subcommand" -a "cache" -d "Cache management"
 complete -c pix -n "__fish_use_subcommand" -a "completion_script" -d "Completion script"
+complete -c pix -n "__fish_use_subcommand" -a "version" -d "Print the pix version"
 complete -c pix -n "__fish_use_subcommand" -a "help" -d "Help"
 
 # ls command options
@@ -105,7 +106,7 @@ complete -c pix -n "__fish_seen_subcommand_from upgrade" -l "dry-run" -d "Only c
 complete -c pix -n "__fish_seen_subcommand_from cache" -a "info\t'Show info about the cache' update\t'Update the cache of remote git pipelines' outdated\t'Check if cached pipelines are outdated' clear\t'Clear the cache of remote git pipelines'"
 
 # help command options
-complete -c pix -n "__fish_seen_subcommand_from help" -a "ls graph run shell setup upgrade cache completion_script" -d "Command"
+complete -c pix -n "__fish_seen_subcommand_from help" -a "ls graph run shell setup upgrade cache completion_script version" -d "Command"
 
 # completion_script command options
 complete -c pix -n "__fish_seen_subcommand_from completion_script" -a "fish" -d "Fish completion script"
